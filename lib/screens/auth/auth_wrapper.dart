@@ -1,6 +1,5 @@
-import 'package:eds_beta/screens/auth/signIn.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:eds_beta/screens/auth/sign_in.dart';
+import 'package:flutter/material.dart';
 
 class AuthWrapper extends StatefulWidget {
   const AuthWrapper({super.key});

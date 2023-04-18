@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1067960690361",
+    "project_id": "endless-store-beta",
+    "storage_bucket": "endless-store-beta.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1067960690361:android:defa47f91508060be85d68",
+        "android_client_info": {
+          "package_name": "com.example.eds_beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1067960690361-vei58q6f17thapguiap382e5acajk6jf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBypJVuRsQGtm0fzkH-63hyAeTQTezoqyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1067960690361-vei58q6f17thapguiap382e5acajk6jf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
