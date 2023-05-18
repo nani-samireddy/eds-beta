@@ -1,10 +1,23 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:eds_beta/screens/auth/auth_wrapper.dart';
-import 'package:eds_beta/screens/splash/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
-void main() {
-  runApp(const MyApp());
+import 'package:eds_beta/core/core.dart';
+import 'package:eds_beta/features/authentication/wrapper.dart';
+import 'package:eds_beta/features/splash/splash_screen.dart';
+import 'package:eds_beta/theme/theme.dart';
+
+FutureVoid main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  FlutterError.demangleStackTrace = (StackTrace stack) {
+    if (stack is stack_trace.Trace) return stack.vmTrace;
+    if (stack is stack_trace.Chain) return stack.toTrace().vmTrace;
+    return stack;
+  };
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -14,12 +27,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        primarySwatch: Colors.yellow,
-      ),
+      theme: AppTheme.getAppTheme(context: context),
       home: AnimatedSplashScreen(
-        duration: 3000,
+        duration: 1600,
         splash: const SplashScreen(),
         nextScreen: const AuthWrapper(),
         splashTransition: SplashTransition.fadeTransition,
