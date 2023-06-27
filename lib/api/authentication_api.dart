@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:eds_beta/core/core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
@@ -16,6 +15,7 @@ final authChangesProvider = StreamProvider<User?>((ref) {
   final authAPI = ref.watch(authAPIProvider);
   return authAPI.authChanges();
 });
+
 
 abstract class IAuthAPI {
   Future<bool> sendOTP({required String phoneNumber});

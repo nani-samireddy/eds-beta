@@ -9,10 +9,11 @@ class HomeView extends ConsumerStatefulWidget {
 }
 
 class _HomeViewState extends ConsumerState<HomeView> {
+
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(child: Text("Home Screen")),
+      body: Center(child: Text("Home")),
     );
   }
 }

@@ -8,7 +8,7 @@ class AppTheme {
       useMaterial3: true,
       appBarTheme: const AppBarTheme(elevation: 0),
       scaffoldBackgroundColor: Pallete.backgroundColor,
-      textTheme: GoogleFonts.nunitoTextTheme(Theme.of(context).textTheme),
+      textTheme: GoogleFonts.nunitoSansTextTheme(Theme.of(context).textTheme),
     );
   }
 }

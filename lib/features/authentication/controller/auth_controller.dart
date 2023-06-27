@@ -1,3 +1,4 @@
+
 import 'package:eds_beta/api/authentication_api.dart';
 import 'package:eds_beta/core/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -75,18 +76,19 @@ class AuthController extends StateNotifier<bool> {
   Future<bool> verifyOTP(
       {required String otp, required BuildContext context}) async {
     return await _authAPI.sigInWithOTP(smsCode: otp).then((value) {
-      if (value is User) {
-        return true;
-      }
-      showSnackBar(
-          context: context,
-          content: "Something went wrong. Please try again later. 🥲");
-      return false;
+      return value.fold((l) => false, (r) => true);
+     
     }).catchError((error) {
       showSnackBar(
           context: context,
-          content: "An error occurred: $error. Please try again later. 🥲");
+          content:
+              "An error occurred: $error. Please try again later. 🥲 while signing in..");
       return false;
     });
+  }
+
+  Future<User?> currentUser() async {
+    final res = await _authAPI.getCurrentUser();
+    return res.fold((l) => null, (r) => r);
   }
 }

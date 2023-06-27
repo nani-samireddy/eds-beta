@@ -6,6 +6,7 @@ class CustomTextInput extends StatefulWidget {
   final String labelText;
   final TextInputType type;
   final TextEditingController controller;
+  final String? prefixText;
   final bool enable;
   final Function(String value) validator;
   final Function(String value) onChange;
@@ -16,7 +17,8 @@ class CustomTextInput extends StatefulWidget {
     required this.type,
     required this.validator,
     required this.onChange,
-    this.enable = true,
+    this.prefixText,
+    this.enable = true,    
     super.key,
   });
 
@@ -31,11 +33,11 @@ class _CustomTextInputState extends State<CustomTextInput> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 18.0),
+      padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Wrap(
         children: [
           Container(
-            margin: const EdgeInsets.only(bottom: 8),
+            margin: const EdgeInsets.only(bottom: 4),
             child: Text(
               widget.labelText,
               style: const TextStyle(fontWeight: FontWeight.w700),
@@ -56,6 +58,16 @@ class _CustomTextInputState extends State<CustomTextInput> {
               keyboardType: widget.type,
               controller: widget.controller,
               decoration: InputDecoration(
+                prefix: Text("${widget.prefixText ?? ""} "),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    widget.controller.clear();
+                  },
+                  icon: const Icon(
+                    Icons.clear_rounded,
+                    color: Pallete.fadedIconColor,
+                  ),
+                ),
                 errorText: _errorText,
                 enabled: true,
                 contentPadding:

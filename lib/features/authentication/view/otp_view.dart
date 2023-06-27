@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:eds_beta/common/common.dart';
-import 'package:eds_beta/common/custom_text_input.dart';
-import 'package:eds_beta/common/primary_button.dart';
 import 'package:eds_beta/core/core.dart';
 import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
-import 'package:eds_beta/features/home_screen/view/home_view.dart';
+import 'package:eds_beta/features/authentication/wrapper.dart';
 import 'package:eds_beta/theme/theme.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +94,7 @@ class _OTPValidationViewState extends ConsumerState<OTPValidationView> {
       });
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) => const HomeView()),
+          MaterialPageRoute(builder: (_) => const AuthWrapper()),
           (route) => false);
     });
   }
@@ -141,6 +139,7 @@ class _OTPValidationViewState extends ConsumerState<OTPValidationView> {
                         fontWeight: FontWeight.w700,
                       ),
                     ),
+                    
                     const SizedBox(
                       height: 50,
                     ),
