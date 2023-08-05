@@ -1,7 +1,7 @@
 import 'package:eds_beta/features/main_layout/cart/view/cart_view.dart';
-import 'package:eds_beta/features/main_layout/home_screen/home_view.dart';
-import 'package:eds_beta/features/main_layout/liked/view/liked_view.dart';
+import 'package:eds_beta/features/main_layout/home_screen/view/home_view.dart';
 import 'package:eds_beta/features/main_layout/profile/view/profile_view.dart';
+import 'package:eds_beta/features/main_layout/services/services_view.dart';
 import 'package:eds_beta/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -25,8 +25,8 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
 
   final _views = [
     const HomeView(),
+    const ServicesView(),
     const CartView(),
-    const LikedView(),
     const ProfileView(),
     // this is a dummy widget to ignore the error RangeError (index): Invalid value: Not in inclusive range 0..2: 3
     const SizedBox.shrink()
@@ -36,12 +36,22 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.menu_rounded,
+              size: 32,
+              weight: 700,
+              color: Pallete.black,
+            )),
+            
         centerTitle: true,
         title: Text(
           "ENDLESS",
           style: TextStyle(
-              fontSize: 28,
+              fontSize: 32,
               fontWeight: FontWeight.w900,
               fontFamily: GoogleFonts.unbounded().fontFamily),
         ),
@@ -49,9 +59,11 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
           Container(
             margin: const EdgeInsets.only(right: 6),
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                //TODO: ADD NOTIFICATION PAGE NAVIGATION
+              },
               icon: const Icon(
-                Icons.search_rounded,
+                Icons.notifications_outlined,
                 size: 32,
                 weight: 700,
                 color: Pallete.black,
@@ -68,7 +80,7 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
               _selectedIndex = value;
             });
           },
-          backgroundColor: Pallete.black,
+          backgroundColor: Pallete.backgroundColor,
           color: Pallete.fadedIconColor,
           activeColor: Pallete.bottomNavActiveColor,
           gap: 10,
@@ -81,16 +93,17 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
           tabs: const [
             GButton(
               icon: Icons.explore_rounded,
-              text: 'HOME',
+              text: 'EXPLORE',
+            ),
+            GButton(
+              icon: Icons.grid_view_rounded,
+              text: 'Services',
             ),
             GButton(
               icon: Icons.local_mall_rounded,
               text: 'CART',
             ),
-            GButton(
-              icon: Icons.favorite_rounded,
-              text: 'LIKED',
-            ),
+           
             GButton(
               icon: Icons.account_circle_rounded,
               text: 'PROFILE',

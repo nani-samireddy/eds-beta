@@ -33,7 +33,6 @@ class AuthAPI implements IAuthAPI {
   final FirebaseAuth _auth;
   AuthAPI({required FirebaseAuth auth}) : _auth = auth;
 
-  PhoneAuthCredential? _phoneAuthCredential;
   String verificationCodeFromFirebase = '';
   int? forceResendingToken;
 
@@ -47,7 +46,6 @@ class AuthAPI implements IAuthAPI {
       await _auth.verifyPhoneNumber(
         forceResendingToken: resendToken,
         verificationCompleted: (phoneAuthCredential) {
-          _phoneAuthCredential = phoneAuthCredential;
           didSend = true;
           if (!completer.isCompleted) {
             // Check if completer is already completed

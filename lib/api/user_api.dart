@@ -52,5 +52,6 @@ class UserAPI implements IUserAPI {
       UserModel userModel = UserModel.fromFirebaseUser(user: user);
       await _databaseAPI.createUserDoc(userModel: userModel);
     }
+    return null;
   }
 }

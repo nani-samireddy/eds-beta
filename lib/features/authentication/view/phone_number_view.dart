@@ -143,12 +143,12 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Center(
-                    child: Image.asset(
-                      ImagesUrl.authPng,
-                      height: 250,
-                    ),
-                  ),
+                  // Center(
+                  //   child: Image.asset(
+                  //     ImagesUrl.authPng,
+                  //     height: 250,
+                  //   ),
+                  // ),
                   const Text(
                     "Find the Perfect Gift for your loved ones",
                     textAlign: TextAlign.left,
