@@ -1,5 +1,6 @@
-import 'package:eds_beta/api/database_api.dart';
+
 import 'package:eds_beta/common/components/products_section.dart';
+import 'package:eds_beta/providers/database_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:eds_beta/common/common.dart';
 import 'package:eds_beta/constants/images_urls.dart';
 import 'package:eds_beta/core/core.dart';
@@ -141,14 +140,14 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
             child: SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Center(
-                  //   child: Image.asset(
-                  //     ImagesUrl.authPng,
-                  //     height: 250,
-                  //   ),
-                  // ),
+                  Center(
+                    child: Image.asset(
+                      ImagesUrl.authPng,
+                      height: 250,
+                    ),
+                  ),
                   const Text(
                     "Find the Perfect Gift for your loved ones",
                     textAlign: TextAlign.left,

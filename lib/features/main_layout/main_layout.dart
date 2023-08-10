@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:heroicons/heroicons.dart';
 
 class MainLayout extends ConsumerStatefulWidget {
   const MainLayout({super.key});
@@ -40,12 +41,13 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {},
-            icon: const Icon(
-              Icons.menu_rounded,
-              size: 32,
-              weight: 700,
-              color: Pallete.black,
-            )),
+          icon: const Icon(
+            Icons.menu,
+            size: 32,
+            weight: 700,
+            color: Colors.black,
+          ),
+        ),
             
         centerTitle: true,
         title: Text(
@@ -63,11 +65,11 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
                 //TODO: ADD NOTIFICATION PAGE NAVIGATION
               },
               icon: const Icon(
-                Icons.notifications_outlined,
-                size: 32,
-                weight: 700,
-                color: Pallete.black,
-              ),
+                  Icons.notifications_outlined,
+                  size: 28,
+                  weight: 300,
+                  color: Colors.black,
+                )
             ),
           ),
         ],
@@ -92,20 +94,20 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
               color: Pallete.bottomNavActiveColor),
           tabs: const [
             GButton(
-              icon: Icons.explore_rounded,
+              icon: Icons.explore_outlined,
               text: 'EXPLORE',
             ),
             GButton(
-              icon: Icons.grid_view_rounded,
+              icon: Icons.grid_view_outlined,
               text: 'Services',
             ),
             GButton(
-              icon: Icons.local_mall_rounded,
+              icon: Icons.local_mall_outlined,
               text: 'CART',
             ),
            
             GButton(
-              icon: Icons.account_circle_rounded,
+              icon: Icons.account_circle_outlined,
               text: 'PROFILE',
             ),
           ]),

@@ -1,8 +1,9 @@
 import 'dart:developer';
 
-import 'package:eds_beta/api/database_api.dart';
+import 'package:eds_beta/providers/database_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CategoriesListView extends ConsumerStatefulWidget {
   const CategoriesListView({super.key});
@@ -24,9 +25,10 @@ class _CategoriesListViewState extends ConsumerState<CategoriesListView> {
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             child: Text(
               "Categories",
-              style: Theme.of(context).textTheme.headline6!.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: GoogleFonts.dmSans().fontFamily,
+                  fontWeight: FontWeight.w700)
             ),
           ),
           SingleChildScrollView(

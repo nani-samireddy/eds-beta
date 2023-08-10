@@ -46,14 +46,4 @@ class Offer {
   @override
   String toString() => 'Offer(name: $name, description: $description, image: $image)';
 
-  @override
-  bool operator ==(covariant Offer other) {
-    if (identical(this, other)) return true;
-  
-    return 
-      other.name == name &&
-      other.description == description &&
-      other.image == image;
-  }
-
 }

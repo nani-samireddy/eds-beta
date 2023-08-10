@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:eds_beta/api/authentication_api.dart';
 import 'package:eds_beta/features/authentication/view/phone_number_view.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +17,6 @@ class _AuthWrapperState extends ConsumerState<AuthWrapper> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authChangesProvider).value;
-    log("User: $user");
     return user == null ? const PhoneNumberView() : const MainLayout();
 
   }

@@ -1,6 +1,6 @@
-import 'package:eds_beta/models/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eds_beta/models/app_models.dart';
 
 class OfferDetailedView extends ConsumerStatefulWidget {
   const OfferDetailedView({super.key, required this.offer});

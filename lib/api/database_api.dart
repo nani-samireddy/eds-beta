@@ -1,41 +1,8 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eds_beta/constants/constans.dart';
-import 'package:eds_beta/data/testdata.dart';
-import 'package:eds_beta/models/category_model.dart';
-import 'package:eds_beta/models/product_model.dart';
-import 'package:eds_beta/models/section_list_model.dart';
-import 'package:eds_beta/models/offer_model.dart';
-import 'package:eds_beta/models/size_model.dart';
-import 'package:eds_beta/models/user_model.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final homeScreenDataProvider = Provider<List<SectionItemsListModel>>((ref) =>
-    homeScreenData.map((e) => SectionItemsListModel.fromMap(e)).toList());
-
-final databaseAPIProvider = Provider<DatabaseAPI>((ref) {
-  final db = FirebaseFirestore.instance;
-  return DatabaseAPI(firestore: db);
-});
-
-final offersProvider = FutureProvider<List<Offer>?>((ref) async {
-  log("Getting offers");
-  final db = ref.watch(databaseAPIProvider);
-  return await db.getOffers();
-});
-
-final categoriesProvider = FutureProvider<List<CategoryModel>?>((ref) async {
-  log("Getting categories");
-  final db = ref.watch(databaseAPIProvider);
-  return await db.getCategories();
-});
-
-final latestProductsProvider = FutureProvider<List<ProductModel>?>((ref) async {
-  log("Getting latest products");
-  final db = ref.watch(databaseAPIProvider);
-
-  return await db.getLatestProducts();
-});
+import '../models/app_models.dart';
 
 abstract class IDatabaseAPI {
   Future<UserModel?> getUserDataFromDB({required String uid});
@@ -45,6 +12,18 @@ abstract class IDatabaseAPI {
   Future<List<CategoryModel>?> getCategories();
   Future<List<ProductModel>?> getLatestProducts();
   Future<void> addProduct();
+  Future<List<ProductModel>> getSimilarProducts(
+      {required List<String> tags, required String productId});
+  Future<List<ProductModel>> getUserCartItems({required UserModel user});
+  Future<void> removeCartItem(
+      {required String productId, required UserModel user});
+  Future<void> addCartItem(
+      {required CartItemModel cartItem, required UserModel user});
+  Future<void> updateCartItem(
+      {required CartItemModel cartItem, required UserModel user});
+
+  Future<List<ProductModel>> getProductsWithIds({required List<String> ids});
+  Future<void> addUserToDB({required UserModel user});
 }
 
 class DatabaseAPI extends IDatabaseAPI {
@@ -60,10 +39,12 @@ class DatabaseAPI extends IDatabaseAPI {
           .get()
           .then((value) {
         if (value.exists) {
-          return UserModel.fromMap(value.data()!);
+          final user = UserModel.fromMap(value.data()!);
+          log("UserModel: $user");
+          return user;
         } else {
           log("User does not exist");
-          //TODO:Create new user
+
           return null;
         }
       });
@@ -149,20 +130,22 @@ class DatabaseAPI extends IDatabaseAPI {
           .orderBy("createdAt", descending: true)
           .limit(10);
 
-      return await productsRef.get().then((value) {
-        if (value.docs.isNotEmpty) {
-          List<ProductModel> products = [];
-          for (var element in value.docs) {
-            String productId = element.id;
-            products.add(ProductModel.fromMap(
-                map: element.data(), productId: productId));
+      return await productsRef.get().then(
+        (value) {
+          if (value.docs.isNotEmpty) {
+            List<ProductModel> products = [];
+            for (var element in value.docs) {
+              String productId = element.id;
+              products.add(ProductModel.fromMap(
+                  map: element.data(), productId: productId));
+            }
+            return products;
+          } else {
+            log("Products does not exist");
+            return [];
           }
-          return products;
-        } else {
-          log("Products does not exist");
-          return [];
-        }
-      });
+        },
+      );
     } catch (e, s) {
       log("Error while fetching products from db $e");
       log(s.toString());
@@ -175,12 +158,13 @@ class DatabaseAPI extends IDatabaseAPI {
   Future<void> addProduct() {
     final ProductModel productModel = ProductModel(
       productId: "l5d0yTPSAiCC1CuUFF4q",
-      name: "Cotton TSHIRT",
-      description:
-          "The Dal Silk Gown with Coddling Embroidery and Real Mirror is a stunning and elegant gown made from high-quality Dal Silk.",
+      name: "White shirt",
+      tagline: 'printed Pure Cotton white SHIRT',
+      description: "Pure cotton white shirt ",
       actualPrice: "1999",
       currentPrice: "1400",
       availableStock: 40,
+      rating: '4.5',
       color: null,
       brand: null,
       sizes: [
@@ -193,24 +177,29 @@ class DatabaseAPI extends IDatabaseAPI {
       ],
       availableColors: [],
       images: [
+        //"https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fnewthshirt.jpeg?alt=media&token=6a793c3c-e0fe-4e62-a45f-f0a3345a3b22",
         "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fpurecotton-t-shirt.jpeg?alt=media&token=7d3a5bc6-1f8f-411d-932f-f8f2781ca8e2",
         "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown2.jpeg?alt=media&token=662925c2-45e6-4b08-b278-c8ad925c36e7",
         "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown3.jpeg?alt=media&token=746d1ab9-2a60-4250-b186-3c6f313b072e",
-        "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown4.jpeg?alt=media&token=137021f8-873b-4f71-aae8-133c424330b0",
-        "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown5.jpeg?alt=media&token=ba2b5325-effb-40a1-82e4-16bb49c90ba6",
+        //"https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown4.jpeg?alt=media&token=137021f8-873b-4f71-aae8-133c424330b0",
+        //"https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown5.jpeg?alt=media&token=ba2b5325-effb-40a1-82e4-16bb49c90ba6",
         "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown6.jpeg?alt=media&token=b7b3ff1d-e61b-4322-906a-ddfe8decbd40"
       ],
       tags: [
-        "women",
-        "fashion",
-        "gown",
-        "white gown",
-        "work gown",
-        "women gown",
-        "girl",
-        "girl gown"
+        "men",
+        "men fashion",
+        "tsirt",
+        "cotton",
+        "pure cotton",
+        "white",
+        "white tshirt",
+        "printed",
+        "printed tshirt",
+        "printed white tshirt",
+        "printed pure cotton tshirt",
+        "printed pure cotton white tshirt",
       ],
-      category: "Women's Fashion",
+      category: "Men's Fashion",
       manufacturer: "",
       netQuantity: 1,
       details:
@@ -227,5 +216,170 @@ class DatabaseAPI extends IDatabaseAPI {
       log("Error while adding product $e");
     }
     return Future.value();
+  }
+
+  Future<void> addUser() async {
+    //TODO: REMOVE THIS MEHTOD IN THE PRODUCTION
+    final UserModel userModel = UserModel(
+        uid: "l5d0yTPSAiCC1CuUFF4q",
+        name: "Rahul",
+        email: "example@example.com",
+        cartItems: [],
+        phone: '+9191234567890',
+        wishListItems: []);
+    try {
+      _firestore
+          .collection(FirestoreCollectionNames.usersCollection)
+          .doc()
+          .set(userModel.toMap());
+    } catch (e) {
+      log("Error while adding product $e");
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> getSimilarProducts(
+      {required List<String> tags, required String productId}) async {
+    try {
+      final docRef = _firestore
+          .collection(FirestoreCollectionNames.productsCollection)
+          .where("tags", arrayContainsAny: tags.getRange(0, 10))
+          .where(FieldPath.documentId, isNotEqualTo: productId)
+          .limit(8);
+      return await docRef.get().then((value) {
+        if (value.docs.isNotEmpty) {
+          List<ProductModel> products = [];
+          log(value.docs.length.toString());
+          for (var element in value.docs) {
+            String productId = element.id;
+            products.add(ProductModel.fromMap(
+                map: element.data(), productId: productId));
+          }
+          return products;
+        } else {
+          log("Products related does not exist");
+          return [];
+        }
+      });
+    } catch (e) {
+      log("Error while fetching similar products $e");
+      return [];
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> getUserCartItems({required UserModel user}) async {
+    try {
+      if (user.cartItems.isEmpty) {
+        log("User cart is empty");
+        return [];
+      }
+      final docRef = _firestore
+          .collection(FirestoreCollectionNames.productsCollection)
+          .where(FieldPath.documentId, whereIn: user.cartItems.toList());
+      return await docRef.get().then((value) {
+        if (value.docs.isNotEmpty) {
+          List<ProductModel> products = [];
+          log(value.docs.length.toString());
+          for (var element in value.docs) {
+            String productId = element.id;
+            products.add(ProductModel.fromMap(
+                map: element.data(), productId: productId));
+          }
+          return products;
+        } else {
+          log("User cart is empty from firebase");
+          return [];
+        }
+      });
+    } catch (e) {
+      log("Error while fetching user cart $e");
+      return [];
+    }
+  }
+
+  @override
+  Future<void> removeCartItem(
+      {required String productId, required UserModel user}) async {
+    try {
+      user.cartItems.removeWhere((element) => element.productId == productId);
+      _firestore
+          .collection(FirestoreCollectionNames.usersCollection)
+          .doc(user.uid)
+          .update({"cartItems": user.cartItems.map((e) => e.toMap()).toList()});
+    } catch (e) {
+      log("Error while removing cart item $e");
+    }
+  }
+
+  @override
+  Future<void> addCartItem(
+      {required CartItemModel cartItem, required UserModel user}) async {
+    try {
+      user.cartItems.add(cartItem);
+      log(user.cartItems.length.toString());
+      await _firestore
+          .collection(FirestoreCollectionNames.usersCollection)
+          .doc(user.uid)
+          .update({"cartItems": user.cartItems.map((e) => e.toMap()).toList()});
+    } catch (e) {
+      log("Error while adding cart item $e");
+    }
+  }
+
+  @override
+  Future<void> updateCartItem(
+      {required CartItemModel cartItem, required UserModel user}) async {
+    try {
+      user.cartItems.forEach((element) {
+        if (element.productId == cartItem.productId) {
+          element.setQuantity = cartItem.quantity;
+        }
+      });
+    } catch (e) {
+      log("Error while updating cart item $e");
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> getProductsWithIds(
+      {required List<String> ids}) async {
+    try {
+      return await _firestore
+          .collection(FirestoreCollectionNames.productsCollection)
+          .where(FieldPath.documentId, whereIn: ids)
+          .get()
+          .then((value) {
+        if (value.docs.isNotEmpty) {
+          List<ProductModel> products = [];
+          log(value.docs.length.toString());
+          for (var element in value.docs) {
+            String productId = element.id;
+            products.add(ProductModel.fromMap(
+                map: element.data(), productId: productId));
+          }
+          return products;
+        } else {
+          log("Products with ids does not exist");
+          return [];
+        }
+      });
+    } catch (e) {
+      log("Error while fetching products with ids $e");
+      return [];
+    }
+  }
+
+  @override
+  Future<void> addUserToDB({required UserModel user}) async {
+    try {
+      await _firestore
+          .collection(FirestoreCollectionNames.usersCollection)
+          .doc(user.uid)
+          .set(user.toMap());
+      log("Added user to db");
+    } catch (e) {
+      log("Error while adding user to db $e");
+    }
   }
 }

@@ -16,6 +16,11 @@ final authChangesProvider = StreamProvider<User?>((ref) {
   return authAPI.authChanges();
 });
 
+final currentAuthUserProvider = FutureProvider<User?>((ref) async {
+  final authAPI = ref.watch(authAPIProvider);
+  final res = await authAPI.getCurrentUser();
+  return res.fold((l) => null, (r) => r);
+});
 
 abstract class IAuthAPI {
   Future<bool> sendOTP({required String phoneNumber});
@@ -31,10 +36,11 @@ abstract class IAuthAPI {
 
 class AuthAPI implements IAuthAPI {
   final FirebaseAuth _auth;
-  AuthAPI({required FirebaseAuth auth}) : _auth = auth;
-
   String verificationCodeFromFirebase = '';
   int? forceResendingToken;
+  static bool isLoggedIn = false;
+
+  AuthAPI({required FirebaseAuth auth}) : _auth = auth;
 
   @override
   Future<bool> sendOTP({required String phoneNumber, int? resendToken}) async {
@@ -108,6 +114,7 @@ class AuthAPI implements IAuthAPI {
   FutureEither<User> getCurrentUser() async {
     try {
       final user = _auth.currentUser;
+     
       if (user != null) {
         return right(user);
       } else {
@@ -126,6 +133,7 @@ class AuthAPI implements IAuthAPI {
     try {
       final result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
+      isLoggedIn = true;
       return right(result.user as User);
     } catch (e, stackTrace) {
       return left(Failure(message: e.toString(), stackTrace: stackTrace));
@@ -135,6 +143,7 @@ class AuthAPI implements IAuthAPI {
   @override
   FutureVoid logout() async {
     await _auth.signOut();
+    isLoggedIn = false;
   }
 
   @override
@@ -144,9 +153,10 @@ class AuthAPI implements IAuthAPI {
       final googleAuth = await googleUser!.authentication;
       final credentials = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
-      return right(await _auth
-          .signInWithCredential(credentials)
-          .then((value) => value.user as User));
+      return right(await _auth.signInWithCredential(credentials).then((value) {
+        isLoggedIn = true;
+        return value.user as User;
+      }));
     } catch (e, stackTrace) {
       return left(Failure(message: e.toString(), stackTrace: stackTrace));
     }

@@ -1,7 +1,8 @@
 import 'package:eds_beta/common/components/rounded_container.dart';
-import 'package:eds_beta/models/section_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eds_beta/models/app_models.dart';
+
 
 class SectionListView extends ConsumerWidget {
   const SectionListView({super.key, required this.items});

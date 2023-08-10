@@ -1,14 +1,20 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:eds_beta/models/app_models.dart';
+
 
 class UserModel {
   final String name;
   final String email;
   final String phone;
+  final List<CartItemModel> cartItems;
+  final List<String> wishListItems;
   final String uid;
   UserModel({
     required this.name,
     required this.email,
     required this.phone,
+    required this.cartItems,
+    required this.wishListItems,
     required this.uid,
   });
 
@@ -17,12 +23,16 @@ class UserModel {
     String? email,
     String? phone,
     String? address,
+    List<CartItemModel>? cartItems,
+    List<String>? wishListItems,
     String? uid,
   }) {
     return UserModel(
       name: name ?? this.name,
       email: email ?? this.email,
       phone: phone ?? this.phone,
+      cartItems: cartItems ?? this.cartItems,
+      wishListItems: wishListItems ?? this.wishListItems,
       uid: uid ?? this.uid,
     );
   }
@@ -32,6 +42,8 @@ class UserModel {
       'name': name,
       'email': email,
       'phone': phone,
+      'cartItems': cartItems.map((e) => e.toMap()).toList(),
+      'wishListItems': wishListItems,
       'uid': uid,
     };
   }
@@ -41,6 +53,9 @@ class UserModel {
       name: map['name'] as String,
       email: map['email'] as String,
       phone: map['phone'] as String,
+      cartItems: List<CartItemModel>.from(
+          (map['cartItems'] as List).map((x) => CartItemModel.fromMap(x))),
+      wishListItems: List<String>.from(map['wishListItems'] as List),
       uid: map['uid'] as String,
     );
   }
@@ -50,26 +65,16 @@ class UserModel {
         name: user.displayName as String,
         email: user.email as String,
         phone: user.phoneNumber as String,
+        cartItems: [],
+        wishListItems: [],
         uid: user.uid);
   }
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email, phone: $phone, uid: $uid)';
+    return 'UserModel(name: $name, email: $email, phone: $phone, uid: $uid, cartItems: $cartItems, wishListItems: $wishListItems)';
   }
 
-  @override
-  bool operator ==(covariant UserModel other) {
-    if (identical(this, other)) return true;
+  
 
-    return other.name == name &&
-        other.email == email &&
-        other.phone == phone &&
-        other.uid == uid;
-  }
-
-  @override
-  int get hashCode {
-    return name.hashCode ^ email.hashCode ^ phone.hashCode ^ uid.hashCode;
-  }
 }

@@ -1,9 +1,9 @@
 import 'package:eds_beta/common/components/product_card.dart';
-import 'package:eds_beta/common/components/product_page/product_page.dart';
-import 'package:eds_beta/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:eds_beta/models/app_models.dart';
+
 
 class ProductsSection extends ConsumerStatefulWidget {
   const ProductsSection(
@@ -41,19 +41,8 @@ class _ProductsSectionState extends ConsumerState<ProductsSection> {
                 mainAxisSpacing: 14.0,
                 mainAxisExtent: 300),
             itemBuilder: (context, index) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ProductPage(
-                        product: widget.products[index],
-                      ),
-                    ),
-                  );
-                },
-                child: ProductCard(
-                  product: widget.products[index],
-                ),
+              return ProductCard(
+                product: widget.products[index],
               );
             },
             itemCount: widget.products.length,

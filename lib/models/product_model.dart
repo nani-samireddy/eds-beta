@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eds_beta/models/app_models.dart';
 
-import 'package:eds_beta/models/size_model.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class ProductModel {
   final String productId;
   final String name;
+  final String tagline;
   final String description;
   final String actualPrice;
   final String currentPrice;
@@ -22,12 +21,14 @@ class ProductModel {
   final String manufacturer;
   final int netQuantity;
   final String details;
+  final String rating;
   final bool hasDifferentSizes;
   final Timestamp createdAt;
   ProductModel({
     required this.productId,
     required this.name,
     required this.description,
+    required this.tagline,
     required this.actualPrice,
     required this.currentPrice,
     required this.availableStock,
@@ -36,6 +37,7 @@ class ProductModel {
     required this.brand,
     required this.availableColors,
     required this.images,
+    required this.rating,
     required this.tags,
     required this.category,
     required this.manufacturer,
@@ -50,10 +52,12 @@ class ProductModel {
       productId: productId,
       name: map['name'],
       description: map['description'],
+      tagline: map['tagline'],
       actualPrice: map['actualPrice'],
       currentPrice: map['currentPrice'],
       availableStock: map['availableStock'],
       color: map['color'],
+      rating: map['rating'],
       sizes: map['sizes'] != null
           ? List<SizeModel>.from(map['sizes'].map((x) => SizeModel.fromMap(x)))
           : null,
@@ -74,6 +78,7 @@ class ProductModel {
       'productId': productId,
       'name': name,
       'description': description,
+      'tagline': tagline,
       'actualPrice': actualPrice,
       'currentPrice': currentPrice,
       'availableStock': availableStock,
@@ -83,7 +88,9 @@ class ProductModel {
       'availableColors': availableColors,
       'images': images,
       'tags': tags,
+      'rating': rating,
       'category': category,
+
       'manufacturer': manufacturer,
       'netQuantity': netQuantity,
       'details': details,
@@ -93,7 +100,7 @@ class ProductModel {
 
   @override
   String toString() {
-    return 'ProductModel(productId: $productId, name: $name, description: $description, actualPrice: $actualPrice, currentPrice: $currentPrice, availableStock: $availableStock, color: $color, brand: $brand, sizes: ${sizes!.map((e) => e.toString)}, availableColors: $availableColors, images: $images, tags: $tags, category: $category, manufacturer: $manufacturer, netQuantity: $netQuantity, details: $details, hasDifferentSizes: $hasDifferentSizes, createdAt: $createdAt)';
+    return 'ProductModel(productId: $productId, name: $name, tagline: $tagline , description: $description, actualPrice: $actualPrice, currentPrice: $currentPrice, availableStock: $availableStock, rating: $rating,color: $color, brand: $brand, sizes: ${sizes!.map((e) => e.toString)}, availableColors: $availableColors, images: $images, tags: $tags, category: $category, manufacturer: $manufacturer, netQuantity: $netQuantity, details: $details, hasDifferentSizes: $hasDifferentSizes, createdAt: $createdAt)';
   }
 
   SizeModel getLeastPrice() {

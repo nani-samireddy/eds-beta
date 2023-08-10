@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -25,7 +23,6 @@ List<TableRow> formatProductDetails({required String details}) {
   for (var element in detailsList) {
     List<String> row = element.split(':');
     if (row.length != 2) {
-      log('Invalid row: $row');
       continue;
     }
     rows.add(

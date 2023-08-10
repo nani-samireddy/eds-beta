@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:eds_beta/api/database_api.dart';
 import 'package:eds_beta/common/components/rounded_container.dart';
+import 'package:eds_beta/providers/database_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

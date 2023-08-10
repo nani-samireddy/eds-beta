@@ -1,4 +1,4 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -6,7 +6,6 @@ import 'package:stack_trace/stack_trace.dart' as stack_trace;
 
 import 'package:eds_beta/core/core.dart';
 import 'package:eds_beta/features/authentication/wrapper.dart';
-import 'package:eds_beta/features/splash/splash_screen.dart';
 import 'package:eds_beta/theme/theme.dart';
 
 FutureVoid main() async {
@@ -28,13 +27,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppTheme.getAppTheme(context: context),
-      home: AnimatedSplashScreen(
-        duration: 1600,
-        splash: const SplashScreen(),
-        nextScreen: const AuthWrapper(),
-        splashTransition: SplashTransition.fadeTransition,
-        backgroundColor: Colors.white,
-      ),
+      home: const AuthWrapper(),
     );
   }
 }

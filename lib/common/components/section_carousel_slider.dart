@@ -1,9 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eds_beta/common/components/rounded_container.dart';
-import 'package:eds_beta/features/main_layout/home_screen/components/offer_detailed_view.dart';
-import 'package:eds_beta/models/section_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eds_beta/models/app_models.dart';
+
 
 class SectionCarouselSlider extends ConsumerStatefulWidget {
   const SectionCarouselSlider({super.key, required this.items});

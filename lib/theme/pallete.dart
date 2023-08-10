@@ -10,7 +10,7 @@ class Pallete {
   static const Color primaryButtonShadowColor = Color(0xffABE422);
   static const Color textBlackColor = Color.fromARGB(255, 115, 124, 132);
   static const Color blue = Colors.blue;
-  static const Color black = Color.fromARGB(255, 25, 9, 9);
+  static const Color black = Color.fromARGB(255, 0, 0, 0);
   static const Color bottomNavActiveColor = Color.fromRGBO(119, 135, 3, 1);
 
 }

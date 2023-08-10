@@ -1,8 +1,8 @@
 import 'package:eds_beta/common/components/common_components.dart';
-import 'package:eds_beta/models/section_list_model.dart';
-import 'package:eds_beta/models/section_item_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eds_beta/models/app_models.dart';
+
 
 class DisplaySection extends ConsumerStatefulWidget {
   const DisplaySection({super.key, required this.sectionItemsListModel});
