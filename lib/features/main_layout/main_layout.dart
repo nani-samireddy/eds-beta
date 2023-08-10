@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:heroicons/heroicons.dart';
+
 
 class MainLayout extends ConsumerStatefulWidget {
   const MainLayout({super.key});

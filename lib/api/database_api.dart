@@ -24,6 +24,9 @@ abstract class IDatabaseAPI {
 
   Future<List<ProductModel>> getProductsWithIds({required List<String> ids});
   Future<void> addUserToDB({required UserModel user});
+
+  Future<void> updateUserCartItems(
+      {required UserModel user, required List<CartItemModel> cartItems});
 }
 
 class DatabaseAPI extends IDatabaseAPI {
@@ -33,14 +36,14 @@ class DatabaseAPI extends IDatabaseAPI {
   @override
   Future<UserModel?> getUserDataFromDB({required String uid}) async {
     try {
-      await _firestore
+      return await _firestore
           .collection(FirestoreCollectionNames.usersCollection)
           .doc(uid)
           .get()
           .then((value) {
         if (value.exists) {
           final user = UserModel.fromMap(value.data()!);
-          log("UserModel: $user");
+         
           return user;
         } else {
           log("User does not exist");
@@ -51,7 +54,6 @@ class DatabaseAPI extends IDatabaseAPI {
     } catch (e) {
       return null;
     }
-    return null;
   }
 
   @override
@@ -331,11 +333,11 @@ class DatabaseAPI extends IDatabaseAPI {
   Future<void> updateCartItem(
       {required CartItemModel cartItem, required UserModel user}) async {
     try {
-      user.cartItems.forEach((element) {
+      for (var element in user.cartItems) {
         if (element.productId == cartItem.productId) {
           element.setQuantity = cartItem.quantity;
         }
-      });
+      }
     } catch (e) {
       log("Error while updating cart item $e");
     }
@@ -380,6 +382,23 @@ class DatabaseAPI extends IDatabaseAPI {
       log("Added user to db");
     } catch (e) {
       log("Error while adding user to db $e");
+    }
+  }
+
+  @override
+  Future<void> updateUserCartItems(
+      {required UserModel user, required List<CartItemModel> cartItems}) async {
+    try {
+      await _firestore
+          .collection(FirestoreCollectionNames.usersCollection)
+          .doc(user.uid)
+          .update({
+        "cartItems":
+            cartItems.isEmpty ? [] : cartItems.map((e) => e.toMap()).toList()
+      });
+      log("Updated user cart items");
+    } catch (e) {
+      log("Error while updating user cart items $e");
     }
   }
 }

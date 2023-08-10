@@ -37,7 +37,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
             const OffersCarosel(),
             ElevatedButton(
               onPressed: () async {
-                final user = ref.watch(curretnUserModel).value;
+                final user = ref.watch(userAPIProvider.notifier).user;
                 log("User: $user");
               },
               child: const Text("Add datat to database"),

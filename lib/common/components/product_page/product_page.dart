@@ -45,7 +45,18 @@ class _ProductPageState extends ConsumerState<ProductPage> {
               currentPrice: double.parse(currentPrice))
           .toString();
     }
+
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    setState(() {
+      isInCart = ref
+          .watch(cartAPIProvider)
+          .isItemInCart(productId: widget.product.productId);
+    });
+    super.didChangeDependencies();
   }
 
   void changeSelectedSize(SizeModel size) {

@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class CartItemModel {
   final String productId;
   int quantity;
@@ -21,4 +22,10 @@ class CartItemModel {
       quantity: map['quantity'] as int,
     );
   }
+
+
+
+  @override
+  String toString() =>
+      'CartItemModel(productId: $productId, quantity: $quantity)';
 }

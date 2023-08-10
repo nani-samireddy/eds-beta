@@ -109,12 +109,13 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
       _isLoading = true;
     });
     await ref
-        .read(authControllerProvider.notifier)
+        .watch(authControllerProvider.notifier)
         .verifyOTP(otp: _otpController.text, context: context)
         .then((value) {
       setState(() {
         _isLoading = false;
       });
+      
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const AuthWrapper()),

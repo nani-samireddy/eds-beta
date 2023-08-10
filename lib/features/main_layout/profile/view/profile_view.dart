@@ -1,4 +1,3 @@
-import 'package:eds_beta/api/authentication_api.dart';
 import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

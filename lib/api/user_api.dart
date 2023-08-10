@@ -1,52 +1,46 @@
 import 'dart:developer';
 import 'package:eds_beta/api/database_api.dart';
-import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
-
 import 'package:eds_beta/providers/database_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../models/app_models.dart';
 
-final userAPIProvider = Provider<UserAPI>((ref) {
+final userAPIProvider = StateNotifierProvider<UserAPI, UserModel?>((ref) {
   final databaseAPI = ref.watch(databaseAPIProvider);
-  final authController = ref.watch(authControllerProvider.notifier);
-  return UserAPI(databaseAPI: databaseAPI, authController: authController);
+  return UserAPI(databaseAPI: databaseAPI);
 });
 
-
-
-
 abstract class IUserAPI {
-  Future<UserModel?> getUserData({required String uid});
+  Future<void> setUserData({required String uid});
   Future<UserModel?> createUser({required User user});
-  Future<UserModel?> currentUser();
   Future<List<CartItemModel>> getCartItems();
+  Future<void> setUserFromFirebaseUser({required User user});
 }
 
-class UserAPI implements IUserAPI {
+class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
   final DatabaseAPI _databaseAPI;
+  UserAPI({
+    required DatabaseAPI databaseAPI,
+  })  : _databaseAPI = databaseAPI,
+        super(null);
 
-  final AuthController _authController;
-  UserAPI(
-      {required DatabaseAPI databaseAPI,
-      required AuthController authController})
-      : _databaseAPI = databaseAPI,
-        _authController = authController;
+  UserModel? get user {
+    return state;
+  }
 
   @override
-  Future<UserModel?> getUserData({required String uid}) async {
+  Future<void> setUserData({required String uid}) async {
     try {
-      return await _databaseAPI.getUserDataFromDB(uid: uid);
+      final user = await _databaseAPI.getUserDataFromDB(uid: uid);
+      log("user sds: $user");
+      state = user;
     } catch (e) {
       log("Error in while getting UserModel: $e");
-      return null;
     }
   }
 
   @override
-  Future<UserModel?> createUser({required user}) async {
-    final user = await _authController.currentUser();
+  Future<UserModel?> createUser({required User? user}) async {
     if (user != null) {
       UserModel userModel = UserModel.fromFirebaseUser(user: user);
       await _databaseAPI.createUserDoc(userModel: userModel);
@@ -55,31 +49,36 @@ class UserAPI implements IUserAPI {
   }
 
   @override
-  Future<UserModel?> currentUser() async {
+  Future<List<CartItemModel>> getCartItems() async {
     try {
-      final uid =
-          await _authController.currentUser().then((value) => value!.uid);
-      if (uid.isNotEmpty) {
-        return await _databaseAPI.getUserDataFromDB(uid: uid);
+      if (state == null) {
+        return [];
       }
-      return null;
+      return state!.cartItems;
     } catch (e) {
-      log("Error in while getting currentUser UserModel: $e");
-      return null;
+      log("Error in getCartItems: $e");
+      return [];
     }
   }
 
   @override
-  Future<List<CartItemModel>> getCartItems() async {
+  Future<void> setUserFromFirebaseUser({required User user}) async {
     try {
-      final user = await _authController.currentUser();
-      if (user == null) {
-        return [];
-      }
-      return await currentUser().then((value) => value!.cartItems);
+      final userModel = UserModel.fromFirebaseUser(user: user);
+      state = userModel;
     } catch (e) {
-      log("Error in getCartItems: $e");
-      return [];
+      log("Error in setUserFromFirebaseUser: $e");
+    }
+  }
+
+  void updateCartItems({required List<CartItemModel> cartItems}) {
+    try {
+      if (state == null) {
+        return;
+      }
+      state = state!.copyWith(cartItems: cartItems);
+    } catch (e) {
+      log("Error in updateCartItems: $e");
     }
   }
 }

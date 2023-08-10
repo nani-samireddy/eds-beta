@@ -9,49 +9,50 @@ import '../models/app_models.dart';
 import '../providers/database_providers.dart';
 
 final cartAPIProvider = Provider<CartAPI>((ref) {
-  final userAPI = ref.watch(userAPIProvider);
+  final userAPI = ref.watch(userAPIProvider.notifier);
   final databaseAPI = ref.watch(databaseAPIProvider);
   final authAPI = ref.watch(authAPIProvider);
   return CartAPI(userAPI: userAPI, databaseAPI: databaseAPI, authAPI: authAPI);
 });
 
-final cartItemsProvider = FutureProvider<List<CartItemModel>>((ref) async {
-  final cartAPI = ref.watch(cartAPIProvider);
-  return await cartAPI.getCartItems();
-});
-
 abstract class ICartAPI {
-  Future<List<CartItemModel>> getCartItems();
   Future<void> addCartItem({required CartItemModel cartItem});
   Future<void> removeCartItem({required CartItemModel cartItem});
   Future<void> clearCart();
-  Future<bool> isItemInCart({required String productId});
+  bool isItemInCart({required String productId});
   Future<void> getProductsInCart();
+  void setProductsInCart();
+  void setCartItems({required List<CartItemModel> cartItems});
 }
 
-class CartAPI implements ICartAPI {
+class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
   final UserAPI _userAPI;
   final DatabaseAPI _databaseAPI;
-  final AuthAPI _authAPI;
-  List<CartItemModel> _noUserCartItems = [];
   CartAPI(
       {required UserAPI userAPI,
       required DatabaseAPI databaseAPI,
       required AuthAPI authAPI})
       : _userAPI = userAPI,
         _databaseAPI = databaseAPI,
-        _authAPI = authAPI;
+        super([]);
+
+  List<CartItemModel> get cartItems => state;
+
+  @override
+  void setCartItems({required List<CartItemModel> cartItems}) {
+    state = cartItems;
+  }
 
   @override
   Future<void> addCartItem({required CartItemModel cartItem}) async {
     try {
-      _userAPI.currentUser().then((user) async {
-        if (user == null) {
-          _noUserCartItems.add(cartItem);
-          return;
-        }
-        await _databaseAPI.addCartItem(user: user, cartItem: cartItem);
-      });
+      final user = _userAPI.user;
+      state = [...state, cartItem];
+      if (user == null) {
+        return;
+      }
+      _userAPI.updateCartItems(cartItems: state);
+      await _databaseAPI.addCartItem(user: user, cartItem: cartItem);
     } catch (e) {
       log("Error in addCartItem: $e");
     }
@@ -60,7 +61,13 @@ class CartAPI implements ICartAPI {
   @override
   Future<void> clearCart() async {
     try {
-      _noUserCartItems.clear();
+      final user = _userAPI.user;
+      state = [];
+      if (user == null) {
+        return;
+      }
+      _userAPI.updateCartItems(cartItems: state);
+      await _databaseAPI.updateUserCartItems(user: user, cartItems: state);
     } catch (e) {
       log("Error in clearCart: $e");
     }
@@ -69,42 +76,23 @@ class CartAPI implements ICartAPI {
   @override
   Future<void> removeCartItem({required CartItemModel cartItem}) async {
     try {
-      await _userAPI.currentUser().then((user) async {
-        if (user == null) {
-          _noUserCartItems.remove(cartItem);
-          return;
-        }
-        await _databaseAPI.removeCartItem(
-            user: user, productId: cartItem.productId);
-      });
+      final user = _userAPI.user;
+      state = [...state]..remove(cartItem);
+      if (user == null) {
+        return;
+      }
+      _userAPI.updateCartItems(cartItems: state);
+      await _databaseAPI.removeCartItem(
+          user: user, productId: cartItem.productId);
     } catch (e) {
       log("Error in removeCartItem: $e");
     }
   }
 
   @override
-  Future<List<CartItemModel>> getCartItems() async {
-    List<CartItemModel> cartItems = [];
+  bool isItemInCart({required String productId}) {
     try {
-      final UserModel? user = await _userAPI.currentUser();
-      if (user == null) {
-        return _noUserCartItems;
-      }
-      if (user.cartItems.isEmpty) {
-        return cartItems;
-      }
-      return user.cartItems;
-    } catch (e) {
-      log(" Error in getCartItems: $e");
-      return cartItems;
-    }
-  }
-
-  @override
-  Future<bool> isItemInCart({required String productId}) async {
-    try {
-      return await getCartItems().then(
-          (value) => value.any((element) => element.productId == productId));
+      return state.any((element) => element.productId == productId);
     } catch (e) {
       log("Error in isItemInCart: $e");
       return false;
@@ -112,19 +100,27 @@ class CartAPI implements ICartAPI {
   }
 
   @override
-  Future<void> getProductsInCart() async {
+  Future<List<ProductModel>> getProductsInCart() async {
     try {
-      List<ProductModel> products =
-          await _userAPI.currentUser().then((user) async {
-        if (user != null) {
-          return await _databaseAPI.getUserCartItems(user: user);
-        } else {
-          return await _databaseAPI.getProductsWithIds(
-              ids: _noUserCartItems.map((e) => e.productId).toList());
-        }
-      });
+      return await _databaseAPI.getProductsWithIds(
+          ids: state.map((e) => e.productId).toList());
     } catch (e) {
       log("Error in getProductsInCart: $e");
+      return [];
+    }
+  }
+
+  @override
+  void setProductsInCart() {
+    try {
+      final user = _userAPI.user;
+      if (user == null) {
+        state = [];
+        return;
+      }
+      state = [...user.cartItems];
+    } catch (e) {
+      log("Error in setProductsInCart: $e");
     }
   }
 }
