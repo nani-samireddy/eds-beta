@@ -53,4 +53,22 @@ class SizeModel {
   @override
   String toString() =>
       'SizeModel(size: $size, stock: $stock, price: $price, actualPrice: $actualPrice)';
+
+  @override
+  bool operator ==(covariant SizeModel other) {
+    if (identical(this, other)) return true;
+
+    return other.size == size &&
+        other.stock == stock &&
+        other.price == price &&
+        other.actualPrice == actualPrice;
+  }
+
+  @override
+  int get hashCode {
+    return size.hashCode ^
+        stock.hashCode ^
+        price.hashCode ^
+        actualPrice.hashCode;
+  }
 }

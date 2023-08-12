@@ -19,6 +19,15 @@ abstract class IUserAPI {
 
 class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
   final DatabaseAPI _databaseAPI;
+
+  final UserModel _noUser = UserModel(
+      uid: "",
+      email: "",
+      name: "",
+      cartItems: [],
+      wishListItems: [],
+      phone: '');
+
   UserAPI({
     required DatabaseAPI databaseAPI,
   })  : _databaseAPI = databaseAPI,
@@ -32,7 +41,6 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
   Future<void> setUserData({required String uid}) async {
     try {
       final user = await _databaseAPI.getUserDataFromDB(uid: uid);
-      log("user sds: $user");
       state = user;
     } catch (e) {
       log("Error in while getting UserModel: $e");
@@ -71,14 +79,32 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
     }
   }
 
-  void updateCartItems({required List<CartItemModel> cartItems}) {
+  Future<void> updateCartItems({required List<CartItemModel> cartItems}) async {
     try {
       if (state == null) {
         return;
       }
       state = state!.copyWith(cartItems: cartItems);
+      await _databaseAPI.updateUserCartItems(
+          user: state!, cartItems: state!.cartItems);
     } catch (e) {
       log("Error in updateCartItems: $e");
     }
   }
+
+  Future<void> updateWishListItems(
+      {required List<WishlistItemModel> wishListItems}) async {
+    try {
+      if (state == null) {
+        return;
+      }
+      state = state!.copyWith(wishListItems: wishListItems);
+      await _databaseAPI.updateUserWishListItems(
+          user: state!, wishlistItems: state!.wishListItems);
+    } catch (e) {
+      log("Error in updateWishListItems: $e");
+    }
+  }
+
+
 }

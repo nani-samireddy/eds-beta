@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:eds_beta/api/cart_api.dart';
+import 'package:eds_beta/api/wishlist_api.dart';
 import 'package:eds_beta/common/components/product_images_slider.dart';
 import 'package:eds_beta/common/components/product_page/product_details_table.dart';
 import 'package:eds_beta/common/components/product_page/similar_products.dart';
@@ -11,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:heroicons/heroicons.dart';
 import '../../../theme/theme.dart';
 
 class ProductPage extends ConsumerStatefulWidget {
@@ -23,21 +23,23 @@ class ProductPage extends ConsumerStatefulWidget {
 }
 
 class _ProductPageState extends ConsumerState<ProductPage> {
-  late SizeModel selectedSize = widget.product.getLeastPrice();
+  late SizeModel? selectedSize;
   late String currentPrice, actualPrice, discountPercentage;
   late List<ProductModel> relatedProducts;
   bool isInCart = false;
+  bool isInWishlist = false;
   @override
   void initState() {
     if (widget.product.hasDifferentSizes) {
-      SizeModel selectedSize = widget.product.getLeastPrice();
-      currentPrice = selectedSize.price.toString();
+      selectedSize = widget.product.getLeastPrice();
+      currentPrice = selectedSize!.price.toString();
       actualPrice = widget.product.actualPrice.toString();
       discountPercentage = calculateDiscount(
               actualPrice: double.parse(actualPrice),
               currentPrice: double.parse(currentPrice))
           .toString();
     } else {
+      selectedSize = null;
       currentPrice = widget.product.currentPrice;
       actualPrice = widget.product.actualPrice;
       discountPercentage = calculateDiscount(
@@ -54,7 +56,11 @@ class _ProductPageState extends ConsumerState<ProductPage> {
     setState(() {
       isInCart = ref
           .watch(cartAPIProvider)
-          .isItemInCart(productId: widget.product.productId);
+          .isItemInCart(
+          productId: widget.product.productId, size: selectedSize);
+      isInWishlist = ref
+          .watch(wishlistAPIProvider.notifier)
+          .isItemInWishlist(productId: widget.product.productId);
     });
     super.didChangeDependencies();
   }
@@ -68,14 +74,20 @@ class _ProductPageState extends ConsumerState<ProductPage> {
         actualPrice: double.parse(actualPrice),
         currentPrice: double.parse(currentPrice),
       ).toString();
+      // check if the product is in cart
+      isInCart = ref.watch(cartAPIProvider).isItemInCart(
+          productId: widget.product.productId, size: selectedSize);
       log("selected size: ${size.size} price: $currentPrice");
     });
   }
 
   void handleAddToCart() {
     ref.watch(cartAPIProvider).addCartItem(
-        cartItem:
-            CartItemModel(productId: widget.product.productId, quantity: 1));
+        cartItem: CartItemModel(
+            productId: widget.product.productId,
+            product: widget.product,
+            quantity: 1,
+            size: selectedSize));
     setState(() {
       isInCart = true;
     });
@@ -84,6 +96,19 @@ class _ProductPageState extends ConsumerState<ProductPage> {
   void handleCheckout() {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (context) => const CartView()));
+  }
+
+  void handleAddToWishlist() {
+    if (isInWishlist) {
+      ref.watch(wishlistAPIProvider.notifier).removeWishlistItem(
+          wishlistItem: WishlistItemModel(productId: widget.product.productId));
+    } else {
+      ref.watch(wishlistAPIProvider.notifier).addWishlistItem(
+          wishlistItem: WishlistItemModel(productId: widget.product.productId));
+    }
+    setState(() {
+      isInWishlist = !isInWishlist;
+    });
   }
 
   @override
@@ -101,13 +126,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
             onPressed: () {
               //TODO: Share Product
             },
-            icon: const HeroIcon(HeroIcons.heart),
-          ),
-          IconButton(
-            onPressed: () {
-              //TODO: Share Product
-            },
-            icon: const HeroIcon(HeroIcons.share),
+            icon: const Icon(Icons.share_outlined),
           ),
         ],
       ),
@@ -136,22 +155,45 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                       children: [
                         ProductImagesSlider(images: widget.product.images),
                         const SizedBox(height: 20),
-                        Text(
-                          widget.product.name,
-                          style: TextStyle(
-                              color: Pallete.textBlackColor,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w900,
-                              fontFamily: GoogleFonts.dmSans().fontFamily),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          widget.product.tagline,
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: Pallete.textBlackColor,
-                              fontSize: 14,
-                              fontFamily: GoogleFonts.poppins().fontFamily),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.product.name,
+                                  style: TextStyle(
+                                      color: Pallete.textBlackColor,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily:
+                                          GoogleFonts.dmSans().fontFamily),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  widget.product.tagline,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                      color: Pallete.textBlackColor,
+                                      fontSize: 14,
+                                      fontFamily:
+                                          GoogleFonts.poppins().fontFamily),
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                                iconSize: 30,
+                                isSelected: isInWishlist,
+                                highlightColor:
+                                    Pallete.primaryButtonShadowColor,
+                                selectedIcon: const Icon(Icons.favorite),
+                                onPressed: handleAddToWishlist,
+                                icon: isInWishlist
+                                    ? const Icon(Icons.favorite)
+                                    : const Icon(
+                                        Icons.favorite_border_outlined))
+                          ],
                         ),
                         const SizedBox(height: 10),
                         RichText(
@@ -263,7 +305,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                                               padding:
                                                   const EdgeInsets.symmetric(
                                                       vertical: 10,
-                                                      horizontal: 20),
+                                                      horizontal: 18),
                                               decoration: BoxDecoration(
                                                 color: size.stock > 0
                                                     ? selectedSize == size
@@ -274,7 +316,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                                                     : Pallete.fadedIconColor
                                                         .withOpacity(.2),
                                                 borderRadius:
-                                                    BorderRadius.circular(5),
+                                                    BorderRadius.circular(50),
                                               ),
                                               child: Text(
                                                 size.size,
@@ -369,7 +411,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                 onPressed: isInCart ? handleCheckout : handleAddToCart,
                 child: Center(
                     child: Text(
-                  isInCart ? "CHECKOUT" : "ADD TO CART",
+                  isInCart ? "GOTO CART" : "ADD TO CART",
                   style: TextStyle(
                       fontWeight: FontWeight.w900,
                       color: Pallete.black,

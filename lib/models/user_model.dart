@@ -7,7 +7,7 @@ class UserModel {
   final String email;
   final String phone;
   final List<CartItemModel> cartItems;
-  final List<String> wishListItems;
+  final List<WishlistItemModel> wishListItems;
   final String uid;
   UserModel({
     required this.name,
@@ -24,7 +24,7 @@ class UserModel {
     String? phone,
     String? address,
     List<CartItemModel>? cartItems,
-    List<String>? wishListItems,
+    List<WishlistItemModel>? wishListItems,
     String? uid,
   }) {
     return UserModel(
@@ -43,7 +43,7 @@ class UserModel {
       'email': email,
       'phone': phone,
       'cartItems': cartItems.map((e) => e.toMap()).toList(),
-      'wishListItems': wishListItems,
+      'wishListItems': wishListItems.map((e) => e.toMap()).toList(),
       'uid': uid,
     };
   }
@@ -55,7 +55,8 @@ class UserModel {
       phone: map['phone'] as String,
       cartItems: List<CartItemModel>.from(
           (map['cartItems'] as List).map((x) => CartItemModel.fromMap(x))),
-      wishListItems: List<String>.from(map['wishListItems'] as List),
+      wishListItems: List<WishlistItemModel>.from((map['wishListItems'] as List)
+          .map((x) => WishlistItemModel.fromMap(x))),
       uid: map['uid'] as String,
     );
   }

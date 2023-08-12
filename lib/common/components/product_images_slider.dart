@@ -27,7 +27,7 @@ class _ProductImagesSliderState extends State<ProductImagesSlider> {
               width: double.infinity,
               margin: const EdgeInsets.only(bottom: 10),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(40),
                 child: Image.network(
                   widget.images[index],
                   fit: BoxFit.cover,
@@ -41,9 +41,9 @@ class _ProductImagesSliderState extends State<ProductImagesSlider> {
                 this.index = index;
               });
             },
-            height: 360,
+            height: 500,
             enlargeCenterPage: true,
-            viewportFraction: .89,
+            viewportFraction: .97,
             autoPlay: true,
             scrollDirection: Axis.horizontal,
             enlargeFactor: .3,
@@ -53,7 +53,7 @@ class _ProductImagesSliderState extends State<ProductImagesSlider> {
           padding: const EdgeInsets.symmetric(horizontal: 8),
           decoration: BoxDecoration(
             color: Pallete.backgroundColor,
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(15),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -76,8 +76,8 @@ class _ProductImagesSliderState extends State<ProductImagesSlider> {
                           ? [
                               BoxShadow(
                                 color: Colors.black.withOpacity(.1),
-                                blurRadius: 8,
-                                offset: const Offset(0, 5),
+                                blurRadius: 30,
+                                offset: const Offset(0, 2),
                               )
                             ]
                           : null,
@@ -90,8 +90,8 @@ class _ProductImagesSliderState extends State<ProductImagesSlider> {
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.white,
                     ),
-                    width: i == index ? 50 : 40,
-                    height: i == index ? 50 : 40,
+                    width: i == index ? 30 : 20,
+                    height: i == index ? 30 : 20,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.network(

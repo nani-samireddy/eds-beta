@@ -46,7 +46,7 @@ List<TableRow> formatProductDetails({required String details}) {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    ' ${row[1]} ${row[1]}',
+                    ' ${row[1]}',
                     softWrap: true,
                     maxLines: 4,
                     style: TextStyle(

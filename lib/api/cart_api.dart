@@ -19,10 +19,11 @@ abstract class ICartAPI {
   Future<void> addCartItem({required CartItemModel cartItem});
   Future<void> removeCartItem({required CartItemModel cartItem});
   Future<void> clearCart();
-  bool isItemInCart({required String productId});
+  bool isItemInCart({required String productId, required SizeModel? size});
   Future<void> getProductsInCart();
   void setProductsInCart();
   void setCartItems({required List<CartItemModel> cartItems});
+  Future<void> changeQuantity({required CartItemModel cartItem});
 }
 
 class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
@@ -34,7 +35,11 @@ class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
       required AuthAPI authAPI})
       : _userAPI = userAPI,
         _databaseAPI = databaseAPI,
-        super([]);
+        super([]) {
+    _userAPI.addListener((user) {
+      state = user?.cartItems ?? [];
+    });
+  }
 
   List<CartItemModel> get cartItems => state;
 
@@ -51,8 +56,7 @@ class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
       if (user == null) {
         return;
       }
-      _userAPI.updateCartItems(cartItems: state);
-      await _databaseAPI.addCartItem(user: user, cartItem: cartItem);
+      await _userAPI.updateCartItems(cartItems: state);
     } catch (e) {
       log("Error in addCartItem: $e");
     }
@@ -66,8 +70,7 @@ class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
       if (user == null) {
         return;
       }
-      _userAPI.updateCartItems(cartItems: state);
-      await _databaseAPI.updateUserCartItems(user: user, cartItems: state);
+      await _userAPI.updateCartItems(cartItems: state);
     } catch (e) {
       log("Error in clearCart: $e");
     }
@@ -81,18 +84,21 @@ class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
       if (user == null) {
         return;
       }
-      _userAPI.updateCartItems(cartItems: state);
-      await _databaseAPI.removeCartItem(
-          user: user, productId: cartItem.productId);
+      await _userAPI.updateCartItems(cartItems: state);
     } catch (e) {
       log("Error in removeCartItem: $e");
     }
   }
 
   @override
-  bool isItemInCart({required String productId}) {
+  bool isItemInCart({required String productId, required SizeModel? size}) {
     try {
-      return state.any((element) => element.productId == productId);
+      if (size != null) {
+        return state.any((element) =>
+            element.productId == productId && element.size == size);
+      } else {
+        return state.any((element) => element.productId == productId);
+      }
     } catch (e) {
       log("Error in isItemInCart: $e");
       return false;
@@ -121,6 +127,26 @@ class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
       state = [...user.cartItems];
     } catch (e) {
       log("Error in setProductsInCart: $e");
+    }
+  }
+
+  @override
+  Future<void> changeQuantity({required CartItemModel cartItem}) async {
+    try {
+      final user = _userAPI.user;
+      final index = state.indexWhere((element) =>
+          element.productId == cartItem.productId &&
+          element.size == cartItem.size);
+      if (index == -1) {
+        return;
+      }
+      state[index] = cartItem;
+      if (user == null) {
+        return;
+      }
+      await _userAPI.updateCartItems(cartItems: state);
+    } catch (e) {
+      log("Error in changeQuantity: $e");
     }
   }
 }

@@ -32,48 +32,14 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
     // this is a dummy widget to ignore the error RangeError (index): Invalid value: Not in inclusive range 0..2: 3
     const SizedBox.shrink()
   ];
+
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       
-      appBar: AppBar(
-        leading: IconButton(
-            onPressed: () {},
-          icon: const Icon(
-            Icons.menu,
-            size: 32,
-            weight: 700,
-            color: Colors.black,
-          ),
-        ),
-            
-        centerTitle: true,
-        title: Text(
-          "ENDLESS",
-          style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w900,
-              fontFamily: GoogleFonts.unbounded().fontFamily),
-        ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 6),
-            child: IconButton(
-              onPressed: () {
-                //TODO: ADD NOTIFICATION PAGE NAVIGATION
-              },
-              icon: const Icon(
-                  Icons.notifications_outlined,
-                  size: 28,
-                  weight: 300,
-                  color: Colors.black,
-                )
-            ),
-          ),
-        ],
-      ),
+      
       body: _views[_selectedIndex],
       bottomNavigationBar: GNav(
           selectedIndex: _selectedIndex,

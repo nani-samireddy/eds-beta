@@ -15,10 +15,7 @@ abstract class IDatabaseAPI {
   Future<List<ProductModel>> getSimilarProducts(
       {required List<String> tags, required String productId});
   Future<List<ProductModel>> getUserCartItems({required UserModel user});
-  Future<void> removeCartItem(
-      {required String productId, required UserModel user});
-  Future<void> addCartItem(
-      {required CartItemModel cartItem, required UserModel user});
+
   Future<void> updateCartItem(
       {required CartItemModel cartItem, required UserModel user});
 
@@ -27,6 +24,14 @@ abstract class IDatabaseAPI {
 
   Future<void> updateUserCartItems(
       {required UserModel user, required List<CartItemModel> cartItems});
+
+  
+  Future<List<WishlistItemModel>> getWishlistItems({required UserModel user});
+  /// Updates the user's wishlist items in the database
+  /// that includes ADD, REMOVE and UPDATE operations
+  Future<void> updateUserWishListItems(
+      {required List<WishlistItemModel> wishlistItems,
+      required UserModel user});
 }
 
 class DatabaseAPI extends IDatabaseAPI {
@@ -43,7 +48,7 @@ class DatabaseAPI extends IDatabaseAPI {
           .then((value) {
         if (value.exists) {
           final user = UserModel.fromMap(value.data()!);
-         
+          
           return user;
         } else {
           log("User does not exist");
@@ -301,35 +306,6 @@ class DatabaseAPI extends IDatabaseAPI {
   }
 
   @override
-  Future<void> removeCartItem(
-      {required String productId, required UserModel user}) async {
-    try {
-      user.cartItems.removeWhere((element) => element.productId == productId);
-      _firestore
-          .collection(FirestoreCollectionNames.usersCollection)
-          .doc(user.uid)
-          .update({"cartItems": user.cartItems.map((e) => e.toMap()).toList()});
-    } catch (e) {
-      log("Error while removing cart item $e");
-    }
-  }
-
-  @override
-  Future<void> addCartItem(
-      {required CartItemModel cartItem, required UserModel user}) async {
-    try {
-      user.cartItems.add(cartItem);
-      log(user.cartItems.length.toString());
-      await _firestore
-          .collection(FirestoreCollectionNames.usersCollection)
-          .doc(user.uid)
-          .update({"cartItems": user.cartItems.map((e) => e.toMap()).toList()});
-    } catch (e) {
-      log("Error while adding cart item $e");
-    }
-  }
-
-  @override
   Future<void> updateCartItem(
       {required CartItemModel cartItem, required UserModel user}) async {
     try {
@@ -399,6 +375,36 @@ class DatabaseAPI extends IDatabaseAPI {
       log("Updated user cart items");
     } catch (e) {
       log("Error while updating user cart items $e");
+    }
+  }
+
+  @override
+  Future<List<WishlistItemModel>> getWishlistItems(
+      {required UserModel user}) async {
+    try {
+      return [];
+    } catch (e) {
+      log("Error while fetching wishlist items $e");
+      return [];
+    }
+  }
+
+  @override
+  Future<void> updateUserWishListItems(
+      {required List<WishlistItemModel> wishlistItems,
+      required UserModel user}) async {
+    try {
+      await _firestore
+          .collection(FirestoreCollectionNames.usersCollection)
+          .doc(user.uid)
+          .update({
+        "wishListItems": wishlistItems.isEmpty
+            ? []
+            : wishlistItems.map((e) => e.toMap()).toList()
+      });
+      log("Updated wishlist items");
+    } catch (e) {
+      log("error while updating wishlist items $e");
     }
   }
 }

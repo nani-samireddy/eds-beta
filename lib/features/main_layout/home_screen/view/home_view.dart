@@ -9,6 +9,7 @@ import 'package:eds_beta/features/main_layout/home_screen/components/offers_slid
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eds_beta/models/app_models.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeView extends ConsumerStatefulWidget {
   const HomeView({super.key});
@@ -27,32 +28,68 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: PagePadding(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const CustomSearchBar(),
-            const OffersCarosel(),
-            ElevatedButton(
-              onPressed: () async {
-                final user = ref.watch(userAPIProvider.notifier).user;
-                log("User: $user");
-              },
-              child: const Text("Add datat to database"),
-            ),
-            const CategoriesListView(),
-            const NewProducts(),
-            const SizedBox(
-              height: 200,
-            ),
-            // Wrap(
-            //   children: data
-            //       .map((e) => DisplaySection(sectionItemsListModel: e))
-            //       .toList(),
-            // ),
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(
+            Icons.menu,
+            size: 32,
+            weight: 700,
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+        title: Text(
+          "Endless",
+          style: TextStyle(
+              fontSize: 32,
+              fontWeight: FontWeight.w900,
+              fontFamily: GoogleFonts.unbounded().fontFamily),
+        ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(right: 6),
+            child: IconButton(
+                onPressed: () {
+                  //TODO: ADD NOTIFICATION PAGE NAVIGATION
+                },
+                icon: const Icon(
+                  Icons.notifications_outlined,
+                  size: 28,
+                  weight: 300,
+                  color: Colors.black,
+                )),
+          ),
+        ],
+      ),
+      body: const SingleChildScrollView(
+        child: PagePadding(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomSearchBar(),
+              OffersCarosel(),
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     final user = ref.watch(userAPIProvider.notifier).user;
+              //     log("User: $user");
+              //   },
+              //   child: const Text("Add datat to database"),
+              // ),
+              CategoriesListView(),
+              NewProducts(),
+              SizedBox(
+                height: 200,
+              ),
+              // Wrap(
+              //   children: data
+              //       .map((e) => DisplaySection(sectionItemsListModel: e))
+              //       .toList(),
+              // ),
+            ],
+          ),
         ),
       ),
     );

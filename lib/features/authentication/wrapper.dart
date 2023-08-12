@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:eds_beta/api/authentication_api.dart';
 import 'package:eds_beta/api/cart_api.dart';
 import 'package:eds_beta/api/user_api.dart';
+import 'package:eds_beta/api/wishlist_api.dart';
 import 'package:eds_beta/features/authentication/view/phone_number_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,13 +18,15 @@ class AuthWrapper extends ConsumerStatefulWidget {
 }
 
 class _AuthWrapperState extends ConsumerState<AuthWrapper> {
-  setUserData() async {
+  setUserData() {
     final user = ref.watch(authChangesProvider).value;
     if (user != null) {
       ref.read(userAPIProvider.notifier).setUserData(uid: user.uid);
-      ref.read(cartAPIProvider).setProductsInCart();
+     
     }
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
