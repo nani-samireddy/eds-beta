@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eds_beta/constants/constans.dart';
+import 'package:eds_beta/models/search_result_model.dart';
 
 import '../models/app_models.dart';
 
@@ -25,13 +26,26 @@ abstract class IDatabaseAPI {
   Future<void> updateUserCartItems(
       {required UserModel user, required List<CartItemModel> cartItems});
 
-  
   Future<List<WishlistItemModel>> getWishlistItems({required UserModel user});
+
   /// Updates the user's wishlist items in the database
   /// that includes ADD, REMOVE and UPDATE operations
   Future<void> updateUserWishListItems(
       {required List<WishlistItemModel> wishlistItems,
       required UserModel user});
+
+  Future<List<ProductModel>> getProductsByCategory({required String category});
+
+  Future<List<ProductModel>> getProductsByQuery(
+      {required Query<Map<String, dynamic>> query});
+
+  Future<List<ProductModel>> loadMore(
+      {required SearchResultModel searchQuery,
+      required String startAfter,
+      int limit = 20});
+
+  Query<Map<String, dynamic>> buildFirebaseSearchQuery(
+      {required SearchResultModel searchResultModel});
 }
 
 class DatabaseAPI extends IDatabaseAPI {
@@ -48,7 +62,7 @@ class DatabaseAPI extends IDatabaseAPI {
           .then((value) {
         if (value.exists) {
           final user = UserModel.fromMap(value.data()!);
-          
+
           return user;
         } else {
           log("User does not exist");
@@ -406,5 +420,135 @@ class DatabaseAPI extends IDatabaseAPI {
     } catch (e) {
       log("error while updating wishlist items $e");
     }
+  }
+
+  @override
+  Future<List<ProductModel>> getProductsByCategory(
+      {required String category}) async {
+    try {
+      final docRef = _firestore
+          .collection(FirestoreCollectionNames.productsCollection)
+          .where("category", isEqualTo: category)
+          .limit(1);
+      return await docRef.get().then((value) {
+        if (value.docs.isNotEmpty) {
+          List<ProductModel> products = [];
+          log(value.docs.length.toString());
+          for (var element in value.docs) {
+            String productId = element.id;
+            products.add(ProductModel.fromMap(
+                map: element.data(), productId: productId));
+          }
+          return products;
+        } else {
+          log("Products related does not exist");
+          return [];
+        }
+      });
+    } catch (e) {
+      log("Error while getting products by category $e");
+      return [];
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> getProductsByQuery(
+      {required Query<Map<String, dynamic>> query}) async {
+    try {
+      return await query.get().then((value) {
+        if (value.docs.isNotEmpty) {
+          List<ProductModel> products = [];
+          log(value.docs.length.toString());
+          for (var element in value.docs) {
+            String productId = element.id;
+            products.add(ProductModel.fromMap(
+                map: element.data(), productId: productId));
+          }
+          return products;
+        } else {
+          log("Products related does not exist");
+          return [];
+        }
+      });
+    } catch (e) {
+      log("Error while getting products by query $e");
+      return [];
+    }
+  }
+
+  @override
+  Future<List<ProductModel>> loadMore(
+      {required SearchResultModel searchQuery,
+      required String startAfter,
+      int limit = 20}) async {
+    final query = buildFirebaseSearchQuery(searchResultModel: searchQuery);
+    try {
+      return await query
+          .orderBy(FieldPath.documentId)
+          .startAfter([startAfter])
+          .limit(limit)
+          .get()
+          .then((value) {
+            if (value.docs.isNotEmpty) {
+              List<ProductModel> products = [];
+              log(value.docs.length.toString());
+              for (var element in value.docs) {
+                String productId = element.id;
+                products.add(ProductModel.fromMap(
+                    map: element.data(), productId: productId));
+              }
+              return products;
+            } else {
+              log("Products related does not exist");
+              return [];
+            }
+          });
+    } catch (e) {
+      log("Error while loading more products $e");
+      return [];
+    }
+  }
+
+  @override
+  Query<Map<String, dynamic>> buildFirebaseSearchQuery(
+      {required SearchResultModel searchResultModel}) {
+    Query<Map<String, dynamic>> query =
+        _firestore.collection(FirestoreCollectionNames.productsCollection);
+
+    if (searchResultModel.query.isNotEmpty) {
+      var queryList = searchResultModel.query.split('&');
+      for (String q in queryList) {
+        switch (q.split(':').first) {
+          case 'category':
+            if (q.split(':').last.contains('|')) {
+              query = query.where('category',
+                  whereIn: q.split(':').last.split('|'));
+            } else {
+              query = query.where('category', isEqualTo: q.split(':').last);
+            }
+            break;
+          case 'brand':
+            if (q.split(':').last.contains('|')) {
+              query =
+                  query.where('brand', whereIn: q.split(':').last.split('|'));
+            } else {
+              query = query.where('brand', isEqualTo: q.split(':').last);
+            }
+            break;
+          case 'color':
+            if (q.split(':').last.contains('|')) {
+              query =
+                  query.where('color', whereIn: q.split(':').last.split('|'));
+            } else {
+              query = query.where('color', isEqualTo: q.split(':').last);
+            }
+            break;
+
+          default:
+        }
+      }
+    }
+
+    return query;
   }
 }

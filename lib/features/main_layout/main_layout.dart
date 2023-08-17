@@ -51,11 +51,11 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
           backgroundColor: Pallete.backgroundColor,
           color: Pallete.fadedIconColor,
           activeColor: Pallete.bottomNavActiveColor,
-          gap: 10,
-          padding: const EdgeInsets.all(28),
-          iconSize: 24,
+        gap: 5,
+        padding: const EdgeInsets.all(20),
+        iconSize: 20,
           textStyle: const TextStyle(
-              fontSize: 16,
+            fontSize: 12,
               fontWeight: FontWeight.w900,
               color: Pallete.bottomNavActiveColor),
           tabs: const [
@@ -76,7 +76,8 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
               icon: Icons.account_circle_outlined,
               text: 'PROFILE',
             ),
-          ]),
+        ],
+      ),
     );
   }
 }

@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:eds_beta/common/components/home_loading.dart';
+import 'package:eds_beta/features/main_layout/home_screen/components/category_results_view.dart';
 import 'package:eds_beta/providers/database_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,34 +42,42 @@ class _CategoriesListViewState extends ConsumerState<CategoriesListView> {
                 data: (data) {
                   return data != null
                       ? data.map((e) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: Image.network(
-                                    e.imageURL,
-                                    width: 60,
-                                    height: 60,
-                                    fit: BoxFit.cover,
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => CategoryResultsView(
+                                        category: e,
+                                      )));
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image.network(
+                                      e.imageURL,
+                                      width: 60,
+                                      height: 60,
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                e.name.replaceAll(' ', '\n'),
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
+                                const SizedBox(
+                                  height: 10,
                                 ),
-                              )
-                            ],
+                                Text(
+                                  e.name.replaceAll(' ', '\n'),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                )
+                              ],
+                            ),
                           );
                         }).toList()
                       : const [SizedBox.shrink()];
@@ -77,7 +87,31 @@ class _CategoriesListViewState extends ConsumerState<CategoriesListView> {
                   return [Text(error.toString())];
                 },
                 loading: () {
-                  return const [CircularProgressIndicator()];
+                  return [
+                    for (int i = 0; i < 5; i++)
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 10),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(100),
+                              child: const CircularSKLoader(
+                                height: 60,
+                                width: 60,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const RectangularSKLOader(
+                            height: 12,
+                            width: 60,
+                          )
+                        ],
+                      )
+                  ];
                 },
               ),
             ),

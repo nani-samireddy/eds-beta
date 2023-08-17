@@ -42,6 +42,7 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Pallete.white,

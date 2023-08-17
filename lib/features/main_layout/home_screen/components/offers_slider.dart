@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:eds_beta/common/components/home_loading.dart';
 import 'package:eds_beta/common/components/rounded_container.dart';
 import 'package:eds_beta/providers/database_providers.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,8 @@ class _OffersCaroselState extends ConsumerState<OffersCarosel> {
   @override
   Widget build(BuildContext context) {
     return ref.watch(offersProvider).when(
-          loading: () => const CircularProgressIndicator(),
+          loading: () =>
+              const RectangularSKLOader(height: 200, width: double.infinity),
           error: (error, stackTrace) {
             log(error.toString());
             return Text(error.toString());
