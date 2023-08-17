@@ -27,7 +27,7 @@ class _ProductImagesSliderState extends State<ProductImagesSlider> {
               width: double.infinity,
               margin: const EdgeInsets.only(bottom: 10),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(40),
+                borderRadius: BorderRadius.circular(50),
                 child: Image.network(
                   widget.images[index],
                   fit: BoxFit.cover,
@@ -41,7 +41,7 @@ class _ProductImagesSliderState extends State<ProductImagesSlider> {
                 this.index = index;
               });
             },
-            height: 500,
+            height: 480,
             enlargeCenterPage: true,
             viewportFraction: .97,
             autoPlay: true,
@@ -90,8 +90,8 @@ class _ProductImagesSliderState extends State<ProductImagesSlider> {
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.white,
                     ),
-                    width: i == index ? 30 : 20,
-                    height: i == index ? 30 : 20,
+                    width: i == index ? 20 : 10,
+                    height: i == index ? 20 : 10,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.network(

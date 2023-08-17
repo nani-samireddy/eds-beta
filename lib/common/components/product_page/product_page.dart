@@ -33,7 +33,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
     if (widget.product.hasDifferentSizes) {
       selectedSize = widget.product.getLeastPrice();
       currentPrice = selectedSize!.price.toString();
-      actualPrice = widget.product.actualPrice.toString();
+      actualPrice = selectedSize!.actualPrice.toString();
       discountPercentage = calculateDiscount(
               actualPrice: double.parse(actualPrice),
               currentPrice: double.parse(currentPrice))
@@ -149,7 +149,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        vertical: 20.0, horizontal: 20),
+                        vertical: 10.0, horizontal: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -237,19 +237,14 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(widget.product.rating,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      fontFamily:
-                                          GoogleFonts.dmSans().fontFamily,
-                                      color: Pallete.black)),
+                             
                               RatingBar.builder(
                                 initialRating:
-                                    double.parse(widget.product.rating),
+                                    (widget.product.ratingRatio),
                                 minRating: 1,
                                 direction: Axis.horizontal,
                                 allowHalfRating: true,
-                                itemCount: 5,
+                                itemCount: 1,
                                 glow: false,
                                 ignoreGestures: true,
                                 itemSize: 20,
@@ -261,6 +256,15 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                                 ),
                                 onRatingUpdate: (rating) {},
                               ),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Text(widget.product.rating,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w900,
+                                      fontFamily:
+                                          GoogleFonts.dmSans().fontFamily,
+                                      color: Pallete.black)),
                             ],
                           ),
                         )

@@ -149,7 +149,7 @@ class DatabaseAPI extends IDatabaseAPI {
       final productsRef = _firestore
           .collection(FirestoreCollectionNames.productsCollection)
           .orderBy("createdAt", descending: true)
-          .limit(10);
+          .limit(20);
 
       return await productsRef.get().then(
         (value) {
@@ -179,8 +179,8 @@ class DatabaseAPI extends IDatabaseAPI {
   Future<void> addProduct() {
     final ProductModel productModel = ProductModel(
       productId: "l5d0yTPSAiCC1CuUFF4q",
-      name: "White shirt",
-      tagline: 'printed Pure Cotton white SHIRT',
+      name: "shorts",
+      tagline: 'samiple 121',
       description: "Pure cotton white shirt ",
       actualPrice: "1999",
       currentPrice: "1400",
@@ -189,19 +189,17 @@ class DatabaseAPI extends IDatabaseAPI {
       color: null,
       brand: null,
       sizes: [
-        SizeModel(price: "700", size: "XS", stock: 0, actualPrice: "1000"),
-        SizeModel(price: "1300", size: "S", stock: 10, actualPrice: "2000"),
-        SizeModel(price: "1400", size: "M", stock: 10, actualPrice: "2000"),
-        SizeModel(price: "1500", size: "L", stock: 10, actualPrice: "2000"),
+       
         SizeModel(price: "1600", size: "XL", stock: 10, actualPrice: "2000"),
         SizeModel(price: "1700", size: "XXL", stock: 0, actualPrice: "2000"),
       ],
       availableColors: [],
       images: [
+        "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1770&q=80",
         //"https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fnewthshirt.jpeg?alt=media&token=6a793c3c-e0fe-4e62-a45f-f0a3345a3b22",
-        "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fpurecotton-t-shirt.jpeg?alt=media&token=7d3a5bc6-1f8f-411d-932f-f8f2781ca8e2",
-        "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown2.jpeg?alt=media&token=662925c2-45e6-4b08-b278-c8ad925c36e7",
-        "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown3.jpeg?alt=media&token=746d1ab9-2a60-4250-b186-3c6f313b072e",
+        // "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fpurecotton-t-shirt.jpeg?alt=media&token=7d3a5bc6-1f8f-411d-932f-f8f2781ca8e2",
+        //  "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown2.jpeg?alt=media&token=662925c2-45e6-4b08-b278-c8ad925c36e7",
+        //   "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown3.jpeg?alt=media&token=746d1ab9-2a60-4250-b186-3c6f313b072e",
         //"https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown4.jpeg?alt=media&token=137021f8-873b-4f71-aae8-133c424330b0",
         //"https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown5.jpeg?alt=media&token=ba2b5325-effb-40a1-82e4-16bb49c90ba6",
         "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown6.jpeg?alt=media&token=b7b3ff1d-e61b-4322-906a-ddfe8decbd40"
@@ -209,16 +207,7 @@ class DatabaseAPI extends IDatabaseAPI {
       tags: [
         "men",
         "men fashion",
-        "tsirt",
-        "cotton",
-        "pure cotton",
-        "white",
-        "white tshirt",
-        "printed",
-        "printed tshirt",
-        "printed white tshirt",
-        "printed pure cotton tshirt",
-        "printed pure cotton white tshirt",
+       "shorts", "men's shorts"
       ],
       category: "Men's Fashion",
       manufacturer: "",
@@ -429,7 +418,7 @@ class DatabaseAPI extends IDatabaseAPI {
       final docRef = _firestore
           .collection(FirestoreCollectionNames.productsCollection)
           .where("category", isEqualTo: category)
-          .limit(1);
+          .limit(20);
       return await docRef.get().then((value) {
         if (value.docs.isNotEmpty) {
           List<ProductModel> products = [];

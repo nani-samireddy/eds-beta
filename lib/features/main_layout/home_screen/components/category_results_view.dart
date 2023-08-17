@@ -1,9 +1,12 @@
 import 'dart:developer';
 
+import 'package:eds_beta/common/circular_loading_page.dart';
 import 'package:eds_beta/common/components/product_card.dart';
 import 'package:eds_beta/common/components/products_not_found.dart';
 import 'package:eds_beta/common/components/search/sort_and_filter.dart';
+import 'package:eds_beta/controllers/products_controller.dart';
 import 'package:eds_beta/features/main_layout/cart/view/cart_view.dart';
+import 'package:eds_beta/features/main_layout/home_screen/components/sort_products.dart';
 import 'package:eds_beta/features/main_layout/wishlist/view/wishlist_view.dart';
 import 'package:eds_beta/models/app_models.dart';
 import 'package:eds_beta/models/search_result_model.dart';
@@ -26,6 +29,8 @@ class _CategoryResultsViewState extends ConsumerState<CategoryResultsView> {
   bool _isLoading = true;
   late SearchResultModel _searchResult;
 
+  ProductsController productsController = ProductsController();
+
   @override
   void initState() {
     super.initState();
@@ -44,11 +49,26 @@ class _CategoryResultsViewState extends ConsumerState<CategoryResultsView> {
       _products = _products;
       _isLoading = false;
       _searchResult.productCount = _products.length;
+      productsController.products = _products;
     });
   }
 
-  void handleFilter() {}
-  void handleSort() {}
+  void handleFilter() {
+    log("filter");
+  }
+
+  void handleSort() async {
+    log("sort");
+    await showModalBottomSheet<void>(
+        context: context,
+        builder: (context) =>
+            SortProductsMenu(controller: productsController)).then((value) {
+      setState(() {
+        _products = productsController.products;
+      });
+    });
+  }
+
   Future<void> handleLoadMore() async {
     log("load more");
     if (_searchResult.hasMore) {
@@ -93,11 +113,7 @@ class _CategoryResultsViewState extends ConsumerState<CategoryResultsView> {
           ),
         ],
       ),
-      body: _isLoading
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : _products.isEmpty
+      body: _products.isEmpty
               ? const ProductsNotFound()
               : Stack(
                   children: [
@@ -116,12 +132,13 @@ class _CategoryResultsViewState extends ConsumerState<CategoryResultsView> {
                                     mainAxisExtent: 300),
                             itemBuilder: (context, index) {
                               return ProductCard(
+                            key: UniqueKey(),
                                 product: _products[index],
                               );
                             },
                             itemCount: _products.length,
                           ),
-                          _searchResult.hasMore
+                      _searchResult.hasMore && !_isLoading
                               ? Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 30.0),
@@ -142,6 +159,11 @@ class _CategoryResultsViewState extends ConsumerState<CategoryResultsView> {
                                       style: TextStyle(color: Pallete.black),
                                     ),
                                   ),
+                                )
+                          : _isLoading
+                              ? const CircularLoaderPage(
+                                  message: "Loading hold on...",
+                                  backgroundColor: Pallete.backgroundColor,
                                 )
                               : const SizedBox.shrink(),
                         ],

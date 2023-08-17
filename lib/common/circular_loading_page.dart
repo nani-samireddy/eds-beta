@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 
 class CircularLoaderPage extends StatelessWidget {
   final String message;
-  const CircularLoaderPage({this.message = "", super.key});
+  const CircularLoaderPage(
+      {this.message = "",
+      this.backgroundColor = const Color.fromARGB(126, 0, 0, 0),
+      super.key});
+  final Color backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromARGB(126, 0, 0, 0),
+      color: backgroundColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,

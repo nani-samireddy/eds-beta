@@ -100,11 +100,37 @@ class ProductModel {
 
   @override
   String toString() {
-    return 'ProductModel(productId: $productId, name: $name, tagline: $tagline , description: $description, actualPrice: $actualPrice, currentPrice: $currentPrice, availableStock: $availableStock, rating: $rating,color: $color, brand: $brand, sizes: ${sizes!.map((e) => e.toString)}, availableColors: $availableColors, images: $images, tags: $tags, category: $category, manufacturer: $manufacturer, netQuantity: $netQuantity, details: $details, hasDifferentSizes: $hasDifferentSizes, createdAt: $createdAt)';
+    return 'ProductModel(productId: $productId,\n name: $name,\n tagline: $tagline,\n description: $description,\n actualPrice: $actualPrice,\n currentPrice: $currentPrice,\n availableStock: $availableStock,\n rating: $rating,\ncolor: $color,\n brand: $brand,\n sizes: ${sizes!},\n availableColors: $availableColors,\n images: $images,\n tags: $tags,\n category: $category,\n manufacturer: $manufacturer,\n netQuantity: $netQuantity,\n details: $details,\n hasDifferentSizes: $hasDifferentSizes,\n createdAt: $createdAt,\n)';
+  }
+
+  double get getMinPrice {
+    if (sizes == null || sizes!.isEmpty) {
+      return double.parse(currentPrice);
+    }
+    var temp = sizes!;
+    temp.sort((a, b) => int.parse(a.price).compareTo(int.parse(b.price)));
+    return double.parse(temp.first.price);
+  }
+
+  double get getDiscount {
+    if (sizes == null || sizes!.isEmpty) {
+      double ap = double.parse(actualPrice);
+      double cp = double.parse(currentPrice);
+      return 100 - ((cp / ap) * 100);
+    }
+    var temp = sizes!;
+    temp.sort((a, b) => int.parse(a.price).compareTo(int.parse(b.price)));
+    double ap = double.parse(temp.first.actualPrice);
+    double cp = double.parse(temp.first.price);
+    return 100 - ((cp / ap) * 100);
+  }
+
+  double get ratingRatio {
+    return double.parse(rating) / 5;
   }
 
   SizeModel getLeastPrice() {
-    var temp = sizes!.where((element) => element.stock > 0).toList();
+    var temp = sizes!;
     temp.sort((a, b) => int.parse(a.price).compareTo(int.parse(b.price)));
     return temp.first;
   }

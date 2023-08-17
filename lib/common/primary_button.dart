@@ -1,6 +1,7 @@
 
 import 'package:eds_beta/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PrimaryButton extends StatefulWidget {
   final String text;
@@ -28,18 +29,18 @@ class _PrimaryButtonState extends State<PrimaryButton> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        widget.enable
-            ? Container(
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                width: double.infinity,
-                height: 54,
-                decoration: BoxDecoration(
-                  color: Pallete.primaryButtonShadowColor,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: Colors.black, width: 2),
-                ),
-              )
-            : const SizedBox.shrink(),
+        // widget.enable
+        //     ? Container(
+        //         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+        //         width: double.infinity,
+        //         height: 54,
+        //         decoration: BoxDecoration(
+        //           color: Pallete.primaryButtonShadowColor,
+        //           borderRadius: BorderRadius.circular(16),
+        //           border: Border.all(color: Colors.black, width: 2),
+        //         ),
+        //       )
+        //     : const SizedBox.shrink(),
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 10),
           width: double.infinity,
@@ -51,7 +52,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
               ),
               shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(6),
                 ),
               ),
               backgroundColor: MaterialStateProperty.all(
@@ -62,7 +63,12 @@ class _PrimaryButtonState extends State<PrimaryButton> {
             ),
             child: Text(
               widget.text,
-              style: const TextStyle(color: Colors.white),
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: 1.3,
+                  fontFamily: GoogleFonts.poppins().fontFamily),
             ),
           ),
         ),

@@ -24,20 +24,13 @@ class _ProductCardState extends ConsumerState<ProductCard> {
     if (widget.product.hasDifferentSizes) {
       SizeModel cheapestModel = widget.product.getLeastPrice();
       currentPrice = cheapestModel.price.toString();
-      actualPrice = widget.product.actualPrice.toString();
-      discountPercentage = calculateDiscount(
-        actualPrice: double.parse(actualPrice),
-        currentPrice: double.parse(currentPrice),
-      ).toString();
+      actualPrice = cheapestModel.actualPrice.toString();
     } else {
       currentPrice = widget.product.currentPrice;
       actualPrice = widget.product.actualPrice;
-      discountPercentage = calculateDiscount(
-        actualPrice: double.parse(actualPrice),
-        currentPrice: double.parse(currentPrice),
-      ).toString();
     }
-
+    discountPercentage = widget.product.getDiscount.toString();
+    
     super.initState();
   }
 
@@ -58,15 +51,15 @@ class _ProductCardState extends ConsumerState<ProductCard> {
         height: 300,
         padding: const EdgeInsets.all(4),
         decoration: BoxDecoration(
-            color: Pallete.whiteAccent,
-            borderRadius: BorderRadius.circular(20),
+          color: Pallete.whiteAccent,
+          borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
                 color: Pallete.blue.withOpacity(0.1),
                 blurRadius: 18,
                 offset: const Offset(0, 5),
               )
-            ]
+          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -77,7 +70,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
               child: Padding(
                 padding: const EdgeInsets.all(3.0),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(20),
                   child: Image.network(
                     widget.product.images[0],
                     fit: BoxFit.cover,
@@ -96,7 +89,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.product.name.padRight(20, " ").substring(0, 20),
+                      widget.product.name.padRight(20, " ").substring(0, 10),
                       softWrap: true,
                       style: TextStyle(
                           fontSize: 14,
@@ -106,7 +99,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      widget.product.tagline.padRight(40, " ").substring(0, 30),
+                      widget.product.tagline.padRight(40, " ").substring(0, 20),
                       softWrap: true,
                       style: TextStyle(
                           fontFamily: GoogleFonts.poppins().fontFamily,
