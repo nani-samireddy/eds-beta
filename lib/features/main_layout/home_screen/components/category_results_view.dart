@@ -6,6 +6,7 @@ import 'package:eds_beta/common/components/products_not_found.dart';
 import 'package:eds_beta/common/components/search/sort_and_filter.dart';
 import 'package:eds_beta/controllers/products_controller.dart';
 import 'package:eds_beta/features/main_layout/cart/view/cart_view.dart';
+import 'package:eds_beta/features/main_layout/home_screen/components/filter_products.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/sort_products.dart';
 import 'package:eds_beta/features/main_layout/wishlist/view/wishlist_view.dart';
 import 'package:eds_beta/models/app_models.dart';
@@ -53,8 +54,17 @@ class _CategoryResultsViewState extends ConsumerState<CategoryResultsView> {
     });
   }
 
-  void handleFilter() {
+  void handleFilter() async {
     log("filter");
+    await showModalBottomSheet<void>(
+        context: context,
+        builder: (context) =>
+            FilterProductsMenu(controller: productsController)).then((value) {
+      setState(() {
+        _products = productsController.products;
+      });
+    });
+
   }
 
   void handleSort() async {

@@ -64,7 +64,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: PagePadding(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -72,13 +72,13 @@ class _HomeViewState extends ConsumerState<HomeView> {
             children: [
               CustomSearchBar(),
               OffersCarosel(),
-              ElevatedButton(
-                onPressed: () async {
-                  await ref.read(databaseAPIProvider).addProduct();
-                  log("jii");
-                },
-                child: const Text("Add datat to database"),
-              ),
+              // ElevatedButton(
+              //   onPressed: () async {
+              //     await ref.read(databaseAPIProvider).addProduct();
+              //     log("jii");
+              //   },
+              //   child: const Text("Add datat to database"),
+              // ),
               CategoriesListView(),
               NewProducts(),
               SizedBox(
