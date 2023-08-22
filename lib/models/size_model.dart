@@ -45,6 +45,8 @@ class SizeModel {
     );
   }
 
+  String get getSize => size;
+
   String toJson() => json.encode(toMap());
 
   factory SizeModel.fromJson(String source) =>
@@ -71,4 +73,5 @@ class SizeModel {
         price.hashCode ^
         actualPrice.hashCode;
   }
+
 }

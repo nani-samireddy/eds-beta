@@ -49,8 +49,13 @@ abstract class IDatabaseAPI {
 }
 
 class DatabaseAPI extends IDatabaseAPI {
-  final FirebaseFirestore _firestore;
-  DatabaseAPI({required FirebaseFirestore firestore}) : _firestore = firestore;
+  late final FirebaseFirestore _firestore;
+  DatabaseAPI({required FirebaseFirestore firestore}) {
+    _firestore = firestore;
+    _firestore.settings = const Settings(
+        persistenceEnabled: true,
+        cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED);
+  }
 
   @override
   Future<UserModel?> getUserDataFromDB({required String uid}) async {
@@ -185,11 +190,11 @@ class DatabaseAPI extends IDatabaseAPI {
       actualPrice: "1999",
       currentPrice: "1400",
       availableStock: 40,
+      gender: "male",
       rating: '4.5',
       color: null,
       brand: null,
       sizes: [
-       
         SizeModel(price: "1600", size: "XL", stock: 10, actualPrice: "2000"),
         SizeModel(price: "1700", size: "XXL", stock: 0, actualPrice: "2000"),
       ],
@@ -204,12 +209,9 @@ class DatabaseAPI extends IDatabaseAPI {
         //"https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown5.jpeg?alt=media&token=ba2b5325-effb-40a1-82e4-16bb49c90ba6",
         "https://firebasestorage.googleapis.com/v0/b/endless-store-beta.appspot.com/o/images%2Fproducts_images%2Fgown6.jpeg?alt=media&token=b7b3ff1d-e61b-4322-906a-ddfe8decbd40"
       ],
-      tags: [
-        "men",
-        "men fashion",
-       "shorts", "men's shorts"
-      ],
+      tags: ["men", "men fashion", "shorts", "men's shorts"],
       category: "Men's Fashion",
+      type: "casual",
       manufacturer: "",
       netQuantity: 1,
       details:

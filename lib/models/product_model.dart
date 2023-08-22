@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eds_beta/models/app_models.dart';
+import 'package:eds_beta/models/color_model.dart';
 
-
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class ProductModel {
   final String productId;
   final String name;
@@ -14,10 +13,13 @@ class ProductModel {
   final String? color;
   final String? brand;
   final List<SizeModel>? sizes;
-  final List<String> availableColors;
+  final List<ColorModel>? availableColors;
+  final bool hasDifferentColors;
   final List<String> images;
   final List<String> tags;
   final String category;
+  final String type;
+  final String? gender;
   final String manufacturer;
   final int netQuantity;
   final String details;
@@ -40,11 +42,15 @@ class ProductModel {
     required this.rating,
     required this.tags,
     required this.category,
+    required this.type,
+    required this.gender,
     required this.manufacturer,
     required this.netQuantity,
     required this.details,
     required this.createdAt,
-  }) : hasDifferentSizes = sizes != null && sizes.isNotEmpty;
+  })  : hasDifferentSizes = sizes != null && sizes.isNotEmpty,
+        hasDifferentColors =
+            availableColors != null && availableColors.isNotEmpty;
 
   factory ProductModel.fromMap(
       {required Map<String, dynamic> map, required String productId}) {
@@ -56,16 +62,22 @@ class ProductModel {
       actualPrice: map['actualPrice'],
       currentPrice: map['currentPrice'],
       availableStock: map['availableStock'],
-      color: map['color'],
+      color: map['color'] ?? "",
       rating: map['rating'],
       sizes: map['sizes'] != null
           ? List<SizeModel>.from(map['sizes'].map((x) => SizeModel.fromMap(x)))
-          : null,
+          : [],
       brand: map['brand'],
-      availableColors: List<String>.from(map['availableColors'] ?? []),
+      availableColors:
+          map['availableColors'] != null && map['availableColors'].isNotEmpty
+              ? List<ColorModel>.from(
+                  map['sizes'].map((x) => ColorModel.fromMap(x)))
+              : [],
       images: List<String>.from(map['images']),
       tags: List<String>.from(map['tags']),
       category: map['category'],
+      type: map['type'],
+      gender: map['gender'],
       manufacturer: map['manufacturer'] ?? '',
       netQuantity: map['netQuantity'],
       details: map['details'],
@@ -90,7 +102,8 @@ class ProductModel {
       'tags': tags,
       'rating': rating,
       'category': category,
-
+      'type': type,
+      'gender': gender,
       'manufacturer': manufacturer,
       'netQuantity': netQuantity,
       'details': details,
@@ -100,7 +113,7 @@ class ProductModel {
 
   @override
   String toString() {
-    return 'ProductModel(productId: $productId,\n name: $name,\n tagline: $tagline,\n description: $description,\n actualPrice: $actualPrice,\n currentPrice: $currentPrice,\n availableStock: $availableStock,\n rating: $rating,\ncolor: $color,\n brand: $brand,\n sizes: ${sizes!},\n availableColors: $availableColors,\n images: $images,\n tags: $tags,\n category: $category,\n manufacturer: $manufacturer,\n netQuantity: $netQuantity,\n details: $details,\n hasDifferentSizes: $hasDifferentSizes,\n createdAt: $createdAt,\n)';
+    return 'ProductModel(productId: $productId,\n name: $name,\n tagline: $tagline,\n description: $description,\n actualPrice: $actualPrice,\n currentPrice: $currentPrice,\n availableStock: $availableStock,\n rating: $rating,\ncolor: $color,\n brand: $brand,\n sizes: ${sizes!},\n availableColors: $availableColors,\n images: $images,\n tags: $tags,\n category: $category,\n type: $type,\n gender: $gender,\n manufacturer: $manufacturer,\n netQuantity: $netQuantity,\n details: $details,\n hasDifferentSizes: $hasDifferentSizes,\n createdAt: $createdAt,\n)';
   }
 
   double get getMinPrice {

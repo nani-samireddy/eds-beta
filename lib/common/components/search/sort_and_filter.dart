@@ -16,36 +16,39 @@ class SortAndFilterProducts extends ConsumerStatefulWidget {
 class _SortAndFilterProductsState extends ConsumerState<SortAndFilterProducts> {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: TextButton.icon(
-            onPressed: widget.handleSort,
-            icon: const Icon(
-              Icons.sort,
-              color: Pallete.black,
-            ),
-            label: const Text(
-              'Sort',
-              style: TextStyle(color: Pallete.black),
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-          child: TextButton.icon(
-            onPressed: widget.handleFilter,
-            icon: const Icon(
-              Icons.filter_alt_outlined,
-              color: Pallete.black,
-            ),
-            label: const Text(
-              'Filter',
-              style: TextStyle(color: Pallete.black),
+    return Container(
+      color: Pallete.backgroundColor,
+      child: Row(
+        children: [
+          Expanded(
+            child: TextButton.icon(
+              onPressed: widget.handleSort,
+              icon: const Icon(
+                Icons.sort,
+                color: Pallete.black,
+              ),
+              label: const Text(
+                'Sort',
+                style: TextStyle(color: Pallete.black),
+              ),
             ),
           ),
-        ),
-      ],
+          const SizedBox(width: 10),
+          Expanded(
+            child: TextButton.icon(
+              onPressed: widget.handleFilter,
+              icon: const Icon(
+                Icons.filter_alt_outlined,
+                color: Pallete.black,
+              ),
+              label: const Text(
+                'Filter',
+                style: TextStyle(color: Pallete.black),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
