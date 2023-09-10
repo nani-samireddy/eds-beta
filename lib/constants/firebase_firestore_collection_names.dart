@@ -14,4 +14,5 @@ class FirestoreCollectionNames {
 class FirestoreDocumentNames {
   static const homeSectionsDocument = "homeSections";
   static const categoriesDocument = "categories";
+  static const tagsDocument = "tagsList";
 }

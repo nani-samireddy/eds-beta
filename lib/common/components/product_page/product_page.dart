@@ -149,7 +149,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 20),
+                        vertical: 10.0, horizontal: 10),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -388,6 +388,8 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                   SimilarProducts(
                     product: widget.product,
                   ),
+                  const SizedBox(height: 100),
+
                 ],
               ),
             ),

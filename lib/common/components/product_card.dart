@@ -52,13 +52,13 @@ class _ProductCardState extends ConsumerState<ProductCard> {
         decoration: BoxDecoration(
           color: Pallete.whiteAccent,
           borderRadius: BorderRadius.circular(24),
-            boxShadow: [
-              BoxShadow(
-                color: Pallete.blue.withOpacity(0.1),
-                blurRadius: 18,
-                offset: const Offset(0, 5),
-              )
-          ],
+          //   boxShadow: [
+          //     BoxShadow(
+          //       color: Pallete.blue.withOpacity(0.1),
+          //       blurRadius: 18,
+          //       offset: const Offset(0, 5),
+          //     )
+          // ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

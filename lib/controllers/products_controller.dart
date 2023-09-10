@@ -1,25 +1,40 @@
 import 'dart:collection';
-import 'dart:developer';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eds_beta/core/enums.dart';
 import 'package:eds_beta/models/app_models.dart';
 
 class ProductsController {
-  List<ProductModel> _products = [];
-  Map<String, dynamic> _selectedFilters = {};
-
   Map<String, ProductModel> _filteredproductsHashMap = {};
   Map<String, ProductModel> _productsHashMap = {};
+  late DocumentSnapshot _lastDocument;
+  late Query<Map<String, dynamic>> _productsQuery;
+
+  set productsQuery(Query<Map<String, dynamic>> productsQuery) {
+    _productsQuery = productsQuery;
+  }
+
+  Query<Map<String, dynamic>> get productsQuery {
+    return _productsQuery;
+  }
+
+  DocumentSnapshot get lastDocument {
+    return _lastDocument;
+  }
+
+  set lastDocument(DocumentSnapshot lastDocument) {
+    _lastDocument = lastDocument;
+  }
 
   List<ProductModel> get products {
     return _filteredproductsHashMap.values.toList();
   }
 
   set products(List<ProductModel> products) {
-    _products = products;
     for (var p in products) {
-      _productsHashMap[p.productId] = p;
       _filteredproductsHashMap[p.productId] = p;
+      _productsHashMap[p.productId] = p;
     }
+
     _updateCategoryFilterProperties();
     applyFilterstoProducts();
   }
@@ -181,7 +196,7 @@ class ProductsController {
     final genders = filteringProperites['Gender'] ?? <String, dynamic>{};
     final colors = filteringProperites['Color'] ?? <String, dynamic>{};
     final sizes = filteringProperites['Size'] ?? <String, dynamic>{};
-    for (final p in _products) {
+    for (final p in _productsHashMap.values) {
       ///CATEGORIES
       if (p.category != "") {
         if (categories[p.category] == null) {
@@ -197,7 +212,7 @@ class ProductsController {
       }
 
       ///TYPES
-      if (p.type != "" && p.type != null) {
+      if (p.type != "") {
         if (types[p.type] == null) {
           types[p.type] = {
             "count": 1,
@@ -295,16 +310,18 @@ class ProductsController {
     filteringProperites.forEach((key, value) {
       if (value != null) {
         value.forEach((key, value) {
-          if (value['selected']) {
+          if (value['selected'] ?? value['selected']) {
             for (var id in value['products']) {
-              _filteredproductsHashMap[id] = _productsHashMap[id]!;
+              if (!_filteredproductsHashMap.containsKey(id)) {
+                _filteredproductsHashMap[id] = _productsHashMap[id]!;
+              }
             }
           }
         });
       }
     });
     if (_filteredproductsHashMap.isEmpty) {
-      _filteredproductsHashMap = _productsHashMap;
+      _filteredproductsHashMap = Map.from(_productsHashMap);
     }
   }
 }

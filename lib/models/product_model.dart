@@ -111,6 +111,8 @@ class ProductModel {
     };
   }
 
+  
+
   @override
   String toString() {
     return 'ProductModel(productId: $productId,\n name: $name,\n tagline: $tagline,\n description: $description,\n actualPrice: $actualPrice,\n currentPrice: $currentPrice,\n availableStock: $availableStock,\n rating: $rating,\ncolor: $color,\n brand: $brand,\n sizes: ${sizes!},\n availableColors: $availableColors,\n images: $images,\n tags: $tags,\n category: $category,\n type: $type,\n gender: $gender,\n manufacturer: $manufacturer,\n netQuantity: $netQuantity,\n details: $details,\n hasDifferentSizes: $hasDifferentSizes,\n createdAt: $createdAt,\n)';

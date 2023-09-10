@@ -30,7 +30,7 @@ class _SimilarProductsState extends ConsumerState<SimilarProducts> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "View Similar Products",
+            "Similar Products",
             style: AppStyles.sectionSubheading,
           ),
           const SizedBox(height: 20),
@@ -59,7 +59,9 @@ class _SimilarProductsState extends ConsumerState<SimilarProducts> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: data.map((e) {
+        children: data.isEmpty
+            ? [const Text("No similar products found")]
+            : data.map((e) {
           return Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),
               child: ProductCard(product: e));

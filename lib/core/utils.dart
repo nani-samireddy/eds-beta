@@ -1,6 +1,4 @@
 import 'dart:core';
-
-import 'package:eds_beta/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

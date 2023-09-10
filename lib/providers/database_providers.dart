@@ -39,3 +39,10 @@ final similarProductsProvider =
   final db = ref.watch(databaseAPIProvider);
   return await db.getSimilarProducts(tags: product.tags,productId: product.productId);
 });
+
+
+final tagsProvider = FutureProvider<List<String>>((ref) async {
+  log("Getting tags");
+  final db = ref.watch(databaseAPIProvider);
+  return await db.getTags();
+});

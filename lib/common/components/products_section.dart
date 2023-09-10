@@ -37,9 +37,9 @@ class _ProductsSectionState extends ConsumerState<ProductsSection> {
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 14.0,
-                mainAxisSpacing: 14.0,
-                mainAxisExtent: 300),
+                crossAxisSpacing: 8.0,
+                mainAxisSpacing: 8.0,
+                mainAxisExtent: 250),
             itemBuilder: (context, index) {
               return ProductCard(
                 product: widget.products[index],

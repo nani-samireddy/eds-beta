@@ -1,7 +1,6 @@
 import 'dart:developer';
-
 import 'package:eds_beta/common/components/home_loading.dart';
-import 'package:eds_beta/features/main_layout/home_screen/components/category_results_view.dart';
+import 'package:eds_beta/features/main_layout/search/results_page_view.dart';
 import 'package:eds_beta/providers/database_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,8 +44,10 @@ class _CategoriesListViewState extends ConsumerState<CategoriesListView> {
                           return GestureDetector(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => CategoryResultsView(
-                                        category: e,
+                                  builder: (context) => ResultsPageView(
+                                        title: e.name,
+                                        query: e.name,
+                                       
                                       )));
                             },
                             child: Column(

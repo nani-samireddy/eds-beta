@@ -21,7 +21,7 @@ class _OffersCaroselState extends ConsumerState<OffersCarosel> {
   Widget build(BuildContext context) {
     return ref.watch(offersProvider).when(
           loading: () =>
-              const RectangularSKLOader(height: 200, width: double.infinity),
+              const RectangularSKLOader(height: 180, width: double.infinity),
           error: (error, stackTrace) {
             log(error.toString());
             return Text(error.toString());

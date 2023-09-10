@@ -6,6 +6,7 @@ import 'package:eds_beta/common/components/page_padding.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/categories_view.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/new_products_section.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/offers_slider.dart';
+import 'package:eds_beta/features/main_layout/search/search_page.dart';
 import 'package:eds_beta/providers/database_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -53,7 +54,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
             margin: const EdgeInsets.only(right: 6),
             child: IconButton(
                 onPressed: () {
-                  //TODO: ADD NOTIFICATION PAGE NAVIGATION
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const SearchPage()));
                 },
                 icon: const Icon(
                   Icons.notifications_outlined,
@@ -62,6 +64,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
                   color: Colors.black,
                 )),
           ),
+        
         ],
       ),
       body: const SingleChildScrollView(

@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eds_beta/constants/constans.dart';
-import 'package:eds_beta/models/search_result_model.dart';
+import 'package:eds_beta/controllers/products_controller.dart';
 
 import '../models/app_models.dart';
 
@@ -35,17 +35,21 @@ abstract class IDatabaseAPI {
       required UserModel user});
 
   Future<List<ProductModel>> getProductsByCategory({required String category});
+  Future<List<ProductModel>> getProductsByTag(
+      {required String tag, required ProductsController controller});
 
   Future<List<ProductModel>> getProductsByQuery(
       {required Query<Map<String, dynamic>> query});
 
   Future<List<ProductModel>> loadMore(
-      {required SearchResultModel searchQuery,
-      required String startAfter,
+      {required String querTag,
+      required ProductsController controller,
       int limit = 20});
 
-  Query<Map<String, dynamic>> buildFirebaseSearchQuery(
-      {required SearchResultModel searchResultModel});
+  // Query<Map<String, dynamic>> buildFirebaseSearchQuery(
+  //     {required SearchResultModel searchResultModel});
+
+  Future<List<String>> getTags();
 }
 
 class DatabaseAPI extends IDatabaseAPI {
@@ -420,7 +424,7 @@ class DatabaseAPI extends IDatabaseAPI {
       final docRef = _firestore
           .collection(FirestoreCollectionNames.productsCollection)
           .where("category", isEqualTo: category)
-          .limit(20);
+          .limit(1);
       return await docRef.get().then((value) {
         if (value.docs.isNotEmpty) {
           List<ProductModel> products = [];
@@ -469,25 +473,32 @@ class DatabaseAPI extends IDatabaseAPI {
 
   @override
   Future<List<ProductModel>> loadMore(
-      {required SearchResultModel searchQuery,
-      required String startAfter,
+      {required String querTag,
+      required ProductsController controller,
       int limit = 20}) async {
-    final query = buildFirebaseSearchQuery(searchResultModel: searchQuery);
+    log("load more with $querTag ${controller.lastDocument.id.toString()}}");
+    final query = _firestore
+        .collection(FirestoreCollectionNames.productsCollection)
+        .orderBy("createdAt", descending: true)
+        .where("tags", arrayContains: querTag)
+        .startAfterDocument(controller.lastDocument)
+        .limit(limit);
     try {
       return await query
-          .orderBy(FieldPath.documentId)
-          .startAfter([startAfter])
-          .limit(limit)
           .get()
           .then((value) {
+        log(value.docs.length.toString());
+
             if (value.docs.isNotEmpty) {
+          controller.lastDocument = value.docs.last;
               List<ProductModel> products = [];
-              log(value.docs.length.toString());
+          log(value.docs.toString());
               for (var element in value.docs) {
                 String productId = element.id;
                 products.add(ProductModel.fromMap(
                     map: element.data(), productId: productId));
               }
+
               return products;
             } else {
               log("Products related does not exist");
@@ -500,46 +511,111 @@ class DatabaseAPI extends IDatabaseAPI {
     }
   }
 
+  // @override
+  // Query<Map<String, dynamic>> buildFirebaseSearchQuery(
+  //     {required SearchResultModel searchResultModel}) {
+  //   Query<Map<String, dynamic>> query =
+  //       _firestore.collection(FirestoreCollectionNames.productsCollection);
+
+  //   if (searchResultModel.query.isNotEmpty) {
+  //     var queryList = searchResultModel.query.split('&');
+  //     for (String q in queryList) {
+  //       switch (q.split(':').first) {
+  //         case 'category':
+  //           if (q.split(':').last.contains('|')) {
+  //             query = query.where('category',
+  //                 whereIn: q.split(':').last.split('|'));
+  //           } else {
+  //             query = query.where('category', isEqualTo: q.split(':').last);
+  //           }
+  //           break;
+  //         case 'brand':
+  //           if (q.split(':').last.contains('|')) {
+  //             query =
+  //                 query.where('brand', whereIn: q.split(':').last.split('|'));
+  //           } else {
+  //             query = query.where('brand', isEqualTo: q.split(':').last);
+  //           }
+  //           break;
+  //         case 'color':
+  //           if (q.split(':').last.contains('|')) {
+  //             query =
+  //                 query.where('color', whereIn: q.split(':').last.split('|'));
+  //           } else {
+  //             query = query.where('color', isEqualTo: q.split(':').last);
+  //           }
+  //           break;
+  //         case 'tag':
+  //           if (q.split(':').last.contains('|')) {
+  //             query = query.where('tags',
+  //                 arrayContainsAny: q.split(':').last.split('|'));
+  //           } else {
+  //             query = query.where('tags', arrayContains: q.split(':').last);
+  //           }
+  //           break;
+
+  //         default:
+  //       }
+  //     }
+  //   }
+
+  //   return query;
+  // }
+
   @override
-  Query<Map<String, dynamic>> buildFirebaseSearchQuery(
-      {required SearchResultModel searchResultModel}) {
-    Query<Map<String, dynamic>> query =
-        _firestore.collection(FirestoreCollectionNames.productsCollection);
-
-    if (searchResultModel.query.isNotEmpty) {
-      var queryList = searchResultModel.query.split('&');
-      for (String q in queryList) {
-        switch (q.split(':').first) {
-          case 'category':
-            if (q.split(':').last.contains('|')) {
-              query = query.where('category',
-                  whereIn: q.split(':').last.split('|'));
-            } else {
-              query = query.where('category', isEqualTo: q.split(':').last);
-            }
-            break;
-          case 'brand':
-            if (q.split(':').last.contains('|')) {
-              query =
-                  query.where('brand', whereIn: q.split(':').last.split('|'));
-            } else {
-              query = query.where('brand', isEqualTo: q.split(':').last);
-            }
-            break;
-          case 'color':
-            if (q.split(':').last.contains('|')) {
-              query =
-                  query.where('color', whereIn: q.split(':').last.split('|'));
-            } else {
-              query = query.where('color', isEqualTo: q.split(':').last);
-            }
-            break;
-
-          default:
+  Future<List<String>> getTags() async {
+    try {
+      final docRef = _firestore
+          .collection(FirestoreCollectionNames.appData)
+          .doc(FirestoreDocumentNames.tagsDocument);
+      return await docRef.get().then((value) {
+        if (value.exists) {
+          List<String> tags = [];
+          final data = value.data()!["tags"];
+          for (var element in data) {
+            tags.add(element);
+          }
+          return tags;
+        } else {
+          log("Tags does not exist");
+          return [];
         }
-      }
+      });
+    } catch (e) {
+      log("Error while getting tags $e ");
+      return [];
     }
+  }
 
-    return query;
+  @override
+  Future<List<ProductModel>> getProductsByTag(
+      {required String tag, required ProductsController controller}) async {
+    try {
+      log("getting products by tag $tag");
+      final docRef = _firestore
+          .collection(FirestoreCollectionNames.productsCollection)
+          .orderBy("createdAt", descending: true)
+          .where("tags", arrayContains: tag)
+          .limit(2);
+      return await docRef.get().then((value) {
+        if (value.docs.isNotEmpty) {
+          List<ProductModel> products = [];
+          controller.lastDocument = value.docs[value.docs.length - 1];
+          log(value.docs.length.toString());
+          for (var element in value.docs) {
+            String productId = element.id;
+            products.add(ProductModel.fromMap(
+                map: element.data(), productId: productId));
+          }
+          return products;
+        } else {
+          log("Products related does not exist");
+          return [];
+        }
+      });
+    } catch (e) {
+      log("Error while getting products by tag $e");
+      return [];
+    }
   }
 }

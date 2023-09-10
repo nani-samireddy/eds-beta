@@ -21,6 +21,12 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
   bool _isLoading = false;
   bool _isValid = false;
   bool _otpSent = false;
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
   final TextEditingController phoneNumberController = TextEditingController();
 
   void _requestOTP() async {
