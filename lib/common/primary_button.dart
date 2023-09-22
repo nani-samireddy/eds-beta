@@ -1,4 +1,3 @@
-
 import 'package:eds_beta/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,17 +41,16 @@ class _PrimaryButtonState extends State<PrimaryButton> {
         //       )
         //     : const SizedBox.shrink(),
         Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10),
           width: double.infinity,
           child: ElevatedButton(
             onPressed: widget.enable ? widget.onPressed : null,
             style: ButtonStyle(
               side: const MaterialStatePropertyAll<BorderSide>(
-                BorderSide(color: Colors.black, width: 2),
+                BorderSide(color: Colors.black, width: 1),
               ),
               shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
+                  borderRadius: BorderRadius.circular(0),
                 ),
               ),
               backgroundColor: MaterialStateProperty.all(

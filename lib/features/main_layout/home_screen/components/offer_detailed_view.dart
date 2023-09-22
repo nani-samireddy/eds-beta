@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eds_beta/models/app_models.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OfferDetailedView extends ConsumerStatefulWidget {
   const OfferDetailedView({super.key, required this.offer});
@@ -28,7 +29,9 @@ class _OfferDetailedViewState extends ConsumerState<OfferDetailedView> {
             )),
         title: Text(
           widget.offer.name,
-          style: const TextStyle(fontWeight: FontWeight.w900),
+          style: TextStyle(
+              fontWeight: FontWeight.w900,
+              fontFamily: GoogleFonts.unbounded().fontFamily),
         ),
       ),
       body: SingleChildScrollView(
@@ -39,7 +42,10 @@ class _OfferDetailedViewState extends ConsumerState<OfferDetailedView> {
               padding: const EdgeInsets.all(20.0),
               child: Text(
                 widget.offer.description,
-                style: const TextStyle(fontSize: 18, height: 1.8),
+                style: TextStyle(
+                    fontSize: 18,
+                    height: 1.8,
+                    fontFamily: GoogleFonts.dmSans().fontFamily),
               ),
             ),
           ],

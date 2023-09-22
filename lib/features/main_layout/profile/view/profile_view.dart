@@ -1,4 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
+import 'package:eds_beta/features/main_layout/profile/components/help_options.dart';
+import 'package:eds_beta/features/main_layout/profile/components/orders_options.dart';
+import 'package:eds_beta/features/main_layout/profile/components/profile_options.dart';
+import 'package:eds_beta/features/main_layout/profile/components/settings_options.dart';
+import 'package:eds_beta/features/main_layout/wishlist/view/wishlist_view.dart';
+import 'package:eds_beta/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,44 +18,125 @@ class ProfileView extends ConsumerStatefulWidget {
 }
 
 class _ProfileViewState extends ConsumerState<ProfileView> {
-
+  final tabs = ["PROFILE", "ORDERS", "SETTINGS", "HELP"];
+  final Map<String, Widget> _tabs = {
+    "PROFILE": const ProfileOptions(),
+    "ORDERS": const OrdersOptions(),
+    "SETTINGS": const SettingsOptions(),
+    "HELP": const HelpOptions(),
+  };
+  int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Profile",
+          _tabs.keys.elementAt(currentIndex),
           style: TextStyle(
-              fontSize: 32,
+              fontSize: 20,
               fontWeight: FontWeight.w900,
               fontFamily: GoogleFonts.unbounded().fontFamily),
         ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 6),
-            child: IconButton(
-                onPressed: () {
-                  //TODO: ADD NOTIFICATION PAGE NAVIGATION
-                },
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  size: 28,
-                  weight: 300,
-                  color: Colors.black,
-                )),
-          ),
-        ],
       ),
-      body: Column(
-        children: [
-          const Text('Profile'),
-          ElevatedButton(
-            onPressed: () {
-              ref.read(authControllerProvider.notifier).signOut();
-            },
-            child: const Text("Logout"),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => const WishlistView()));
+                    },
+                    child: Column(
+                      children: [
+                        const Icon(
+                          Icons.favorite_outline_sharp,
+                          size: 40,
+                          color: Pallete.grey,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          "WISHLIST",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Pallete.grey,
+                              fontFamily: GoogleFonts.dmSans().fontFamily,
+                              fontWeight: FontWeight.w600),
+                        )
+                      ],
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      //TODO:GOTO INBOX
+                    },
+                    child: Column(
+                      children: [
+                        const Icon(
+                          Icons.mail_outline_outlined,
+                          size: 40,
+                          color: Pallete.grey,
+                        ),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          "INBOX",
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Pallete.grey,
+                              fontFamily: GoogleFonts.dmSans().fontFamily,
+                              fontWeight: FontWeight.w600),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 60,
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 5),
+                    child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            currentIndex = index;
+                          });
+                        },
+                        child: Text(
+                          _tabs.keys.elementAt(index),
+                          style: TextStyle(
+                              color: currentIndex == index
+                                  ? Pallete.black
+                                  : Pallete.grey,
+                              fontSize: 18,
+                              fontFamily: GoogleFonts.dmSans().fontFamily,
+                              fontWeight: FontWeight.w600),
+                        )),
+                  );
+                },
+                itemCount: _tabs.length,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: _tabs.values.elementAt(currentIndex),
+            ),
+          ],
+        ),
       ),
     );
   }

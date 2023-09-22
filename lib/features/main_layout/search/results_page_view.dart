@@ -134,63 +134,72 @@ class _ResultsPageViewState extends ConsumerState<ResultsPageView> {
           ? const ProductsNotFound()
           : Stack(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    children: [
-                      GridView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 14.0,
-                                mainAxisSpacing: 14.0,
-                                mainAxisExtent: 300),
-                        itemBuilder: (context, index) {
-                          return ProductCard(
-                            key: UniqueKey(),
-                            product: _products[index],
-                          );
-                        },
-                        itemCount: _products.length,
-                      ),
-                      _searchResult.hasMore && !_isLoading
-                          ? Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 30.0),
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 0, horizontal: 10),
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      side: const BorderSide(
-                                          color: Pallete.black, width: 1.0)),
-                                ),
-                                onPressed: handleLoadMore,
-                                child: const Text(
-                                  'Load More',
-                                  style: TextStyle(color: Pallete.black),
-                                ),
-                              ),
-                            )
-                          : _isLoading
-                              ? Container(
-                                  margin: const EdgeInsets.only(top: 20.0),
-                                  child: const CircularLoaderPage(
-                                    message: "Loading hold on...",
-                                    backgroundColor: Pallete.backgroundColor,
+                SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      children: [
+                        GridView.builder(
+                          
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 14.0,
+                                  mainAxisSpacing: 14.0,
+                                  mainAxisExtent: 300),
+                          itemBuilder: (context, index) {
+                            return ProductCard(
+                              key: UniqueKey(),
+                              product: _products[index],
+                            );
+                          },
+                          itemCount: _products.length,
+                        ),
+                        _searchResult.hasMore && !_isLoading
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 30.0),
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 0, horizontal: 10),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        side: const BorderSide(
+                                            color: Pallete.black, width: 1.0)),
                                   ),
-                                )
-                              : const SizedBox.shrink(),
-                    ],
+                                  onPressed: handleLoadMore,
+                                  child: const Text(
+                                    'Load More',
+                                    style: TextStyle(color: Pallete.black),
+                                  ),
+                                ),
+                              )
+                            : _isLoading
+                                ? Container(
+                                    margin: const EdgeInsets.only(top: 20.0),
+                                    child: const CircularLoaderPage(
+                                      message: "Loading hold on...",
+                                      backgroundColor: Pallete.backgroundColor,
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                        const SizedBox(
+                          height: 100.0,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: Padding(
-                      padding: const EdgeInsets.all(20.0),
+                  child: Container(
+                      color: Pallete.white,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10.0, horizontal: 5),
                       child: SortAndFilterProducts(
                         handleFilter: handleFilter,
                         handleSort: handleSort,

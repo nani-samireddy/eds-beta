@@ -1,7 +1,5 @@
-import 'dart:developer';
 import 'package:eds_beta/common/common.dart';
 import 'package:eds_beta/controllers/products_controller.dart';
-import 'package:eds_beta/core/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

@@ -54,9 +54,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
   @override
   void didChangeDependencies() {
     setState(() {
-      isInCart = ref
-          .watch(cartAPIProvider)
-          .isItemInCart(
+      isInCart = ref.watch(cartAPIProvider).isItemInCart(
           productId: widget.product.productId, size: selectedSize);
       isInWishlist = ref
           .watch(wishlistAPIProvider.notifier)
@@ -237,10 +235,8 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                             
                               RatingBar.builder(
-                                initialRating:
-                                    (widget.product.ratingRatio),
+                                initialRating: (widget.product.ratingRatio),
                                 minRating: 1,
                                 direction: Axis.horizontal,
                                 allowHalfRating: true,
@@ -389,7 +385,6 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                     product: widget.product,
                   ),
                   const SizedBox(height: 100),
-
                 ],
               ),
             ),

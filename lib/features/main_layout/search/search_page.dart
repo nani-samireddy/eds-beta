@@ -1,12 +1,8 @@
-import 'dart:developer';
-
 import 'package:eds_beta/common/circular_loading_page.dart';
+import 'package:eds_beta/core/styles.dart';
 import 'package:eds_beta/features/main_layout/search/results_page_view.dart';
-import 'package:eds_beta/providers/database_providers.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'search_controller.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
@@ -27,6 +23,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         title: TextField(
+          style: AppStyles.paragraph2,
           onChanged: _handleInputChanges,
           controller: _searchController,
           decoration: const InputDecoration(
@@ -75,7 +72,8 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           : [
               for (var suggestion in _suggestions)
                 ListTile(
-                  title: Text(suggestion),
+                  leading: const Icon(Icons.north_east_sharp),
+                  title: Text(suggestion, style: AppStyles.paragraph1),
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(

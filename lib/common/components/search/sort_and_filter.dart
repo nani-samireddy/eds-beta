@@ -17,7 +17,7 @@ class _SortAndFilterProductsState extends ConsumerState<SortAndFilterProducts> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Pallete.backgroundColor,
+      color: Pallete.white,
       child: Row(
         children: [
           Expanded(

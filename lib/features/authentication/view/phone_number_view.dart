@@ -2,7 +2,8 @@ import 'dart:async';
 import 'package:eds_beta/common/common.dart';
 import 'package:eds_beta/constants/images_urls.dart';
 import 'package:eds_beta/core/core.dart';
-import 'package:eds_beta/features/authentication/controller/auth_controller.dart';  
+import 'package:eds_beta/core/styles.dart';
+import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
 import 'package:eds_beta/features/authentication/wrapper.dart';
 import 'package:eds_beta/theme/pallete.dart';
 import 'package:flutter/gestures.dart';
@@ -27,6 +28,7 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
       super.setState(fn);
     }
   }
+
   final TextEditingController phoneNumberController = TextEditingController();
 
   void _requestOTP() async {
@@ -121,7 +123,7 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
       setState(() {
         _isLoading = false;
       });
-      
+
       Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (_) => const AuthWrapper()),
@@ -140,74 +142,70 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
     String formattedTime = formatTime(_seconds);
 
     return Scaffold(
-      body: Stack(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 60),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Image.asset(
-                      ImagesUrl.authPng,
-                      height: 250,
+      body: SizedBox(
+        height: double.maxFinite,
+        child: Stack(
+          children: [
+            // Background image
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage(ImagesUrl.authBg), fit: BoxFit.cover)),
+            ),
+            // Contents
+            Positioned(
+              child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: Pallete.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
                     ),
                   ),
-                  const Text(
-                    "Find the Perfect Gift for your loved ones",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const Text(
-                    "Get access to your orders, wishlist, recommandations, and highly customizable products...",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w100),
-                  ),
-                  Center(
-                    child: CustomTextInput(
-                        prefixText: "+91",
-                        enable: !_otpSent,
-                        validator: validatephoneNumber,
-                        type: TextInputType.number,
-                        hintText: "Enter 10 digit phone number ",
-                        labelText: "Phone number*",
-                        controller: phoneNumberController,
-                        onChange: (val) {
-                          setState(() {
-                            if (validateOTP(val) == null) {
-                              _isValid = true;
-                            } else {
-                              _isValid = false;
-                            }
-                          });
-                        }),
-                  ),
-                  _otpSent
-                      ? Wrap(
-                          children: [
-                            TextButton.icon(
-                              onPressed: () {
-                                editPhoneNumberHandler();
-                              },
-                              icon: const Icon(
-                                Icons.edit_rounded,
-                                color: Pallete.fadedIconColor,
-                              ),
-                              label: const Text(
-                                "Edit phone number",
-                                style: TextStyle(color: Pallete.fadedIconColor),
+                  padding: const EdgeInsets.only(
+                      left: 40, right: 40, bottom: 40, top: 10),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Container(
+                            height: 4,
+                            width: 60,
+                            margin: const EdgeInsets.only(bottom: 30),
+                            decoration: BoxDecoration(
+                              color: Pallete.fadedIconColor.withOpacity(0.5),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(20),
                               ),
                             ),
-                            CustomTextInput(
-                              validator: validateOTP,
-                              hintText: "Enter the 6 digit OTP",
-                              labelText: "OTP",
-                              controller: _otpController,
+                          ),
+                        ),
+                        Text(
+                          "Welcome to ENDLESS",
+                          style:
+                              AppStyles.sectionHeading.copyWith(fontSize: 28),
+                        ),
+                        const Text(
+                          "Lets complete the setup",
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w100),
+                        ),
+                        Center(
+                          child: CustomTextInput(
+                              prefixText: "+91",
+                              enable: !_otpSent,
+                              validator: validatephoneNumber,
                               type: TextInputType.number,
+                              hintText: "Enter 10 digit phone number ",
+                              labelText: "Phone number*",
+                              controller: phoneNumberController,
                               onChange: (val) {
                                 setState(() {
                                   if (validateOTP(val) == null) {
@@ -216,65 +214,101 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
                                     _isValid = false;
                                   }
                                 });
-                              },
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                  text: "Didn't get the code?",
-                                  style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      color: Pallete.textBlackColor),
-                                  children: [
-                                    TextSpan(
-                                        text: enableResend
-                                            ? " Resend"
-                                            : " Resend in $formattedTime",
-                                        style: enableResend
-                                            ? const TextStyle(
-                                                color: Pallete.blue,
-                                                fontSize: 14)
-                                            : null,
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = enableResend
-                                              ? () {
-                                                  resendOTP();
-                                                }
-                                              : null),
-                                  ]),
-                            ),
-                            const SizedBox(
-                              height: 40,
-                            ),
-                            PrimaryButton(
-                              enable: _isValid,
-                              text: "Verify OTP",
-                              onPressed: verifyOTP,
-                            ),
-                          ],
-                        )
-                      : const SizedBox.shrink(),
-                  const SizedBox(
-                    height: 20,
+                              }),
+                        ),
+                        _otpSent
+                            ? Wrap(
+                                children: [
+                                  TextButton.icon(
+                                    onPressed: () {
+                                      editPhoneNumberHandler();
+                                    },
+                                    icon: const Icon(
+                                      Icons.edit_rounded,
+                                      color: Pallete.fadedIconColor,
+                                    ),
+                                    label: const Text(
+                                      "Edit phone number",
+                                      style: TextStyle(
+                                          color: Pallete.fadedIconColor),
+                                    ),
+                                  ),
+                                  CustomTextInput(
+                                    validator: validateOTP,
+                                    hintText: "Enter the 6 digit OTP",
+                                    labelText: "OTP",
+                                    controller: _otpController,
+                                    type: TextInputType.number,
+                                    onChange: (val) {
+                                      setState(() {
+                                        if (validateOTP(val) == null) {
+                                          _isValid = true;
+                                        } else {
+                                          _isValid = false;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  RichText(
+                                    text: TextSpan(
+                                        text: "Didn't get the code?",
+                                        style: const TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                            color: Pallete.textBlackColor),
+                                        children: [
+                                          TextSpan(
+                                              text: enableResend
+                                                  ? " Resend"
+                                                  : " Resend in $formattedTime",
+                                              style: enableResend
+                                                  ? const TextStyle(
+                                                      color: Pallete.blue,
+                                                      fontSize: 14)
+                                                  : null,
+                                              recognizer: TapGestureRecognizer()
+                                                ..onTap = enableResend
+                                                    ? () {
+                                                        resendOTP();
+                                                      }
+                                                    : null),
+                                        ]),
+                                  ),
+                                  const SizedBox(
+                                    height: 40,
+                                  ),
+                                  PrimaryButton(
+                                    enable: _isValid,
+                                    text: "Verify OTP",
+                                    onPressed: verifyOTP,
+                                  ),
+                                ],
+                              )
+                            : const SizedBox.shrink(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        !_otpSent
+                            ? Center(
+                                child: PrimaryButton(
+                                  text: "SEND OTP",
+                                  onPressed: _requestOTP,
+                                  enable: _isValid,
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                      ],
+                    ),
                   ),
-                  !_otpSent
-                      ? Center(
-                          child: PrimaryButton(
-                            text: "Request OTP",
-                            onPressed: _requestOTP,
-                            enable: _isValid,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ],
+                ),
               ),
             ),
-          ),
-          _isLoading ? const CircularLoaderPage() : const SizedBox.shrink(),
-        ],
+            _isLoading ? const CircularLoaderPage() : const SizedBox.shrink(),
+          ],
+        ),
       ),
     );
   }

@@ -46,7 +46,7 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Pallete.white,
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(18),
         boxShadow: [
           BoxShadow(
               color: Pallete.blue.withOpacity(.09),
@@ -72,7 +72,7 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                             image: NetworkImage(
                                 widget.cartItem.product.images.first),
                             fit: BoxFit.cover),
-                        borderRadius: BorderRadius.circular(30)),
+                        borderRadius: BorderRadius.circular(18)),
                   ),
                 ],
               ),

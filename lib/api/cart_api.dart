@@ -20,7 +20,6 @@ abstract class ICartAPI {
   Future<void> removeCartItem({required CartItemModel cartItem});
   Future<void> clearCart();
   bool isItemInCart({required String productId, required SizeModel? size});
-  Future<void> getProductsInCart();
   void setProductsInCart();
   void setCartItems({required List<CartItemModel> cartItems});
   Future<void> changeQuantity({required CartItemModel cartItem});
@@ -105,8 +104,8 @@ class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
     }
   }
 
-  @override
   Future<List<ProductModel>> getProductsInCart() async {
+    
     try {
       return await _databaseAPI.getProductsWithIds(
           ids: state.map((e) => e.productId).toList());

@@ -34,15 +34,15 @@ class _OffersCaroselState extends ConsumerState<OffersCarosel> {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => OfferDetailedView(offer: e)));
                       },
-                      child: RoundedContainer(child: Image.network(e.image))))
+                      child: Image.network(e.image)))
                   .toList(),
               options: CarouselOptions(
-                height: 200,
+                height: 160,
                 enlargeCenterPage: true,
-                viewportFraction: 1,
-                padEnds: false,
+                viewportFraction: 0.85,
+                padEnds: true,
                 autoPlay: true,
-                enlargeFactor: 0.5,
+                enlargeFactor: 0.1,
               ),
             );
           },

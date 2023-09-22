@@ -18,7 +18,7 @@ class _ServicesViewState extends ConsumerState<ServicesView> {
         title: Text(
           "Services",
           style: TextStyle(
-              fontSize: 32,
+              fontSize: 20,
               fontWeight: FontWeight.w900,
               fontFamily: GoogleFonts.unbounded().fontFamily),
         ),
@@ -38,7 +38,7 @@ class _ServicesViewState extends ConsumerState<ServicesView> {
           ),
         ],
       ),
-      body: Center(child: Text("Services")),
+      body: const Center(child: Text("Services")),
     );
   }
 }

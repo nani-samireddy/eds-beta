@@ -18,7 +18,7 @@ class CustomTextInput extends StatefulWidget {
     required this.validator,
     required this.onChange,
     this.prefixText,
-    this.enable = true,    
+    this.enable = true,
     super.key,
   });
 
@@ -58,16 +58,6 @@ class _CustomTextInputState extends State<CustomTextInput> {
               keyboardType: widget.type,
               controller: widget.controller,
               decoration: InputDecoration(
-                prefix: Text("${widget.prefixText ?? ""} "),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    widget.controller.clear();
-                  },
-                  icon: const Icon(
-                    Icons.clear_rounded,
-                    color: Pallete.fadedIconColor,
-                  ),
-                ),
                 errorText: _errorText,
                 enabled: true,
                 contentPadding:

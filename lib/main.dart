@@ -1,9 +1,7 @@
-
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stack_trace/stack_trace.dart' as stack_trace;
-
 import 'package:eds_beta/core/core.dart';
 import 'package:eds_beta/features/authentication/wrapper.dart';
 import 'package:eds_beta/theme/theme.dart';

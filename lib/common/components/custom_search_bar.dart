@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:eds_beta/features/main_layout/search/search_page.dart';
 import 'package:flutter/material.dart';
 

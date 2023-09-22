@@ -190,12 +190,12 @@ class ProductsController {
   }
 
   void _updateCategoryFilterProperties() {
-    final brands = filteringProperites['Brand'] ?? <String, dynamic>{};
-    final categories = filteringProperites["Category"] ?? <String, dynamic>{};
-    final types = filteringProperites['Type'] ?? <String, dynamic>{};
-    final genders = filteringProperites['Gender'] ?? <String, dynamic>{};
-    final colors = filteringProperites['Color'] ?? <String, dynamic>{};
-    final sizes = filteringProperites['Size'] ?? <String, dynamic>{};
+    final brands = <String, dynamic>{};
+    final categories = <String, dynamic>{};
+    final types = <String, dynamic>{};
+    final genders = <String, dynamic>{};
+    final colors = <String, dynamic>{};
+    final sizes = <String, dynamic>{};
     for (final p in _productsHashMap.values) {
       ///CATEGORIES
       if (p.category != "") {
@@ -228,7 +228,7 @@ class ProductsController {
       ///BRANDS
       if (p.brand != null && p.brand != "") {
         if (brands[p.brand] == null) {
-          brands[p.brand] = {
+          brands[p.brand.toString()] = {
             "count": 1,
             "selected": false,
             "products": [p.productId]
@@ -242,7 +242,7 @@ class ProductsController {
       ///GENDER
       if (p.gender != null && p.gender != "") {
         if (genders[p.gender] == null) {
-          genders[p.gender] = {
+          genders[p.gender.toString()] = {
             "count": 1,
             "selected": false,
             "products": [p.productId]
@@ -270,7 +270,7 @@ class ProductsController {
         }
       } else {
         if (colors[p.color] == null) {
-          colors[p.color] = {
+          colors[p.color.toString()] = {
             "count": 1,
             "selected": false,
             "products": [p.productId]

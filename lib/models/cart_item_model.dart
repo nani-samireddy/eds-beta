@@ -35,8 +35,6 @@ class CartItemModel {
     );
   }
 
-
-
   @override
   String toString() =>
       'CartItemModel(productId: $productId, quantity: $quantity, product: $product, size: $size)';

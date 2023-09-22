@@ -5,10 +5,8 @@ class ProductsNotFound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text('No products found'),
-      ),
+    return const Center(
+      child: Text('No products found'),
     );
   }
 }

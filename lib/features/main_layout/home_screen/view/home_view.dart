@@ -1,13 +1,9 @@
-import 'dart:developer';
-
-import 'package:eds_beta/api/user_api.dart';
 import 'package:eds_beta/common/components/common_components.dart';
 import 'package:eds_beta/common/components/page_padding.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/categories_view.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/new_products_section.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/offers_slider.dart';
 import 'package:eds_beta/features/main_layout/search/search_page.dart';
-import 'package:eds_beta/providers/database_providers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eds_beta/models/app_models.dart';
@@ -32,15 +28,19 @@ class _HomeViewState extends ConsumerState<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(
-            Icons.menu,
-            size: 32,
-            weight: 700,
-            color: Colors.black,
-          ),
-        ),
+        leading: Builder(builder: (context) {
+          return IconButton(
+            onPressed: () {
+              Scaffold.of(context).openDrawer();
+            },
+            icon: const Icon(
+              Icons.menu,
+              size: 32,
+              weight: 700,
+              color: Colors.black,
+            ),
+          );
+        }),
         centerTitle: true,
         title: Text(
           "Endless",
@@ -58,13 +58,12 @@ class _HomeViewState extends ConsumerState<HomeView> {
                       builder: (context) => const SearchPage()));
                 },
                 icon: const Icon(
-                  Icons.notifications_outlined,
+                  Icons.search_sharp,
                   size: 28,
                   weight: 300,
                   color: Colors.black,
                 )),
           ),
-        
         ],
       ),
       body: const SingleChildScrollView(
@@ -73,7 +72,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomSearchBar(),
+              //CustomSearchBar(),
               OffersCarosel(),
               // ElevatedButton(
               //   onPressed: () async {
