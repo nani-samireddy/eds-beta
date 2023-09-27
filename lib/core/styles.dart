@@ -15,12 +15,12 @@ class AppStyles {
       fontWeight: FontWeight.w600);
 
   static TextStyle paragraph1 = TextStyle(
-      fontSize: 18,
+      fontSize: 16,
       fontFamily: GoogleFonts.poppins().fontFamily,
       fontWeight: FontWeight.w400);
 
   static TextStyle paragraph2 = TextStyle(
       fontSize: 18,
       fontFamily: GoogleFonts.poppins().fontFamily,
-      fontWeight: FontWeight.w600);
+      fontWeight: FontWeight.w400);
 }

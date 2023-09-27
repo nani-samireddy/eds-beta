@@ -1,3 +1,4 @@
+import 'package:eds_beta/common/common.dart';
 import 'package:eds_beta/core/styles.dart';
 import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
 import 'package:eds_beta/theme/theme.dart';
@@ -15,7 +16,7 @@ class ProfileOptions extends ConsumerStatefulWidget {
 class _ProfileOptionsState extends ConsumerState<ProfileOptions> {
   @override
   Widget build(BuildContext context) {
-  return Column(
+    return Column(
       children: [
         ListTile(
           title: Text("Edit Profile", style: AppStyles.sectionHeading),
@@ -29,11 +30,8 @@ class _ProfileOptionsState extends ConsumerState<ProfileOptions> {
           trailing: const Icon(Icons.border_color_outlined),
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.88,
-          child: const Divider(
-            color: Pallete.fadedIconColor,
-          ),
-        ),
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: const CustomDivider()),
         ListTile(
           title: Text(
             "Address Book",
@@ -43,11 +41,8 @@ class _ProfileOptionsState extends ConsumerState<ProfileOptions> {
           trailing: const Icon(Icons.border_color_outlined),
         ),
         SizedBox(
-          width: MediaQuery.of(context).size.width * 0.88,
-          child: const Divider(
-            color: Pallete.fadedIconColor,
-          ),
-        ),
+            width: MediaQuery.of(context).size.width * 0.9,
+            child: const CustomDivider()),
         ListTile(
           title: Text(
             "Logout",

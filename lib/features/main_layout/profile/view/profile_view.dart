@@ -64,7 +64,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                         Text(
                           "WISHLIST",
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               color: Pallete.grey,
                               fontFamily: GoogleFonts.dmSans().fontFamily,
                               fontWeight: FontWeight.w600),
@@ -89,7 +89,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                         Text(
                           "INBOX",
                           style: TextStyle(
-                              fontSize: 18,
+                              fontSize: 16,
                               color: Pallete.grey,
                               fontFamily: GoogleFonts.dmSans().fontFamily,
                               fontWeight: FontWeight.w600),
@@ -102,6 +102,18 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
             ),
             Container(
               width: double.infinity,
+              decoration: const BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Pallete.grey,
+                    width: 0.5,
+                ),
+                  bottom: BorderSide(
+                    color: Pallete.grey,
+                    width: 0.5,
+                  ),
+                ),
+              ),
               height: 60,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: ListView.builder(

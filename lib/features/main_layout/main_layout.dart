@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
-
 class MainLayout extends ConsumerStatefulWidget {
   const MainLayout({super.key});
 
@@ -37,44 +36,39 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
-      
       body: _views[_selectedIndex],
       bottomNavigationBar: GNav(
-          selectedIndex: _selectedIndex,
-          onTabChange: (value) {
-            setState(() {
-              _selectedIndex = value;
-            });
-          },
-          backgroundColor: Pallete.backgroundColor,
-          color: Pallete.fadedIconColor,
-          activeColor: Pallete.bottomNavActiveColor,
+        selectedIndex: _selectedIndex,
+        onTabChange: (value) {
+          setState(() {
+            _selectedIndex = value;
+          });
+        },
+        backgroundColor: Pallete.backgroundColor,
+        color: Pallete.fadedIconColor,
+        activeColor: Pallete.black,
         gap: 5,
         padding: const EdgeInsets.all(20),
         iconSize: 20,
-          textStyle: const TextStyle(
-            fontSize: 12,
-              fontWeight: FontWeight.w900,
-              color: Pallete.bottomNavActiveColor),
-          tabs: const [
-            GButton(
-              icon: Icons.explore_outlined,
-              text: 'EXPLORE',
-            ),
-            GButton(
-              icon: Icons.grid_view_outlined,
-              text: 'Services',
-            ),
-            GButton(
-              icon: Icons.local_mall_outlined,
-              text: 'CART',
-            ),
-           
-            GButton(
-              icon: Icons.account_circle_outlined,
-              text: 'PROFILE',
-            ),
+        textStyle: const TextStyle(
+            fontSize: 12, fontWeight: FontWeight.w900, color: Pallete.black),
+        tabs: const [
+          GButton(
+            icon: Icons.explore_outlined,
+            text: 'EXPLORE',
+          ),
+          GButton(
+            icon: Icons.grid_view_outlined,
+            text: 'Services',
+          ),
+          GButton(
+            icon: Icons.local_mall_outlined,
+            text: 'CART',
+          ),
+          GButton(
+            icon: Icons.account_circle_outlined,
+            text: 'PROFILE',
+          ),
         ],
       ),
     );

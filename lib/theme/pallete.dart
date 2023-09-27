@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Pallete {
   static const Color grey = Colors.grey;
-  static const Color fadedIconColor = Color.fromARGB(255, 147, 149, 152);
+  static const Color fadedIconColor = Color.fromARGB(203, 147, 149, 152);
   static const Color backgroundColor = Color.fromARGB(255, 247, 247, 247);
   static const Color whiteAccent = Color.fromARGB(255, 255, 250, 250);
   static const Color white = Color.fromARGB(255, 255, 250, 250);
