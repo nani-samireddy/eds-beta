@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eds_beta/core/styles.dart';
 import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
 import 'package:eds_beta/features/main_layout/profile/components/help_options.dart';
 import 'package:eds_beta/features/main_layout/profile/components/orders_options.dart';
@@ -63,12 +64,10 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                         ),
                         Text(
                           "WISHLIST",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Pallete.grey,
-                              fontFamily: GoogleFonts.dmSans().fontFamily,
-                              fontWeight: FontWeight.w600),
-                        )
+                          style: AppStyles.sectionHeading.copyWith(
+                            color: Pallete.grey,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -88,11 +87,9 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                         ),
                         Text(
                           "INBOX",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Pallete.grey,
-                              fontFamily: GoogleFonts.dmSans().fontFamily,
-                              fontWeight: FontWeight.w600),
+                          style: AppStyles.sectionHeading.copyWith(
+                            color: Pallete.grey,
+                          ),
                         )
                       ],
                     ),
@@ -107,7 +104,7 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                   top: BorderSide(
                     color: Pallete.grey,
                     width: 0.5,
-                ),
+                  ),
                   bottom: BorderSide(
                     color: Pallete.grey,
                     width: 0.5,
@@ -128,16 +125,12 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                             currentIndex = index;
                           });
                         },
-                        child: Text(
-                          _tabs.keys.elementAt(index),
-                          style: TextStyle(
+                        child: Text(_tabs.keys.elementAt(index),
+                            style: AppStyles.sectionHeading.copyWith(
                               color: currentIndex == index
                                   ? Pallete.black
                                   : Pallete.grey,
-                              fontSize: 18,
-                              fontFamily: GoogleFonts.dmSans().fontFamily,
-                              fontWeight: FontWeight.w600),
-                        )),
+                            ))),
                   );
                 },
                 itemCount: _tabs.length,

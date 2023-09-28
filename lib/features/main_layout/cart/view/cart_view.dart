@@ -1,5 +1,8 @@
+import 'dart:developer';
+
 import 'package:eds_beta/api/cart_api.dart';
 import 'package:eds_beta/common/components/cart_item_card.dart';
+import 'package:eds_beta/common/primary_button.dart';
 import 'package:eds_beta/constants/constans.dart';
 import 'package:eds_beta/core/styles.dart';
 import 'package:eds_beta/models/app_models.dart';
@@ -19,38 +22,28 @@ class _CartViewState extends ConsumerState<CartView> {
 
   double _total = 0;
   bool _loading = false;
+
   @override
-  didChangeDependencies() {
+  void didChangeDependencies() {
     super.didChangeDependencies();
-    getCartItems();
-  }
-
-  getCartItems() async {
-    setState(() {
-      _loading = true;
-
-      final res = ref.watch(cartAPIProvider).cartItems;
-
-      cartItems = res;
-      calculateCart();
-      _loading = false;
+    ref.watch(cartAPIProvider).addListener((state) {
+      setState(() {
+        cartItems = state;
+        calculateCart();
+        _loading = false;
+      });
     });
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
   }
 
   void calculateCart() {
     double total = 0;
     for (var element in cartItems) {
       total += element.quantity * double.parse(element.product.currentPrice);
+      log("product: ${element.product.name} total: ${element.quantity * double.parse(element.product.currentPrice)}");
     }
     setState(() {
       _total = total;
+      log("total: $_total");
     });
   }
 
@@ -66,91 +59,106 @@ class _CartViewState extends ConsumerState<CartView> {
                 fontFamily: GoogleFonts.unbounded().fontFamily),
           ),
         ),
-        body: SingleChildScrollView(
-          child: _loading
-              ? const Center(child: CircularProgressIndicator())
-              : cartItems.isEmpty
-                  ? Column(
-                      children: [
-                        Image.asset(ImagesUrl.emptyImage),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 40),
-                          child: Center(
-                              child: Text(
-                            "No items in cart... Browse products to add items to cart",
-                            style:
-                                AppStyles.sectionHeading.copyWith(fontSize: 28),
-                          )),
+        body: Stack(
+          children: [
+            SingleChildScrollView(
+              child: _loading
+                  ? const Center(child: CircularProgressIndicator())
+                  : cartItems.isEmpty
+                      ? Column(
+                          children: [
+                            Image.asset(ImagesUrl.emptyImage),
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 40, vertical: 40),
+                              child: Center(
+                                  child: Text(
+                                "No items in cart... Browse products to add items to cart",
+                                style: AppStyles.sectionHeading
+                                    .copyWith(fontSize: 28),
+                              )),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            ListView.builder(
+                              itemBuilder: (context, index) {
+                                return CartItemCard(cartItem: cartItems[index]);
+                              },
+                              itemCount: cartItems.length,
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                            ),
+                          ],
                         ),
-                      ],
-                    )
-                  : Column(
-                      children: [
-                        ListView.builder(
-                          itemBuilder: (context, index) {
-                            return CartItemCard(cartItem: cartItems[index]);
-                          },
-                          itemCount: cartItems.length,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 10),
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(14),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.blue.withOpacity(0.02),
-                                spreadRadius: 2,
-                                blurRadius: 2,
-                                offset: const Offset(
-                                    0, 3), // changes position of shadow
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Total",
-                                      style: TextStyle(
-                                          fontFamily:
-                                              GoogleFonts.poppins().fontFamily,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold)),
-                                  Text("$_total",
-                                      style: TextStyle(
-                                          fontFamily:
-                                              GoogleFonts.poppins().fontFamily,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold)),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+            ),
+
+            // Bottom bar
+            cartItems.isNotEmpty
+                ? Align(
+                    alignment: Alignment.bottomCenter,
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 18.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                      "(Shipping charges will be calculated at checkout)",
-                                      style: TextStyle(
-                                          fontFamily:
-                                              GoogleFonts.poppins().fontFamily,
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w300)),
+                                    "$_total",
+                                    style: TextStyle(
+                                      fontFamily: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.bold)
+                                          .fontFamily,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  Text(
+                                    "*Shipping charges will be calculated at checkout",
+                                    style: TextStyle(
+                                      fontFamily: GoogleFonts.poppins(
+                                              fontWeight: FontWeight.w300)
+                                          .fontFamily,
+                                      fontSize: 8,
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ],
+                            ),
                           ),
-                        ),
-                      ],
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              child: PrimaryButton(
+                                  text: "CHECKOUT",
+                                  enable: true,
+                                  onPressed: () {}),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
+                  )
+                : const SizedBox.shrink()
+          ],
         ));
+  }
+
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
+  dispose() {
+    super.dispose();
   }
 }

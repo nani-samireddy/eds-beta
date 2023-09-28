@@ -50,6 +50,8 @@ abstract class IDatabaseAPI {
   //     {required SearchResultModel searchResultModel});
 
   Future<List<String>> getTags();
+
+
 }
 
 class DatabaseAPI extends IDatabaseAPI {
@@ -484,27 +486,25 @@ class DatabaseAPI extends IDatabaseAPI {
         .startAfterDocument(controller.lastDocument)
         .limit(limit);
     try {
-      return await query
-          .get()
-          .then((value) {
+      return await query.get().then((value) {
         log(value.docs.length.toString());
 
-            if (value.docs.isNotEmpty) {
+        if (value.docs.isNotEmpty) {
           controller.lastDocument = value.docs.last;
-              List<ProductModel> products = [];
+          List<ProductModel> products = [];
           log(value.docs.toString());
-              for (var element in value.docs) {
-                String productId = element.id;
-                products.add(ProductModel.fromMap(
-                    map: element.data(), productId: productId));
-              }
+          for (var element in value.docs) {
+            String productId = element.id;
+            products.add(ProductModel.fromMap(
+                map: element.data(), productId: productId));
+          }
 
-              return products;
-            } else {
-              log("Products related does not exist");
-              return [];
-            }
-          });
+          return products;
+        } else {
+          log("Products related does not exist");
+          return [];
+        }
+      });
     } catch (e) {
       log("Error while loading more products $e");
       return [];
@@ -618,4 +618,7 @@ class DatabaseAPI extends IDatabaseAPI {
       return [];
     }
   }
+
+
+
 }

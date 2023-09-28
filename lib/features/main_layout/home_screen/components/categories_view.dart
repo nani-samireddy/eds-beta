@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:eds_beta/common/components/home_loading.dart';
+import 'package:eds_beta/core/styles.dart';
 import 'package:eds_beta/features/main_layout/search/results_page_view.dart';
 import 'package:eds_beta/providers/database_providers.dart';
 import 'package:flutter/material.dart';
@@ -24,13 +25,7 @@ class _CategoriesListViewState extends ConsumerState<CategoriesListView> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-            child: Text(
-              "Categories",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: GoogleFonts.dmSans().fontFamily,
-                  fontWeight: FontWeight.w700)
-            ),
+            child: Text("Categories", style: AppStyles.sectionHeading),
           ),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -47,7 +42,6 @@ class _CategoriesListViewState extends ConsumerState<CategoriesListView> {
                                   builder: (context) => ResultsPageView(
                                         title: e.name,
                                         query: e.name,
-                                       
                                       )));
                             },
                             child: Column(

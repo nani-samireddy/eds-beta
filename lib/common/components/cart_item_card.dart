@@ -87,7 +87,6 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                     widget.cartItem.product.name,
                     style: TextStyle(
                         fontFamily: GoogleFonts.unbounded().fontFamily,
-                        color: Pallete.fadedIconColor,
                         fontSize: 18,
                         fontWeight: FontWeight.bold),
                   ),
@@ -97,8 +96,11 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                   Text(
                     ' Price : ${widget.cartItem.size!.price.toString()}',
                     style: TextStyle(
-                        fontFamily: GoogleFonts.unbounded().fontFamily,
-                        fontWeight: FontWeight.w800),
+                      color: Pallete.fadedIconColor,
+                      fontFamily:
+                          GoogleFonts.unbounded(fontWeight: FontWeight.w500)
+                              .fontFamily,
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -106,8 +108,11 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
                   Text(
                     ' SIZE : ${widget.cartItem.size!.size.toString()}',
                     style: TextStyle(
-                        fontFamily: GoogleFonts.unbounded().fontFamily,
-                        fontWeight: FontWeight.w800),
+                      color: Pallete.fadedIconColor,
+                      fontFamily:
+                          GoogleFonts.unbounded(fontWeight: FontWeight.w500)
+                              .fontFamily,
+                    ),
                   ),
                 ],
               ),

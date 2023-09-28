@@ -40,7 +40,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
         //         ),
         //       )
         //     : const SizedBox.shrink(),
-        Container(
+        SizedBox(
           width: double.infinity,
           child: ElevatedButton(
             onPressed: widget.enable ? widget.onPressed : null,
@@ -63,10 +63,11 @@ class _PrimaryButtonState extends State<PrimaryButton> {
               widget.text,
               style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w900,
+                  fontSize: 16,
                   letterSpacing: 1.3,
-                  fontFamily: GoogleFonts.poppins().fontFamily),
+                  fontFamily: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w400,
+                  ).fontFamily),
             ),
           ),
         ),

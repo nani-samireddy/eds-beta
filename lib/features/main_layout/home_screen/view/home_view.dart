@@ -28,20 +28,20 @@ class _HomeViewState extends ConsumerState<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Builder(builder: (context) {
-          return IconButton(
-            onPressed: () {
-              Scaffold.of(context).openDrawer();
-            },
-            icon: const Icon(
-              Icons.menu,
-              size: 32,
-              weight: 700,
-              color: Colors.black,
-            ),
-          );
-        }),
-        centerTitle: true,
+        // leading: Builder(builder: (context) {
+        //   return IconButton(
+        //     onPressed: () {
+        //       Scaffold.of(context).openDrawer();
+        //     },
+        //     icon: const Icon(
+        //       Icons.menu,
+        //       size: 32,
+        //       weight: 700,
+        //       color: Colors.black,
+        //     ),
+        //   );
+        // }),
+        centerTitle: false,
         title: Text(
           "Endless",
           style: TextStyle(

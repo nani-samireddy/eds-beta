@@ -188,14 +188,15 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
                           ),
                         ),
                         Text(
-                          "Welcome to ENDLESS",
-                          style:
-                              AppStyles.sectionHeading.copyWith(fontSize: 28),
+                          "Welcome 👋",
+                          style: AppStyles.heading1,
                         ),
                         const Text(
-                          "Lets complete the setup",
+                          "Enter your phone number to get started",
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w100),
+                              color: Pallete.grey,
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400),
                         ),
                         Center(
                           child: CustomTextInput(

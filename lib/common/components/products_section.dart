@@ -1,9 +1,9 @@
 import 'package:eds_beta/common/components/product_card.dart';
+import 'package:eds_beta/core/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:eds_beta/models/app_models.dart';
-
 
 class ProductsSection extends ConsumerStatefulWidget {
   const ProductsSection(
@@ -26,10 +26,7 @@ class _ProductsSectionState extends ConsumerState<ProductsSection> {
         children: [
           Text(
             widget.title,
-            style: TextStyle(
-                fontSize: 20,
-                fontFamily: GoogleFonts.dmSans().fontFamily,
-                fontWeight: FontWeight.w700),
+            style: AppStyles.sectionHeading,
           ),
           const SizedBox(height: 20),
           GridView.builder(

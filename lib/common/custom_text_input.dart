@@ -36,13 +36,6 @@ class _CustomTextInputState extends State<CustomTextInput> {
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: Wrap(
         children: [
-          Container(
-            margin: const EdgeInsets.only(bottom: 4),
-            child: Text(
-              widget.labelText,
-              style: const TextStyle(fontWeight: FontWeight.w700),
-            ),
-          ),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
             child: TextFormField(
@@ -58,6 +51,12 @@ class _CustomTextInputState extends State<CustomTextInput> {
               keyboardType: widget.type,
               controller: widget.controller,
               decoration: InputDecoration(
+                labelText: widget.labelText,
+                labelStyle: const TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w400,
+                ),
                 errorText: _errorText,
                 enabled: true,
                 contentPadding:

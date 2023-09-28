@@ -54,10 +54,10 @@ class _ProductPageState extends ConsumerState<ProductPage> {
   @override
   void didChangeDependencies() {
     setState(() {
-      isInCart = ref.watch(cartAPIProvider).isItemInCart(
+      isInCart = ref.read(cartAPIProvider).isItemInCart(
           productId: widget.product.productId, size: selectedSize);
       isInWishlist = ref
-          .watch(wishlistAPIProvider.notifier)
+          .read(wishlistAPIProvider.notifier)
           .isItemInWishlist(productId: widget.product.productId);
     });
     super.didChangeDependencies();
@@ -183,12 +183,17 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                             IconButton(
                                 iconSize: 30,
                                 isSelected: isInWishlist,
-                                highlightColor:
-                                    Pallete.primaryButtonShadowColor,
-                                selectedIcon: const Icon(Icons.favorite),
+                                highlightColor: Pallete.black,
+                                selectedIcon: const Icon(
+                                  Icons.favorite,
+                                  color: Pallete.black,
+                                ),
                                 onPressed: handleAddToWishlist,
                                 icon: isInWishlist
-                                    ? const Icon(Icons.favorite)
+                                    ? const Icon(
+                                        Icons.favorite,
+                                        color: Pallete.primaryButtonShadowColor,
+                                      )
                                     : const Icon(
                                         Icons.favorite_border_outlined))
                           ],
