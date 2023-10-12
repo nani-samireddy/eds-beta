@@ -117,7 +117,7 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
       _isLoading = true;
     });
     await ref
-        .watch(authControllerProvider.notifier)
+        .read(authControllerProvider.notifier)
         .verifyOTP(otp: _otpController.text, context: context)
         .then((value) {
       setState(() {

@@ -14,8 +14,9 @@ class AppStyles {
       fontFamily: GoogleFonts.poppins().fontFamily);
 
   static TextStyle sectionHeading = TextStyle(
-    fontSize: 18,
-    fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w600).fontFamily,
+    fontSize: 20,
+    color: const Color.fromARGB(255, 52, 51, 51),
+    fontFamily: GoogleFonts.poppins(fontWeight: FontWeight.w700).fontFamily,
   );
 
   static TextStyle paragraph1 = TextStyle(

@@ -29,7 +29,7 @@ class _ProductCardState extends ConsumerState<ProductCard> {
       actualPrice = widget.product.actualPrice;
     }
     discountPercentage = widget.product.getDiscount.toString();
-    
+
     super.initState();
   }
 

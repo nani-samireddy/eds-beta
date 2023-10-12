@@ -47,6 +47,7 @@ class AuthController extends StateNotifier<bool> {
         if (value == null) {
           _databaseAPI.addUserToDB(
               user: UserModel(
+                  addresses: [],
                   cartItems: [],
                   uid: r.uid,
                   name: name,
@@ -113,7 +114,8 @@ class AuthController extends StateNotifier<bool> {
             name: user.displayName ?? '',
             email: user.email ?? '',
             phone: user.phoneNumber ?? '',
-            wishListItems: []);
+            wishListItems: [],
+            addresses: []);
         if (value == null) {
           log("Creating a new user");
           log("user that is being added is: $user");
@@ -128,7 +130,6 @@ class AuthController extends StateNotifier<bool> {
       //     .showSnackBar(SnackBar(content: Text('Welcome ${user.displayName}')));
       return true;
     }
-
   }
 
   Future<User?> currentUser() async {

@@ -36,41 +36,45 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _views[_selectedIndex],
-      bottomNavigationBar: GNav(
-        selectedIndex: _selectedIndex,
-        onTabChange: (value) {
-          setState(() {
-            _selectedIndex = value;
-          });
-        },
-        backgroundColor: Pallete.backgroundColor,
-        color: Pallete.fadedIconColor,
-        activeColor: Pallete.black,
-        gap: 5,
-        padding: const EdgeInsets.all(20),
-        iconSize: 20,
-        textStyle: const TextStyle(
-            fontSize: 12, fontWeight: FontWeight.w900, color: Pallete.black),
-        tabs: const [
-          GButton(
-            icon: Icons.explore_outlined,
-            text: 'EXPLORE',
-          ),
-          GButton(
-            icon: Icons.grid_view_outlined,
-            text: 'Services',
-          ),
-          GButton(
-            icon: Icons.local_mall_outlined,
-            text: 'CART',
-          ),
-          GButton(
-            icon: Icons.account_circle_outlined,
-            text: 'PROFILE',
-          ),
-        ],
-      ),
-    );
+        body: _views[_selectedIndex],
+        bottomNavigationBar: NavigationBar(
+          indicatorColor: Pallete.bottomNavActiveColor,
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(
+                Icons.explore_outlined,
+                color: Pallete.black,
+              ),
+              label: 'Explore',
+            ),
+            NavigationDestination(
+              icon: Icon(
+                Icons.grid_view_outlined,
+                color: Pallete.black,
+              ),
+              label: 'Services',
+            ),
+            NavigationDestination(
+              icon: Icon(
+                Icons.local_mall_outlined,
+                color: Pallete.black,
+              ),
+              label: 'Cart',
+            ),
+            NavigationDestination(
+              icon: Icon(
+                Icons.account_circle_outlined,
+                color: Pallete.black,
+              ),
+              label: 'Profile',
+            ),
+          ],
+          selectedIndex: _selectedIndex,
+          onDestinationSelected: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+        ));
   }
 }

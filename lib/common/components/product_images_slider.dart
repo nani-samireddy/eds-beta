@@ -87,13 +87,13 @@ class _ProductImagesSliderState extends State<ProductImagesSlider> {
                             : Colors.transparent,
                         width: 1,
                       ),
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(8),
                       color: Colors.white,
                     ),
                     width: i == index ? 20 : 10,
                     height: i == index ? 20 : 10,
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(8),
                       child: Image.network(
                         widget.images[i],
                         fit: BoxFit.cover,

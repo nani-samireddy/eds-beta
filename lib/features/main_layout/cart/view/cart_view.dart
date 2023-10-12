@@ -5,6 +5,7 @@ import 'package:eds_beta/common/components/cart_item_card.dart';
 import 'package:eds_beta/common/primary_button.dart';
 import 'package:eds_beta/constants/constans.dart';
 import 'package:eds_beta/core/styles.dart';
+import 'package:eds_beta/features/main_layout/cart/view/address_selection_page.dart';
 import 'package:eds_beta/models/app_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -138,7 +139,12 @@ class _CartViewState extends ConsumerState<CartView> {
                               child: PrimaryButton(
                                   text: "CHECKOUT",
                                   enable: true,
-                                  onPressed: () {}),
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const AddressSelectionPage()));
+                                  }),
                             ),
                           ),
                         ],

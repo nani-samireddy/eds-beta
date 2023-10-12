@@ -45,18 +45,15 @@ class _PrimaryButtonState extends State<PrimaryButton> {
           child: ElevatedButton(
             onPressed: widget.enable ? widget.onPressed : null,
             style: ButtonStyle(
-              side: const MaterialStatePropertyAll<BorderSide>(
-                BorderSide(color: Colors.black, width: 1),
-              ),
               shape: MaterialStatePropertyAll<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
               backgroundColor: MaterialStateProperty.all(
                   Pallete.primaryButtonBackgroundColor),
               padding: MaterialStateProperty.all(
-                const EdgeInsets.symmetric(vertical: 18, horizontal: 18),
+                const EdgeInsets.symmetric(vertical: 16, horizontal: 22),
               ),
             ),
             child: Text(
@@ -66,7 +63,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
                   fontSize: 16,
                   letterSpacing: 1.3,
                   fontFamily: GoogleFonts.poppins(
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                   ).fontFamily),
             ),
           ),

@@ -1,4 +1,3 @@
-import 'package:eds_beta/common/components/common_components.dart';
 import 'package:eds_beta/common/components/page_padding.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/categories_view.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/new_products_section.dart';

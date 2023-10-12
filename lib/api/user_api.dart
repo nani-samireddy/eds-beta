@@ -26,7 +26,8 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
       name: "",
       cartItems: [],
       wishListItems: [],
-      phone: '');
+      phone: '',
+      addresses: []);
 
   UserAPI({
     required DatabaseAPI databaseAPI,
@@ -87,6 +88,7 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
       state = state!.copyWith(cartItems: cartItems);
       await _databaseAPI.updateUserCartItems(
           user: state!, cartItems: state!.cartItems);
+      log("Cart Items: ${state!.cartItems.length}");
     } catch (e) {
       log("Error in updateCartItems: $e");
     }
@@ -106,5 +108,52 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
     }
   }
 
+  Future<void> addAddress({required AddressModel address}) async {
+    try {
+      if (state == null) {
+        return;
+      }
+      state = state!.copyWith(
+        addresses: [...state!.addresses, address],
+      );
+      await _databaseAPI.updateUserAddresses(
+        uid: state!.uid,
+        addresses: state!.addresses,
+      );
+    } catch (e) {
+      log("Error in addAddress: $e");
+    }
+  }
 
+  Future<void> updateAddress({required AddressModel address}) async {
+    try {
+      if (state == null) {
+        return;
+      }
+      final addresses = state!.addresses;
+      final index = addresses.indexWhere((element) => element == address);
+      addresses[index] = address;
+      state = state!.copyWith(addresses: addresses);
+      await _databaseAPI.updateUserAddresses(
+        uid: state!.uid,
+        addresses: state!.addresses,
+      );
+    } catch (e) {
+      log("Error in updateAddress: $e");
+    }
+  }
+
+  Future<List<AddressModel>> getAddresses() async {
+    try {
+      if (state == null) {
+        return [];
+      }
+      
+      return state!.addresses;
+
+    } catch (e) {
+      log("Error in getAddresses: $e");
+      return [];
+    }
+  }
 }

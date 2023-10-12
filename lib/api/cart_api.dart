@@ -23,6 +23,7 @@ abstract class ICartAPI {
   void setProductsInCart();
   void setCartItems({required List<CartItemModel> cartItems});
   Future<void> changeQuantity({required CartItemModel cartItem});
+  Future<void> addItemToCart({required CartItemDatabaseModel cartItem});
 }
 
 class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
@@ -52,6 +53,7 @@ class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
     try {
       final user = _userAPI.user;
       state = [...state, cartItem];
+      log("Cart Items: ${state.length}");
       if (user == null) {
         return;
       }
@@ -146,6 +148,13 @@ class CartAPI extends StateNotifier<List<CartItemModel>> implements ICartAPI {
       await _userAPI.updateCartItems(cartItems: state);
     } catch (e) {
       log("Error in changeQuantity: $e");
+    }
+  }
+
+  @override
+  Future<void> addItemToCart({required CartItemDatabaseModel cartItem}) {
+    try {} catch (e) {
+      log("Error in addItemToCart: $e");
     }
   }
 }

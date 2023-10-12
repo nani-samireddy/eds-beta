@@ -1,6 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eds_beta/common/common.dart';
 import 'package:eds_beta/core/styles.dart';
-import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
 import 'package:eds_beta/features/main_layout/profile/components/help_options.dart';
 import 'package:eds_beta/features/main_layout/profile/components/orders_options.dart';
 import 'package:eds_beta/features/main_layout/profile/components/profile_options.dart';
@@ -103,15 +102,15 @@ class _ProfileViewState extends ConsumerState<ProfileView> {
                 border: Border(
                   top: BorderSide(
                     color: Pallete.grey,
-                    width: 0.5,
+                    width: 2,
                   ),
                   bottom: BorderSide(
                     color: Pallete.grey,
-                    width: 0.5,
+                    width: 2,
                   ),
                 ),
               ),
-              height: 60,
+              height: 70,
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,

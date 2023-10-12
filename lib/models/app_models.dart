@@ -7,5 +7,4 @@ export './offer_model.dart';
 export './section_list_model.dart';
 export './size_model.dart';
 export './wishlist_item_model.dart';
-
-
+export './address_model.dart';

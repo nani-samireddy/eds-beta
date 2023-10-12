@@ -20,7 +20,7 @@ class _DisplaySectionState extends ConsumerState<DisplaySection> {
       child: Wrap(
         children: [
           widget.sectionItemsListModel.hasTitleImage
-              ? RoundedContainer(
+            ? RoundedContainer(
                   child: Image.network(
                     widget.sectionItemsListModel.titleImageURL!,
                     width: MediaQuery.of(context).size.width,

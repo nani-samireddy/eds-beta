@@ -26,20 +26,25 @@ class _OffersCaroselState extends ConsumerState<OffersCarosel> {
           data: (data) {
             return CarouselSlider(
               items: data!
-                  .map((e) => GestureDetector(
+                  .map(
+                    (e) => GestureDetector(
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => OfferDetailedView(offer: e)));
                       },
-                      child: Image.network(e.image)))
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(e.image),
+                      ),
+                    ),
+                  )
                   .toList(),
               options: CarouselOptions(
-                height: 160,
+                height: 180,
                 enlargeCenterPage: true,
-                viewportFraction: 0.85,
+                viewportFraction: 1,
                 padEnds: true,
                 autoPlay: true,
-                enlargeFactor: 0.1,
               ),
             );
           },

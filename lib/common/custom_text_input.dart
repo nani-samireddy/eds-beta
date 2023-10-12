@@ -9,15 +9,15 @@ class CustomTextInput extends StatefulWidget {
   final String? prefixText;
   final bool enable;
   final Function(String value) validator;
-  final Function(String value) onChange;
+  final Function(String value)? onChange;
   const CustomTextInput({
     required this.hintText,
     required this.labelText,
     required this.controller,
     required this.type,
     required this.validator,
-    required this.onChange,
     this.prefixText,
+    this.onChange,
     this.enable = true,
     super.key,
   });
@@ -37,7 +37,7 @@ class _CustomTextInputState extends State<CustomTextInput> {
       child: Wrap(
         children: [
           SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
+            width: MediaQuery.of(context).size.width * 0.9,
             child: TextFormField(
               onChanged: (value) {
                 setState(() {
@@ -45,7 +45,9 @@ class _CustomTextInputState extends State<CustomTextInput> {
                   _isValid = (err == null);
                   _errorText = err;
                 });
-                widget.onChange(value);
+                if (widget.onChange != null) {
+                  widget.onChange!(value);
+                }
               },
               enabled: widget.enable,
               keyboardType: widget.type,
@@ -60,7 +62,7 @@ class _CustomTextInputState extends State<CustomTextInput> {
                 errorText: _errorText,
                 enabled: true,
                 contentPadding:
-                    const EdgeInsets.symmetric(vertical: 14, horizontal: 14),
+                    const EdgeInsets.symmetric(vertical: 14, horizontal: 18),
                 hintText: widget.hintText,
                 hintStyle: const TextStyle(
                   fontSize: 14,

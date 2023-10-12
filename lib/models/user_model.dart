@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eds_beta/models/app_models.dart';
 
-
 class UserModel {
   final String name;
   final String email;
@@ -9,6 +8,8 @@ class UserModel {
   final List<CartItemModel> cartItems;
   final List<WishlistItemModel> wishListItems;
   final String uid;
+  final List<AddressModel> addresses;
+
   UserModel({
     required this.name,
     required this.email,
@@ -16,6 +17,7 @@ class UserModel {
     required this.cartItems,
     required this.wishListItems,
     required this.uid,
+    required this.addresses,
   });
 
   UserModel copyWith({
@@ -26,6 +28,7 @@ class UserModel {
     List<CartItemModel>? cartItems,
     List<WishlistItemModel>? wishListItems,
     String? uid,
+    List<AddressModel>? addresses,
   }) {
     return UserModel(
       name: name ?? this.name,
@@ -34,6 +37,7 @@ class UserModel {
       cartItems: cartItems ?? this.cartItems,
       wishListItems: wishListItems ?? this.wishListItems,
       uid: uid ?? this.uid,
+      addresses: addresses ?? this.addresses,
     );
   }
 
@@ -45,6 +49,7 @@ class UserModel {
       'cartItems': cartItems.map((e) => e.toMap()).toList(),
       'wishListItems': wishListItems.map((e) => e.toMap()).toList(),
       'uid': uid,
+      'addresses': addresses.map((e) => e.toMap()).toList(),
     };
   }
 
@@ -58,6 +63,8 @@ class UserModel {
       wishListItems: List<WishlistItemModel>.from((map['wishListItems'] as List)
           .map((x) => WishlistItemModel.fromMap(x))),
       uid: map['uid'] as String,
+      addresses: List<AddressModel>.from(
+          (map['addresses'] as List).map((x) => AddressModel.fromMap(x))),
     );
   }
 
@@ -68,14 +75,12 @@ class UserModel {
         phone: user.phoneNumber as String,
         cartItems: [],
         wishListItems: [],
-        uid: user.uid);
+        uid: user.uid,
+        addresses: []);
   }
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email, phone: $phone, uid: $uid, cartItems: $cartItems, wishListItems: $wishListItems)';
+    return 'UserModel(name: $name, email: $email, phone: $phone, uid: $uid, cartItems: $cartItems, wishListItems: $wishListItems, addresses: $addresses)';
   }
-
-  
-
 }

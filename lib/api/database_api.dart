@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eds_beta/constants/constans.dart';
 import 'package:eds_beta/controllers/products_controller.dart';
-
 import '../models/app_models.dart';
 
 abstract class IDatabaseAPI {
@@ -51,7 +50,8 @@ abstract class IDatabaseAPI {
 
   Future<List<String>> getTags();
 
-
+  Future<void> updateUserAddresses(
+      {required List<AddressModel> addresses, required String uid});
 }
 
 class DatabaseAPI extends IDatabaseAPI {
@@ -239,6 +239,7 @@ class DatabaseAPI extends IDatabaseAPI {
   Future<void> addUser() async {
     //TODO: REMOVE THIS MEHTOD IN THE PRODUCTION
     final UserModel userModel = UserModel(
+        addresses: [],
         uid: "l5d0yTPSAiCC1CuUFF4q",
         name: "Rahul",
         email: "example@example.com",
@@ -619,6 +620,20 @@ class DatabaseAPI extends IDatabaseAPI {
     }
   }
 
-
-
+  @override
+  Future<void> updateUserAddresses(
+      {required List<AddressModel> addresses, required String uid}) async {
+    try {
+      await _firestore
+          .collection(FirestoreCollectionNames.usersCollection)
+          .doc(uid)
+          .update({
+        "addresses":
+            addresses.isEmpty ? [] : addresses.map((e) => e.toMap()).toList()
+      });
+      log("Added address");
+    } catch (e) {
+      log("Error while adding address $e");
+    }
+  }
 }

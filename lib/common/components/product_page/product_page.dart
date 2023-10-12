@@ -147,7 +147,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                       borderRadius: BorderRadius.circular(5),
                     ),
                     padding: const EdgeInsets.symmetric(
-                        vertical: 10.0, horizontal: 10),
+                        vertical: 10.0, horizontal: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -161,12 +161,8 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                               children: [
                                 Text(
                                   widget.product.name,
-                                  style: TextStyle(
-                                      color: Pallete.textBlackColor,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.w900,
-                                      fontFamily:
-                                          GoogleFonts.dmSans().fontFamily),
+                                  style: AppStyles.sectionHeading
+                                      .copyWith(fontSize: 22),
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
@@ -208,10 +204,11 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                             children: [
                               TextSpan(
                                 text: "₹$currentPrice  ",
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 22,
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: GoogleFonts.dmSans().fontFamily,
                                 ),
                               ),
                               TextSpan(
@@ -233,42 +230,6 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                             ],
                           ),
                         ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 5),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              RatingBar.builder(
-                                initialRating: (widget.product.ratingRatio),
-                                minRating: 1,
-                                direction: Axis.horizontal,
-                                allowHalfRating: true,
-                                itemCount: 1,
-                                glow: false,
-                                ignoreGestures: true,
-                                itemSize: 20,
-                                itemPadding:
-                                    const EdgeInsets.symmetric(horizontal: .7),
-                                itemBuilder: (context, _) => const Icon(
-                                  Icons.star,
-                                  color: Colors.amber,
-                                ),
-                                onRatingUpdate: (rating) {},
-                              ),
-                              const SizedBox(
-                                width: 5,
-                              ),
-                              Text(widget.product.rating,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.w900,
-                                      fontFamily:
-                                          GoogleFonts.dmSans().fontFamily,
-                                      color: Pallete.black)),
-                            ],
-                          ),
-                        )
                       ],
                     ),
                   ),
@@ -283,7 +244,6 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          margin: const EdgeInsets.only(top: 12),
                           padding: const EdgeInsets.symmetric(
                               vertical: 20, horizontal: 20),
                           child: Column(
@@ -291,56 +251,56 @@ class _ProductPageState extends ConsumerState<ProductPage> {
                             children: [
                               Text(
                                 "Size",
-                                style: AppStyles.sectionSubheading,
+                                style: AppStyles.sectionHeading,
                               ),
                               const SizedBox(height: 10),
                               SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
                                     children: widget.product.sizes?.map((size) {
-                                          return GestureDetector(
-                                            onTap: size.stock > 0
-                                                ? () {
+                                          return size.stock > 0
+                                              ? GestureDetector(
+                                                  onTap: () {
                                                     changeSelectedSize(size);
-                                                  }
-                                                : null,
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  right: 10, bottom: 10),
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 10,
-                                                      horizontal: 18),
-                                              decoration: BoxDecoration(
-                                                color: size.stock > 0
-                                                    ? selectedSize == size
-                                                        ? Pallete
-                                                            .bottomNavActiveColor
-                                                        : Pallete
-                                                            .backgroundColor
-                                                    : Pallete.fadedIconColor
-                                                        .withOpacity(.2),
-                                                borderRadius:
-                                                    BorderRadius.circular(50),
-                                              ),
-                                              child: Text(
-                                                size.size,
-                                                style: TextStyle(
-                                                    color: size.stock > 0
-                                                        ? selectedSize == size
-                                                            ? Pallete.white
-                                                            : Pallete
-                                                                .textBlackColor
-                                                        : Pallete.fadedIconColor
-                                                            .withOpacity(.4),
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w600,
-                                                    fontFamily:
-                                                        GoogleFonts.dmSans()
-                                                            .fontFamily),
-                                              ),
-                                            ),
-                                          );
+                                                  },
+                                                  child: Container(
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            right: 10,
+                                                            bottom: 10),
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 10,
+                                                        horizontal: 18),
+                                                    decoration: BoxDecoration(
+                                                      color: selectedSize ==
+                                                              size
+                                                          ? Pallete.black
+                                                          : Pallete
+                                                              .backgroundColor,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              50),
+                                                    ),
+                                                    child: Text(
+                                                      size.size,
+                                                      style: TextStyle(
+                                                          color: selectedSize ==
+                                                                  size
+                                                              ? Pallete.white
+                                                              : Pallete
+                                                                  .textBlackColor,
+                                                          fontSize: 14,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          fontFamily:
+                                                              GoogleFonts
+                                                                      .dmSans()
+                                                                  .fontFamily),
+                                                    ),
+                                                  ),
+                                                )
+                                              : const SizedBox.shrink();
                                         }).toList() ??
                                         []),
                               ),
