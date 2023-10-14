@@ -18,6 +18,7 @@ class _AddressSelectionPageState extends ConsumerState<AddressSelectionPage> {
   @override
   Widget build(BuildContext context) {
     final addresses = ref.watch(addressAPIProvider) ?? [];
+    log(addresses.toString());
     return Scaffold(
       appBar: AppBar(
         title: const Text("Shipping Address"),
@@ -56,13 +57,13 @@ class _AddressSelectionPageState extends ConsumerState<AddressSelectionPage> {
                                   Icons.check_circle,
                                   color: Pallete.black,
                                 )
-                              : null,
+                              : const SizedBox(),
                           title: addresses[index].title,
                           subtitle: addresses[index].address,
                           onTap: () {
                             log("Select address");
                           },
-                          icon: Icons.location_on_outlined,
+                          icon: Icons.edit,
                         );
                       },
                     )

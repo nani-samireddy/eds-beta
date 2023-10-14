@@ -3,6 +3,7 @@ class AddressModel {
   final String fullName;
   final String phone;
   final String address;
+  final String landMark;
   final String city;
   final String state;
   final String country;
@@ -13,6 +14,7 @@ class AddressModel {
     required this.fullName,
     required this.phone,
     required this.address,
+    required this.landMark,
     required this.city,
     required this.state,
     required this.zipCode,
@@ -25,6 +27,7 @@ class AddressModel {
     String? fullName,
     String? phone,
     String? address,
+    String? landMark,
     String? city,
     String? state,
     String? country,
@@ -36,6 +39,7 @@ class AddressModel {
       fullName: fullName ?? this.fullName,
       phone: phone ?? this.phone,
       address: address ?? this.address,
+      landMark: landMark ?? this.landMark,
       city: city ?? this.city,
       state: state ?? this.state,
       country: country ?? this.country,
@@ -50,6 +54,7 @@ class AddressModel {
       'fullName': fullName,
       'phone': phone,
       'address': address,
+      'landMark': landMark,
       'city': city,
       'state': state,
       'country': country,
@@ -61,9 +66,10 @@ class AddressModel {
   factory AddressModel.fromMap(Map<String, dynamic> map) {
     return AddressModel(
       title: map['title'] as String,
-      fullName: map['firstName'] as String,
+      fullName: map['fullName'] as String,
       phone: map['phone'] as String,
       address: map['address'] as String,
+      landMark: map['landMark'] as String,
       city: map['city'] as String,
       state: map['state'] as String,
       country: map['country'] as String,
@@ -74,7 +80,7 @@ class AddressModel {
 
   @override
   String toString() {
-    return 'AddressModel(title: $title, firstName: $fullName, phone: $phone, address: $address, city: $city, state: $state, country: $country, zipCode: $zipCode, isDefault: $isDefault)';
+    return 'AddressModel(title: $title, firstName: $fullName, phone: $phone, address: $address,landMark: $landMark , city: $city, state: $state, country: $country, zipCode: $zipCode, isDefault: $isDefault)';
   }
 
   @override
@@ -85,6 +91,7 @@ class AddressModel {
         other.fullName == fullName &&
         other.phone == phone &&
         other.address == address &&
+        other.landMark == landMark &&
         other.city == city &&
         other.state == state &&
         other.country == country &&
@@ -98,6 +105,7 @@ class AddressModel {
         fullName.hashCode ^
         phone.hashCode ^
         address.hashCode ^
+        landMark.hashCode ^
         city.hashCode ^
         state.hashCode ^
         country.hashCode ^

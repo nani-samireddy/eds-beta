@@ -1,15 +1,16 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:eds_beta/models/app_models.dart';
 
 class CartItemDatabaseModel {
   final String productId;
-  final int quantity;
+  late final int quantity;
   final String size;
   CartItemDatabaseModel({
     required this.productId,
     required this.quantity,
     required this.size,
   });
+
+  set setQuantity(int value) => quantity = value;
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -24,6 +25,14 @@ class CartItemDatabaseModel {
       productId: map['productId'] as String,
       quantity: map['quantity'] as int,
       size: map['size'] as String,
+    );
+  }
+
+  factory CartItemDatabaseModel.fromCartItemModel(CartItemModel cartItem) {
+    return CartItemDatabaseModel(
+      productId: cartItem.productId,
+      quantity: cartItem.quantity,
+      size: cartItem.size?.size ?? "",
     );
   }
 
@@ -45,6 +54,14 @@ class CartItemModel {
   });
 
   set setQuantity(int value) => quantity = value;
+
+  CartItemDatabaseModel toCartItemDatabaseModel() {
+    return CartItemDatabaseModel(
+      productId: productId,
+      quantity: quantity,
+      size: size?.size ?? "",
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{

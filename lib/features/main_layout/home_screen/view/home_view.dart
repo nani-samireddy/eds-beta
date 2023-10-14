@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:eds_beta/api/user_api.dart';
 import 'package:eds_beta/common/components/page_padding.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/categories_view.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/new_products_section.dart';
@@ -25,6 +28,8 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final user = ref.watch(userAPIProvider);
+    log("User: $user");
     return Scaffold(
       appBar: AppBar(
         // leading: Builder(builder: (context) {

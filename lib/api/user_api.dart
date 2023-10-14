@@ -13,7 +13,7 @@ final userAPIProvider = StateNotifierProvider<UserAPI, UserModel?>((ref) {
 abstract class IUserAPI {
   Future<void> setUserData({required String uid});
   Future<UserModel?> createUser({required User user});
-  Future<List<CartItemModel>> getCartItems();
+  Future<List<CartItemDatabaseModel>> getCartItems();
   Future<void> setUserFromFirebaseUser({required User user});
 }
 
@@ -35,17 +35,25 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
         super(null);
 
   UserModel? get user {
+    log("User: $state");
     return state;
   }
 
   @override
   Future<void> setUserData({required String uid}) async {
-    try {
-      final user = await _databaseAPI.getUserDataFromDB(uid: uid);
-      state = user;
-    } catch (e) {
-      log("Error in while getting UserModel: $e");
-    }
+    // try {
+      log("sertting up user data");
+      await _databaseAPI.getUserDataFromDB(uid: uid).then((value) {
+        log("user data from db is $value");
+        if (value != null) {
+          state = value;
+        } else {
+          state = _noUser;
+        }
+      });
+    // } catch (e) {
+    //   log("Error in while getting UserModel: $e");
+    // }
   }
 
   @override
@@ -58,7 +66,7 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
   }
 
   @override
-  Future<List<CartItemModel>> getCartItems() async {
+  Future<List<CartItemDatabaseModel>> getCartItems() async {
     try {
       if (state == null) {
         return [];
@@ -80,7 +88,8 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
     }
   }
 
-  Future<void> updateCartItems({required List<CartItemModel> cartItems}) async {
+  Future<void> updateCartItems(
+      {required List<CartItemDatabaseModel> cartItems}) async {
     try {
       if (state == null) {
         return;
@@ -148,9 +157,8 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
       if (state == null) {
         return [];
       }
-      
-      return state!.addresses;
 
+      return state!.addresses;
     } catch (e) {
       log("Error in getAddresses: $e");
       return [];

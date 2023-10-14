@@ -23,7 +23,7 @@ class AddressAPI extends StateNotifier<List<AddressModel>?> {
 
   List<AddressModel>? get addresses {
     state = _userAPI.user?.addresses;
-    log(state.toString() + " from address_api.dart");
+    log("$state from address_api.dart");
     return state;
   }
 

@@ -116,19 +116,30 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
     setState(() {
       _isLoading = true;
     });
-    await ref
+    final res = await ref
         .read(authControllerProvider.notifier)
         .verifyOTP(otp: _otpController.text, context: context)
         .then((value) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (value) {
+        setState(() {
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _isLoading = false;
+        });
 
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => const AuthWrapper()),
-          (route) => false);
+        showSnackBar(
+            content: "Oops that's an Invalid OTP! 🥲", context: context);
+      }
     });
+  }
+
+  void handleOTPVerifycationResult() {
+    Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const AuthWrapper()),
+        (route) => false);
   }
 
   @override

@@ -8,12 +8,14 @@ class OptionListTile extends StatelessWidget {
       this.subtitle,
       required this.icon,
       this.leading,
-      this.onTap});
+      this.onTap,
+      this.onTrailTap});
   final String title;
   final String? subtitle;
   final IconData icon;
   final Widget? leading;
   final void Function()? onTap;
+  final void Function()? onTrailTap;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class OptionListTile extends StatelessWidget {
         style: AppStyles.sectionHeading,
       ),
       subtitle: subtitle != null ? Text(subtitle!) : null,
-      trailing: Icon(icon),
+      trailing: IconButton(icon: Icon(icon), onPressed: onTrailTap),
       onTap: onTap,
     );
   }

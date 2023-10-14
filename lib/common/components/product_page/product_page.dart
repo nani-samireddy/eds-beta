@@ -9,7 +9,6 @@ import 'package:eds_beta/core/utils.dart';
 import 'package:eds_beta/features/main_layout/cart/view/cart_view.dart';
 import 'package:eds_beta/models/app_models.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../theme/theme.dart';
@@ -81,11 +80,10 @@ class _ProductPageState extends ConsumerState<ProductPage> {
 
   void handleAddToCart() {
     ref.watch(cartAPIProvider).addCartItem(
-        cartItem: CartItemModel(
+        cartItem: CartItemDatabaseModel(
             productId: widget.product.productId,
-            product: widget.product,
             quantity: 1,
-            size: selectedSize));
+            size: selectedSize!.size));
     setState(() {
       isInCart = true;
     });

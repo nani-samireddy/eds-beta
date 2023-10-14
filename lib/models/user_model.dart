@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eds_beta/models/app_models.dart';
 
@@ -5,7 +7,7 @@ class UserModel {
   final String name;
   final String email;
   final String phone;
-  final List<CartItemModel> cartItems;
+  final List<CartItemDatabaseModel> cartItems;
   final List<WishlistItemModel> wishListItems;
   final String uid;
   final List<AddressModel> addresses;
@@ -25,7 +27,7 @@ class UserModel {
     String? email,
     String? phone,
     String? address,
-    List<CartItemModel>? cartItems,
+    List<CartItemDatabaseModel>? cartItems,
     List<WishlistItemModel>? wishListItems,
     String? uid,
     List<AddressModel>? addresses,
@@ -54,18 +56,20 @@ class UserModel {
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
-    return UserModel(
+    final user = UserModel(
       name: map['name'] as String,
       email: map['email'] as String,
       phone: map['phone'] as String,
-      cartItems: List<CartItemModel>.from(
-          (map['cartItems'] as List).map((x) => CartItemModel.fromMap(x))),
+      cartItems: List<CartItemDatabaseModel>.from((map['cartItems'] as List)
+          .map((x) => CartItemDatabaseModel.fromMap(x))),
       wishListItems: List<WishlistItemModel>.from((map['wishListItems'] as List)
           .map((x) => WishlistItemModel.fromMap(x))),
       uid: map['uid'] as String,
       addresses: List<AddressModel>.from(
           (map['addresses'] as List).map((x) => AddressModel.fromMap(x))),
     );
+    log("User from map: $user");
+    return user;
   }
 
   factory UserModel.fromFirebaseUser({required User user}) {

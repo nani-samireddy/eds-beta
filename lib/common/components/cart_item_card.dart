@@ -8,8 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CartItemCard extends ConsumerStatefulWidget {
-  const CartItemCard({super.key, required this.cartItem});
+  const CartItemCard(
+      {super.key, required this.cartItem, required this.onUpdate});
   final CartItemModel cartItem;
+  final void Function() onUpdate;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _CartItemCardState();
@@ -25,18 +27,23 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
   }
 
   handleQuantityChange({required int quantity}) {
-    log(quantity.toString());
+    log("cart item count: $quantity");
     if (quantity == 0) {
-      ref.read(cartAPIProvider).removeCartItem(cartItem: widget.cartItem);
+      ref
+          .read(cartAPIProvider)
+          .removeCartItem(cartItem: widget.cartItem.toCartItemDatabaseModel());
       return;
     } else {
       CartItemModel cartItem = widget.cartItem;
       cartItem.quantity = quantity;
-      ref.read(cartAPIProvider).changeQuantity(cartItem: widget.cartItem);
+      ref
+          .read(cartAPIProvider)
+          .changeQuantity(cartItem: widget.cartItem.toCartItemDatabaseModel());
       setState(() {
         this.cartItem = cartItem;
       });
     }
+    widget.onUpdate();
   }
 
   @override

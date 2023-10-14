@@ -38,6 +38,7 @@ class _AddressEditingPageState extends ConsumerState<AddressEditingPage> {
         fullName: _fullNameController.text,
         phone: _phoneController.text,
         address: _addressLineController.text,
+        landMark: _landMarkController.text,
         city: _cityController.text,
         state: _stateController.text,
         country: "India",
@@ -45,7 +46,7 @@ class _AddressEditingPageState extends ConsumerState<AddressEditingPage> {
         isDefault: _isDefault);
     final addressAPI = ref.read(addressAPIProvider.notifier);
     await addressAPI.addAddress(address: address).then((value) {
-      // ToastMessager.show(message: "Address added successfully");
+      showSnackBar(content: "Address added successfully", context: context);
       Navigator.of(context).pop();
     });
   }

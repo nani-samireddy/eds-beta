@@ -17,13 +17,14 @@ abstract class IDatabaseAPI {
   Future<List<ProductModel>> getUserCartItems({required UserModel user});
 
   Future<void> updateCartItem(
-      {required CartItemModel cartItem, required UserModel user});
+      {required CartItemDatabaseModel cartItem, required UserModel user});
 
   Future<List<ProductModel>> getProductsWithIds({required List<String> ids});
   Future<void> addUserToDB({required UserModel user});
 
   Future<void> updateUserCartItems(
-      {required UserModel user, required List<CartItemModel> cartItems});
+      {required UserModel user,
+      required List<CartItemDatabaseModel> cartItems});
 
   Future<List<WishlistItemModel>> getWishlistItems({required UserModel user});
 
@@ -73,6 +74,7 @@ class DatabaseAPI extends IDatabaseAPI {
           .then((value) {
         if (value.exists) {
           final user = UserModel.fromMap(value.data()!);
+          log("user data from db ${user.toString()}");
 
           return user;
         } else {
@@ -82,6 +84,8 @@ class DatabaseAPI extends IDatabaseAPI {
         }
       });
     } catch (e) {
+      log("Error while fetching user data from db ${e.toString()}");
+
       return null;
     }
   }
@@ -299,7 +303,7 @@ class DatabaseAPI extends IDatabaseAPI {
       return await docRef.get().then((value) {
         if (value.docs.isNotEmpty) {
           List<ProductModel> products = [];
-          log(value.docs.length.toString());
+          log("user cart items count: ${value.docs.length}");
           for (var element in value.docs) {
             String productId = element.id;
             products.add(ProductModel.fromMap(
@@ -319,7 +323,8 @@ class DatabaseAPI extends IDatabaseAPI {
 
   @override
   Future<void> updateCartItem(
-      {required CartItemModel cartItem, required UserModel user}) async {
+      {required CartItemDatabaseModel cartItem,
+      required UserModel user}) async {
     try {
       for (var element in user.cartItems) {
         if (element.productId == cartItem.productId) {
@@ -335,6 +340,10 @@ class DatabaseAPI extends IDatabaseAPI {
   Future<List<ProductModel>> getProductsWithIds(
       {required List<String> ids}) async {
     try {
+      if (ids.isEmpty) {
+        log("Ids is empty");
+        return [];
+      }
       return await _firestore
           .collection(FirestoreCollectionNames.productsCollection)
           .where(FieldPath.documentId, whereIn: ids)
@@ -375,7 +384,8 @@ class DatabaseAPI extends IDatabaseAPI {
 
   @override
   Future<void> updateUserCartItems(
-      {required UserModel user, required List<CartItemModel> cartItems}) async {
+      {required UserModel user,
+      required List<CartItemDatabaseModel> cartItems}) async {
     try {
       await _firestore
           .collection(FirestoreCollectionNames.usersCollection)

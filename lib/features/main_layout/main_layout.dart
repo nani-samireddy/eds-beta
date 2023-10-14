@@ -5,7 +5,6 @@ import 'package:eds_beta/features/main_layout/services/services_view.dart';
 import 'package:eds_beta/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 
 class MainLayout extends ConsumerStatefulWidget {
   const MainLayout({super.key});

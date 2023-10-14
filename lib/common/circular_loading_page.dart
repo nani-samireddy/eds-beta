@@ -5,7 +5,7 @@ class CircularLoaderPage extends StatelessWidget {
   final String message;
   const CircularLoaderPage(
       {this.message = "",
-      this.backgroundColor = const Color.fromARGB(126, 0, 0, 0),
+      this.backgroundColor = const Color.fromARGB(57, 255, 255, 255),
       super.key});
   final Color backgroundColor;
 
@@ -13,6 +13,8 @@ class CircularLoaderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: backgroundColor,
+      height: MediaQuery.of(context).size.height,
+      width: double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
