@@ -3,8 +3,10 @@ import 'package:eds_beta/common/components/home_loading.dart';
 import 'package:eds_beta/core/styles.dart';
 import 'package:eds_beta/features/main_layout/search/results_page_view.dart';
 import 'package:eds_beta/providers/database_providers.dart';
+import 'package:eds_beta/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CategoriesListView extends ConsumerStatefulWidget {
   const CategoriesListView({super.key});
@@ -63,9 +65,11 @@ class _CategoriesListViewState extends ConsumerState<CategoriesListView> {
                               Text(
                                 e.name.replaceAll(' ', '\n'),
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
+                                  color: const Color.fromARGB(239, 60, 61, 62),
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
                                 ),
                               )
                             ],

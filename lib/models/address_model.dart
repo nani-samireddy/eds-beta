@@ -1,7 +1,9 @@
 class AddressModel {
+  final String id;
   final String title;
   final String fullName;
   final String phone;
+  final String email;
   final String address;
   final String landMark;
   final String city;
@@ -10,9 +12,11 @@ class AddressModel {
   final String zipCode;
   final bool isDefault;
   AddressModel({
+    required this.id,
     required this.title,
     required this.fullName,
     required this.phone,
+    required this.email,
     required this.address,
     required this.landMark,
     required this.city,
@@ -23,9 +27,11 @@ class AddressModel {
   });
 
   AddressModel copyWith({
+    String? id,
     String? title,
     String? fullName,
     String? phone,
+    String? email,
     String? address,
     String? landMark,
     String? city,
@@ -35,9 +41,11 @@ class AddressModel {
     bool? isDefault,
   }) {
     return AddressModel(
+      id: id ?? this.id,
       title: title ?? this.title,
       fullName: fullName ?? this.fullName,
       phone: phone ?? this.phone,
+      email: email ?? this.email,
       address: address ?? this.address,
       landMark: landMark ?? this.landMark,
       city: city ?? this.city,
@@ -50,9 +58,11 @@ class AddressModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'title': title,
       'fullName': fullName,
       'phone': phone,
+      'email': email,
       'address': address,
       'landMark': landMark,
       'city': city,
@@ -65,9 +75,11 @@ class AddressModel {
 
   factory AddressModel.fromMap(Map<String, dynamic> map) {
     return AddressModel(
+      id: map['id'] as String,
       title: map['title'] as String,
       fullName: map['fullName'] as String,
       phone: map['phone'] as String,
+      email: map['email'] as String,
       address: map['address'] as String,
       landMark: map['landMark'] as String,
       city: map['city'] as String,
@@ -80,16 +92,18 @@ class AddressModel {
 
   @override
   String toString() {
-    return 'AddressModel(title: $title, firstName: $fullName, phone: $phone, address: $address,landMark: $landMark , city: $city, state: $state, country: $country, zipCode: $zipCode, isDefault: $isDefault)';
+    return 'AddressModel(id: $id,title: $title, firstName: $fullName, phone: $phone, email: $email, address: $address,landMark: $landMark , city: $city, state: $state, country: $country, zipCode: $zipCode, isDefault: $isDefault)';
   }
 
   @override
   bool operator ==(covariant AddressModel other) {
     if (identical(this, other)) return true;
 
-    return other.title == title &&
+    return other.id == id &&
+        other.title == title &&
         other.fullName == fullName &&
         other.phone == phone &&
+        other.email == email &&
         other.address == address &&
         other.landMark == landMark &&
         other.city == city &&
@@ -101,9 +115,11 @@ class AddressModel {
 
   @override
   int get hashCode {
-    return title.hashCode ^
+    return id.hashCode ^
+        title.hashCode ^
         fullName.hashCode ^
         phone.hashCode ^
+        email.hashCode ^
         address.hashCode ^
         landMark.hashCode ^
         city.hashCode ^

@@ -18,7 +18,6 @@ class _AuthWrapperState extends ConsumerState<AuthWrapper> {
   setUserData() {
     final user = ref.watch(authChangesProvider).value;
     if (user != null) {
-      log("User: $user");
       ref.read(userAPIProvider.notifier).setUserData(uid: user.uid);
     }
   }

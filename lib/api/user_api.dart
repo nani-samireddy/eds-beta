@@ -15,6 +15,9 @@ abstract class IUserAPI {
   Future<UserModel?> createUser({required User user});
   Future<List<CartItemDatabaseModel>> getCartItems();
   Future<void> setUserFromFirebaseUser({required User user});
+  Future<void> addAddress({required AddressModel address});
+  Future<void> updateAddress({required List<AddressModel> addresses});
+  Future<void> deleteAddress({required AddressModel address});
 }
 
 class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
@@ -35,22 +38,21 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
         super(null);
 
   UserModel? get user {
-    log("User: $state");
+   
     return state;
   }
 
   @override
   Future<void> setUserData({required String uid}) async {
     // try {
-      log("sertting up user data");
-      await _databaseAPI.getUserDataFromDB(uid: uid).then((value) {
-        log("user data from db is $value");
-        if (value != null) {
-          state = value;
-        } else {
-          state = _noUser;
-        }
-      });
+    log("sertting up user data");
+    await _databaseAPI.getUserDataFromDB(uid: uid).then((value) {
+      if (value != null) {
+        state = value;
+      } else {
+        state = _noUser;
+      }
+    });
     // } catch (e) {
     //   log("Error in while getting UserModel: $e");
     // }
@@ -134,14 +136,13 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
     }
   }
 
-  Future<void> updateAddress({required AddressModel address}) async {
+  @override
+  Future<void> updateAddress({required List<AddressModel> addresses}) async {
     try {
       if (state == null) {
         return;
       }
-      final addresses = state!.addresses;
-      final index = addresses.indexWhere((element) => element == address);
-      addresses[index] = address;
+
       state = state!.copyWith(addresses: addresses);
       await _databaseAPI.updateUserAddresses(
         uid: state!.uid,
@@ -157,11 +158,28 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
       if (state == null) {
         return [];
       }
-
       return state!.addresses;
     } catch (e) {
       log("Error in getAddresses: $e");
       return [];
+    }
+  }
+
+  @override
+  Future<void> deleteAddress({required AddressModel address}) async {
+    try {
+      if (state == null) {
+        return;
+      }
+      final addresses = state!.addresses;
+      addresses.remove(address);
+      state = state!.copyWith(addresses: addresses);
+      await _databaseAPI.updateUserAddresses(
+        uid: state!.uid,
+        addresses: state!.addresses,
+      );
+    } catch (e) {
+      log("Error in deleteAddress: $e");
     }
   }
 }

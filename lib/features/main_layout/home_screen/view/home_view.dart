@@ -1,11 +1,7 @@
-import 'dart:developer';
-
-import 'package:eds_beta/api/user_api.dart';
-import 'package:eds_beta/common/components/page_padding.dart';
-import 'package:eds_beta/features/main_layout/home_screen/components/categories_view.dart';
-import 'package:eds_beta/features/main_layout/home_screen/components/new_products_section.dart';
-import 'package:eds_beta/features/main_layout/home_screen/components/offers_slider.dart';
+import 'package:eds_beta/features/main_layout/freshkart/view/freshkart_layout.dart';
+import 'package:eds_beta/features/main_layout/home_screen/view/home_layout.dart';
 import 'package:eds_beta/features/main_layout/search/search_page.dart';
+import 'package:eds_beta/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eds_beta/models/app_models.dart';
@@ -20,6 +16,8 @@ class HomeView extends ConsumerStatefulWidget {
 
 class _HomeViewState extends ConsumerState<HomeView> {
   late List<Offer> offers;
+  final tabs = const [HomeLayout(), FreshKartLayout()];
+  int _selectedIndex = 0;
 
   @override
   void initState() {
@@ -28,8 +26,6 @@ class _HomeViewState extends ConsumerState<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userAPIProvider);
-    log("User: $user");
     return Scaffold(
       appBar: AppBar(
         // leading: Builder(builder: (context) {
@@ -46,20 +42,67 @@ class _HomeViewState extends ConsumerState<HomeView> {
         //   );
         // }),
         centerTitle: false,
-        title: Text(
-          "Endless",
-          style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w900,
-              fontFamily: GoogleFonts.unbounded().fontFamily),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  _selectedIndex = 0;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: _selectedIndex == 0
+                    ? Pallete.primaryButtonBackgroundColor
+                    : Colors.white,
+                foregroundColor:
+                    _selectedIndex == 0 ? Colors.white : Colors.black,
+                elevation: _selectedIndex == 0 ? 1 : 0,
+              ),
+              child: Text(
+                "ENDLESS",
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w900,
+                    fontFamily: GoogleFonts.unbounded().fontFamily),
+              ),
+            ),
+            const SizedBox(
+              width: 6,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedIndex = 1;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _selectedIndex == 1
+                      ? Pallete.primaryButtonBackgroundColor
+                      : Colors.white,
+                  foregroundColor:
+                      _selectedIndex == 1 ? Colors.white : Colors.black,
+                  elevation: _selectedIndex == 1 ? 1 : 0,
+                ),
+                child: Text(
+                  "FRESHKART",
+                  style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w900,
+                      fontFamily: GoogleFonts.unbounded().fontFamily),
+                )),
+          ],
         ),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 6),
             child: IconButton(
                 onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const SearchPage()));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const SearchPage(),
+                    ),
+                  );
                 },
                 icon: const Icon(
                   Icons.search_sharp,
@@ -70,35 +113,7 @@ class _HomeViewState extends ConsumerState<HomeView> {
           ),
         ],
       ),
-      body: const SingleChildScrollView(
-        child: PagePadding(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              //CustomSearchBar(),
-              OffersCarosel(),
-              // ElevatedButton(
-              //   onPressed: () async {
-              //     await ref.read(databaseAPIProvider).addProduct();
-              //     log("jii");
-              //   },
-              //   child: const Text("Add datat to database"),
-              // ),
-              CategoriesListView(),
-              NewProducts(),
-              SizedBox(
-                height: 200,
-              ),
-              // Wrap(
-              //   children: data
-              //       .map((e) => DisplaySection(sectionItemsListModel: e))
-              //       .toList(),
-              // ),
-            ],
-          ),
-        ),
-      ),
+      body: tabs[_selectedIndex],
     );
   }
 }

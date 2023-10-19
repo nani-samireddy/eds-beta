@@ -56,7 +56,7 @@ class UserModel {
   }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
-    final user = UserModel(
+    return UserModel(
       name: map['name'] as String,
       email: map['email'] as String,
       phone: map['phone'] as String,
@@ -68,8 +68,6 @@ class UserModel {
       addresses: List<AddressModel>.from(
           (map['addresses'] as List).map((x) => AddressModel.fromMap(x))),
     );
-    log("User from map: $user");
-    return user;
   }
 
   factory UserModel.fromFirebaseUser({required User user}) {

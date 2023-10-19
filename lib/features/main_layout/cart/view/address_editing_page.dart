@@ -12,8 +12,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AddressEditingPage extends ConsumerStatefulWidget {
   const AddressEditingPage(
-      {super.key, required this.title, required this.onSave});
+      {super.key, required this.title, required this.onSave, this.address});
   final String title;
+  final AddressModel? address;
   final void Function() onSave;
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -21,6 +22,23 @@ class AddressEditingPage extends ConsumerStatefulWidget {
 }
 
 class _AddressEditingPageState extends ConsumerState<AddressEditingPage> {
+  @override
+  void didChangeDependencies() {
+    if (widget.address != null) {
+      _addressTitleController.text = widget.address!.title;
+      _fullNameController.text = widget.address!.fullName;
+      _addressLineController.text = widget.address!.address;
+      _landMarkController.text = widget.address!.landMark;
+      _cityController.text = widget.address!.city;
+      _stateController.text = widget.address!.state;
+      _zipController.text = widget.address!.zipCode;
+      _phoneController.text = widget.address!.phone;
+      _emailController.text = widget.address!.email;
+      _isDefault = widget.address!.isDefault;
+    }
+    super.didChangeDependencies();
+  }
+
   final TextEditingController _addressTitleController = TextEditingController();
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _addressLineController = TextEditingController();
@@ -34,9 +52,11 @@ class _AddressEditingPageState extends ConsumerState<AddressEditingPage> {
 
   void _onSave() async {
     final address = AddressModel(
+        id: DateTime.now().toString(),
         title: _addressTitleController.text,
         fullName: _fullNameController.text,
         phone: _phoneController.text,
+        email: _emailController.text,
         address: _addressLineController.text,
         landMark: _landMarkController.text,
         city: _cityController.text,

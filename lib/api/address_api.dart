@@ -32,4 +32,24 @@ class AddressAPI extends StateNotifier<List<AddressModel>?> {
 
     state = _userAPI.user?.addresses;
   }
+
+  Future<void> deleteAddress({required AddressModel address}) async {
+    await _userAPI.deleteAddress(address: address);
+
+    state = _userAPI.user?.addresses;
+  }
+
+  Future<void> updateAddress({required AddressModel address}) async {
+    state = state!.map((e) => e.id == address.id ? address : e).toList();
+    await _userAPI.updateAddress(addresses: state!);
+    state = _userAPI.user?.addresses;
+  }
+
+  Future<void> setDefaultAddress({required AddressModel address}) async {
+    state = state!
+        .map((e) => e.id == address.id ? address : e.copyWith(isDefault: false))
+        .toList();
+    await _userAPI.updateAddress(addresses: state!);
+    state = _userAPI.user?.addresses;
+  }
 }

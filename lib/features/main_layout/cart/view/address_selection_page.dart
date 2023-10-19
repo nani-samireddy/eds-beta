@@ -18,6 +18,7 @@ class _AddressSelectionPageState extends ConsumerState<AddressSelectionPage> {
   @override
   Widget build(BuildContext context) {
     final addresses = ref.watch(addressAPIProvider) ?? [];
+
     log(addresses.toString());
     return Scaffold(
       appBar: AppBar(
@@ -62,8 +63,25 @@ class _AddressSelectionPageState extends ConsumerState<AddressSelectionPage> {
                           subtitle: addresses[index].address,
                           onTap: () {
                             log("Select address");
+
+                            ref
+                                .read(addressAPIProvider.notifier)
+                                .setDefaultAddress(
+                                    address: addresses[index]
+                                        .copyWith(isDefault: true));
                           },
                           icon: Icons.edit,
+                          onTrailTap: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => AddressEditingPage(
+                                    title: "Edit Address",
+                                    onSave: () {
+                                      log("Save edited address");
+                                    }),
+                              ),
+                            );
+                          },
                         );
                       },
                     )

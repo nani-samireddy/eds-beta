@@ -73,10 +73,7 @@ class DatabaseAPI extends IDatabaseAPI {
           .get()
           .then((value) {
         if (value.exists) {
-          final user = UserModel.fromMap(value.data()!);
-          log("user data from db ${user.toString()}");
-
-          return user;
+          return UserModel.fromMap(value.data()!);
         } else {
           log("User does not exist");
 
