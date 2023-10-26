@@ -16,15 +16,18 @@ class AddressEditingPage extends ConsumerStatefulWidget {
   final String title;
   final AddressModel? address;
   final void Function() onSave;
+
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _AddressEditingPageState();
 }
 
 class _AddressEditingPageState extends ConsumerState<AddressEditingPage> {
+  late final bool _canDelete;
   @override
   void didChangeDependencies() {
     if (widget.address != null) {
+      _canDelete = true;
       _addressTitleController.text = widget.address!.title;
       _fullNameController.text = widget.address!.fullName;
       _addressLineController.text = widget.address!.address;
@@ -35,6 +38,8 @@ class _AddressEditingPageState extends ConsumerState<AddressEditingPage> {
       _phoneController.text = widget.address!.phone;
       _emailController.text = widget.address!.email;
       _isDefault = widget.address!.isDefault;
+    } else {
+      _canDelete = false;
     }
     super.didChangeDependencies();
   }
@@ -76,6 +81,18 @@ class _AddressEditingPageState extends ConsumerState<AddressEditingPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        actions: _canDelete
+            ? [
+                IconButton(
+                    onPressed: () {
+                      ref
+                          .read(addressAPIProvider.notifier)
+                          .deleteAddress(address: widget.address!);
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(Icons.delete))
+              ]
+            : [],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),

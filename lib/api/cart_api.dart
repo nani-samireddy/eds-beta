@@ -4,6 +4,7 @@ import 'package:eds_beta/api/authentication_api.dart';
 import 'package:eds_beta/api/database_api.dart';
 import 'package:eds_beta/api/user_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 
 import '../models/app_models.dart';
 import '../providers/database_providers.dart';
@@ -54,7 +55,6 @@ class CartAPI extends StateNotifier<List<CartItemDatabaseModel>>
 
   @override
   void setCartItems({required List<CartItemDatabaseModel> cartItems}) {
-
     state = cartItems;
     _isUpdated = true;
   }
@@ -80,7 +80,7 @@ class CartAPI extends StateNotifier<List<CartItemDatabaseModel>>
     try {
       final user = _userAPI.user;
       state = [];
-      _isUpdated  = true;
+      _isUpdated = true;
       if (user == null) {
         return;
       }
@@ -95,7 +95,13 @@ class CartAPI extends StateNotifier<List<CartItemDatabaseModel>>
     log("removeCartItem: ${cartItem.productId}");
     try {
       final user = _userAPI.user;
-      state = [...state]..remove(cartItem);
+      final remainingItems = state
+          .where((element) =>
+              element.productId != cartItem.productId ||
+              element.size != cartItem.size)
+          .toList();
+      state = [...remainingItems];
+      log("$state  after removing");
       _isUpdated = true;
       if (user == null) {
         return;
@@ -126,20 +132,21 @@ class CartAPI extends StateNotifier<List<CartItemDatabaseModel>>
     try {
       if (_isUpdated) {
         final products = await _databaseAPI.getProductsWithIds(
-          ids: state.map((e) => e.productId).toList());
+            ids: state.map((e) => e.productId).toList());
 
-      final cartItems = state.map((e) {
-        final product =
-            products.firstWhere((element) => element.productId == e.productId);
-        return CartItemModel(
-          productId: e.productId,
-          product: product,
-          quantity: e.quantity,
-          size: product.sizes?.firstWhere((element) => element.size == e.size),
-        );
-      }).toList();
-      cartItemsWithProductModel = cartItems;
-      _isUpdated = false;
+        final cartItems = state.map((e) {
+          final product = products
+              .firstWhere((element) => element.productId == e.productId);
+          return CartItemModel(
+            productId: e.productId,
+            product: product,
+            quantity: e.quantity,
+            size:
+                product.sizes?.firstWhere((element) => element.size == e.size),
+          );
+        }).toList();
+        cartItemsWithProductModel = cartItems;
+        _isUpdated = false;
       }
       return cartItemsWithProductModel;
     } catch (e) {

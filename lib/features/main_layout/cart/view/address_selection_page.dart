@@ -75,6 +75,7 @@ class _AddressSelectionPageState extends ConsumerState<AddressSelectionPage> {
                             Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) => AddressEditingPage(
+                                    address: addresses[index],
                                     title: "Edit Address",
                                     onSave: () {
                                       log("Save edited address");

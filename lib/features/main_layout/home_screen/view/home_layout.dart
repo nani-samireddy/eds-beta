@@ -34,7 +34,7 @@ class _HomeLayoutState extends ConsumerState<HomeLayout> {
             CategoriesListView(),
             NewProducts(),
             SizedBox(
-              height: 200,
+              height: 100,
             ),
             // Wrap(
             //   children: data

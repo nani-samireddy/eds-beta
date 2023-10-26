@@ -3,7 +3,6 @@ import 'package:eds_beta/common/components/home_loading.dart';
 import 'package:eds_beta/core/styles.dart';
 import 'package:eds_beta/features/main_layout/search/results_page_view.dart';
 import 'package:eds_beta/providers/database_providers.dart';
-import 'package:eds_beta/theme/pallete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';

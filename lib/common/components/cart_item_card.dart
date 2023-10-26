@@ -32,7 +32,6 @@ class _CartItemCardState extends ConsumerState<CartItemCard> {
       ref
           .read(cartAPIProvider)
           .removeCartItem(cartItem: widget.cartItem.toCartItemDatabaseModel());
-      return;
     } else {
       CartItemModel cartItem = widget.cartItem;
       cartItem.quantity = quantity;

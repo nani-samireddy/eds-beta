@@ -24,27 +24,31 @@ class _OffersCaroselState extends ConsumerState<OffersCarosel> {
             return Text(error.toString());
           },
           data: (data) {
-            return CarouselSlider(
-              items: data!
-                  .map(
-                    (e) => GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => OfferDetailedView(offer: e)));
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(e.image),
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              child: CarouselSlider(
+                items: data!
+                    .map(
+                      (e) => GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) =>
+                                  OfferDetailedView(offer: e)));
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: Image.network(e.image),
+                        ),
                       ),
-                    ),
-                  )
-                  .toList(),
-              options: CarouselOptions(
-                height: 180,
-                enlargeCenterPage: true,
-                viewportFraction: 1,
-                padEnds: true,
-                autoPlay: true,
+                    )
+                    .toList(),
+                options: CarouselOptions(
+                  height: 180,
+                  enlargeCenterPage: false,
+                  viewportFraction: 1,
+                  padEnds: true,
+                  autoPlay: true,
+                ),
               ),
             );
           },

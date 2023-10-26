@@ -42,6 +42,7 @@ class _CartViewState extends ConsumerState<CartView> {
   }
 
   void refreshCartItems() async {
+    log("refreshing cart items");
     setState(() {
       _loading = true;
     });

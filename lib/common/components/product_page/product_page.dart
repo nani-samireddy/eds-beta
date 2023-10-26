@@ -29,6 +29,7 @@ class _ProductPageState extends ConsumerState<ProductPage> {
   bool isInWishlist = false;
   @override
   void initState() {
+    log("hiiii");
     if (widget.product.hasDifferentSizes) {
       selectedSize = widget.product.getLeastPrice();
       currentPrice = selectedSize!.price.toString();
@@ -53,10 +54,10 @@ class _ProductPageState extends ConsumerState<ProductPage> {
   @override
   void didChangeDependencies() {
     setState(() {
-      isInCart = ref.read(cartAPIProvider).isItemInCart(
+      isInCart = ref.watch(cartAPIProvider).isItemInCart(
           productId: widget.product.productId, size: selectedSize);
       isInWishlist = ref
-          .read(wishlistAPIProvider.notifier)
+          .watch(wishlistAPIProvider.notifier)
           .isItemInWishlist(productId: widget.product.productId);
     });
     super.didChangeDependencies();

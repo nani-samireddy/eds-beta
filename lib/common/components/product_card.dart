@@ -131,9 +131,9 @@ class _ProductCardState extends ConsumerState<ProductCard> {
                             ),
                           ),
                           TextSpan(
-                            text: "   $discountPercentage%  ",
+                            text: "   $discountPercentage% OFF ",
                             style: const TextStyle(
-                              fontSize: 14,
+                              fontSize: 12,
                               color: Color.fromARGB(255, 87, 137, 28),
                               fontWeight: FontWeight.bold,
                             ),
