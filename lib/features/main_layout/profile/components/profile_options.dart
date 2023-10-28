@@ -1,5 +1,6 @@
 import 'package:eds_beta/common/common.dart';
 import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
+import 'package:eds_beta/features/main_layout/profile/view/address_book_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,10 +24,14 @@ class _ProfileOptionsState extends ConsumerState<ProfileOptions> {
         SizedBox(
             width: MediaQuery.of(context).size.width * 0.9,
             child: const CustomDivider()),
-        const OptionListTile(
+        OptionListTile(
           title: "Address Book",
           icon: Icons.border_color_outlined,
           subtitle: "Manage your delivery addresses",
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const AddressBookView()));
+          },
         ),
         SizedBox(
             width: MediaQuery.of(context).size.width * 0.9,
