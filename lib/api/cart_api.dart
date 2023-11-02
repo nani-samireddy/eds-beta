@@ -1,11 +1,8 @@
 import 'dart:developer';
-
 import 'package:eds_beta/api/authentication_api.dart';
 import 'package:eds_beta/api/database_api.dart';
 import 'package:eds_beta/api/user_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fpdart/fpdart.dart';
-
 import '../models/app_models.dart';
 import '../providers/database_providers.dart';
 

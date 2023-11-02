@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eds_beta/models/app_models.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,18 +37,19 @@ class _OfferDetailedViewState extends ConsumerState<OfferDetailedView> {
       ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Image.network(widget.offer.image),
-            Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                widget.offer.description,
-                style: TextStyle(
-                    fontSize: 18,
-                    height: 1.8,
-                    fontFamily: GoogleFonts.dmSans().fontFamily),
-              ),
-            ),
+            Markdown(
+                data: widget.offer.description,
+                shrinkWrap: true,
+                styleSheet: MarkdownStyleSheet(
+                  p: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: GoogleFonts.dmSans().fontFamily,
+                  ),
+                )),
           ],
         ),
       ),

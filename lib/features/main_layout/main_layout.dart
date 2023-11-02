@@ -35,6 +35,7 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
         body: _views[_selectedIndex],
         bottomNavigationBar: NavigationBar(
           indicatorColor: Pallete.bottomNavActiveColor,

@@ -18,6 +18,7 @@ abstract class IUserAPI {
   Future<void> addAddress({required AddressModel address});
   Future<void> updateAddress({required List<AddressModel> addresses});
   Future<void> deleteAddress({required AddressModel address});
+  Future<void> updateUserDetails({required Map<String, dynamic> data});
 }
 
 class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
@@ -38,8 +39,18 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
         super(null);
 
   UserModel? get user {
-   
     return state;
+  }
+
+  bool get doesBasicDetailsExist {
+    log(state.toString());
+    if (state == null) {
+      return false;
+    }
+    return state!.name.isNotEmpty ||
+        state!.dateOfBirth != null ||
+        state!.email.isNotEmpty ||
+        state!.name != '';
   }
 
   @override
@@ -180,6 +191,27 @@ class UserAPI extends StateNotifier<UserModel?> implements IUserAPI {
       );
     } catch (e) {
       log("Error in deleteAddress: $e");
+    }
+  }
+
+  @override
+  Future<void> updateUserDetails({required Map<String, dynamic> data}) async {
+    try {
+      log("Updating user details $state");
+      if (state == null) {
+        return;
+      }
+
+      final res = await _databaseAPI.updateUserDetails(
+        uid: state!.uid,
+        data: data,
+      );
+      if (res != null) {
+        log("User details updated: $res");
+        state = res;
+      }
+    } catch (e) {
+      log("Error in updateUserDetails: $e");
     }
   }
 }

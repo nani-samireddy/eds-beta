@@ -50,8 +50,9 @@ class _PrimaryButtonState extends State<PrimaryButton> {
                   borderRadius: BorderRadius.circular(8),
                 ),
               ),
-              backgroundColor: MaterialStateProperty.all(
-                  Pallete.primaryButtonBackgroundColor),
+              backgroundColor: MaterialStateProperty.all(widget.enable
+                  ? Pallete.primaryButtonBackgroundColor
+                  : Pallete.primaryButtonBackgroundColor.withOpacity(0.2)),
               padding: MaterialStateProperty.all(
                 const EdgeInsets.symmetric(vertical: 16, horizontal: 22),
               ),

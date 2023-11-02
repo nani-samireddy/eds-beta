@@ -1,6 +1,8 @@
 import 'package:eds_beta/api/wishlist_api.dart';
 import 'package:eds_beta/common/common.dart';
 import 'package:eds_beta/common/components/product_card.dart';
+import 'package:eds_beta/constants/constans.dart';
+import 'package:eds_beta/core/styles.dart';
 import 'package:eds_beta/models/app_models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,7 +17,6 @@ class WishlistView extends ConsumerStatefulWidget {
 
 class _WishlistViewState extends ConsumerState<WishlistView> {
   List<ProductModel> _wishlistItems = [];
-  List<WishlistItemModel> _wishlistItemModels = [];
   bool _isLoading = true;
 
   @override
@@ -61,35 +62,51 @@ class _WishlistViewState extends ConsumerState<WishlistView> {
             ? const CircularLoaderPage(
                 message: "Loading your wishlist hold on a second 😁",
               )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${_wishlistItems.length} items",
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: GoogleFonts.dmSans().fontFamily,
-                        fontWeight: FontWeight.w400),
+            : _wishlistItems.isEmpty
+                ? Column(
+                    children: [
+                      Image.asset(ImagesUrl.emptyImage),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 40, vertical: 40),
+                        child: Center(
+                            child: Text(
+                          "No items in wishlist... Browse products save the ones you like to wishlist",
+                          style:
+                              AppStyles.sectionHeading.copyWith(fontSize: 28),
+                        )),
+                      ),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${_wishlistItems.length} items",
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontFamily: GoogleFonts.dmSans().fontFamily,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 20),
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 14.0,
+                                mainAxisSpacing: 14.0,
+                                mainAxisExtent: 300),
+                        itemBuilder: (context, index) {
+                          return ProductCard(
+                            product: _wishlistItems[index],
+                          );
+                        },
+                        itemCount: _wishlistItems.length,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 20),
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 14.0,
-                            mainAxisSpacing: 14.0,
-                            mainAxisExtent: 300),
-                    itemBuilder: (context, index) {
-                      return ProductCard(
-                        product: _wishlistItems[index],
-                      );
-                    },
-                    itemCount: _wishlistItems.length,
-                  ),
-                ],
-              ),
       ),
     );
   }

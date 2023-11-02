@@ -5,3 +5,9 @@ enum productSortRadioTypes {
   highestDiscount,
   ratingHighToLow,
 }
+
+enum userAccountTypes {
+  newAccount,
+  existingAccount,
+  noAccount,
+}

@@ -5,13 +5,12 @@ String? validatephoneNumber(String? value) {
   return null;
 }
 
-String? validateEmailAddress(String? value){
+String? validateEmailAddress(String? value) {
   if (value!.isEmpty || !value.contains('@')) {
     return 'Please enter valid email address';
   }
-  return null;    
-  }
-
+  return null;
+}
 
 String? validateOTP(String? value) {
   if (value == null || value.isEmpty || value.length < 6) {
@@ -21,8 +20,16 @@ String? validateOTP(String? value) {
 }
 
 String? validateName(String? value) {
-  if (value == null || value.isEmpty) {
+  final RegExp nameRegx = RegExp(r'^[a-zA-Z ]+$');
+  if (value == null || value.isEmpty || !nameRegx.hasMatch(value)) {
     return 'Enter a valid name';
+  }
+  return null;
+}
+
+String? validateDateOfBirth(String? value) {
+  if (value == null || value.isEmpty || value.length != 10) {
+    return 'Enter a valid date of birth (DD/MM/YYYY)';
   }
   return null;
 }

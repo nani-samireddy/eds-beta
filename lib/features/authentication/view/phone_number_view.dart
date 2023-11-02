@@ -4,7 +4,6 @@ import 'package:eds_beta/constants/images_urls.dart';
 import 'package:eds_beta/core/core.dart';
 import 'package:eds_beta/core/styles.dart';
 import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
-import 'package:eds_beta/features/authentication/wrapper.dart';
 import 'package:eds_beta/theme/pallete.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -116,30 +115,26 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
     setState(() {
       _isLoading = true;
     });
-     await ref
+    await ref
         .read(authControllerProvider.notifier)
         .verifyOTP(otp: _otpController.text, context: context)
         .then((value) {
-      if (value) {
-        setState(() {
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _isLoading = false;
-        });
-
+      setState(() {
+        _isLoading = false;
+      });
+      if (!value) {
         showSnackBar(
             content: "Oops that's an Invalid OTP! 🥲", context: context);
-      }
+      } 
+      // else {
+      //   Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (context) => const AuthWrapper(),
+      //     ),
+      //   );
+      // }
     });
-  }
-
-  void handleOTPVerifycationResult() {
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const AuthWrapper()),
-        (route) => false);
   }
 
   @override
@@ -220,11 +215,7 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
                               controller: phoneNumberController,
                               onChange: (val) {
                                 setState(() {
-                                  if (validateOTP(val) == null) {
-                                    _isValid = true;
-                                  } else {
-                                    _isValid = false;
-                                  }
+                                  _isValid = validatephoneNumber(val) == null;
                                 });
                               }),
                         ),
@@ -253,11 +244,7 @@ class _PhoneNumberViewState extends ConsumerState<PhoneNumberView> {
                                     type: TextInputType.number,
                                     onChange: (val) {
                                       setState(() {
-                                        if (validateOTP(val) == null) {
-                                          _isValid = true;
-                                        } else {
-                                          _isValid = false;
-                                        }
+                                        _isValid = validateOTP(val) == null;
                                       });
                                     },
                                   ),

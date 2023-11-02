@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:eds_beta/models/app_models.dart';
 
@@ -11,6 +9,7 @@ class UserModel {
   final List<WishlistItemModel> wishListItems;
   final String uid;
   final List<AddressModel> addresses;
+  final String? dateOfBirth;
 
   UserModel({
     required this.name,
@@ -20,11 +19,13 @@ class UserModel {
     required this.wishListItems,
     required this.uid,
     required this.addresses,
+    this.dateOfBirth,
   });
 
   UserModel copyWith({
     String? name,
     String? email,
+    String? dateOfBirth,
     String? phone,
     String? address,
     List<CartItemDatabaseModel>? cartItems,
@@ -36,6 +37,7 @@ class UserModel {
       name: name ?? this.name,
       email: email ?? this.email,
       phone: phone ?? this.phone,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       cartItems: cartItems ?? this.cartItems,
       wishListItems: wishListItems ?? this.wishListItems,
       uid: uid ?? this.uid,
@@ -48,6 +50,7 @@ class UserModel {
       'name': name,
       'email': email,
       'phone': phone,
+      'dateOfBirth': dateOfBirth,
       'cartItems': cartItems.map((e) => e.toMap()).toList(),
       'wishListItems': wishListItems.map((e) => e.toMap()).toList(),
       'uid': uid,
@@ -60,6 +63,7 @@ class UserModel {
       name: map['name'] as String,
       email: map['email'] as String,
       phone: map['phone'] as String,
+      dateOfBirth: map['dateOfBirth'] as String?,
       cartItems: List<CartItemDatabaseModel>.from((map['cartItems'] as List)
           .map((x) => CartItemDatabaseModel.fromMap(x))),
       wishListItems: List<WishlistItemModel>.from((map['wishListItems'] as List)
@@ -83,6 +87,6 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(name: $name, email: $email, phone: $phone, uid: $uid, cartItems: $cartItems, wishListItems: $wishListItems, addresses: $addresses)';
+    return 'UserModel(name: $name, email: $email, phone: $phone, dateOfBirth: $dateOfBirth, uid: $uid, cartItems: $cartItems, wishListItems: $wishListItems, addresses: $addresses)';
   }
 }

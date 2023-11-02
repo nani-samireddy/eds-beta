@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:eds_beta/api/address_api.dart';
+import 'package:eds_beta/common/components/title_app_bar.dart';
 import 'package:eds_beta/common/custom_divider.dart';
 import 'package:eds_beta/common/option_list_tile.dart';
 import 'package:eds_beta/features/main_layout/cart/view/address_editing_page.dart';
@@ -21,9 +22,7 @@ class _AddressBookViewState extends ConsumerState<AddressBookView> {
   Widget build(BuildContext context) {
     final addresses = ref.watch(addressAPIProvider) ?? [];
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Address Book"),
-      ),
+      appBar: titleAppBar(title: "Address Book"),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),

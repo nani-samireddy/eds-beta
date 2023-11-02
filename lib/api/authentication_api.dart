@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:eds_beta/core/core.dart';
+import 'package:eds_beta/providers/database_providers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,11 @@ final authAPIProvider = Provider<AuthAPI>((ref) {
 final authChangesProvider = StreamProvider<User?>((ref) {
   final authAPI = ref.watch(authAPIProvider);
   return authAPI.authChanges();
+});
+
+final isNewUserProvider = FutureProvider((ref)async {
+  final user =  ref.watch(currentAuthUserProvider).value;
+  return await ref.watch(databaseAPIProvider).isNewUser(uid: user!.uid);
 });
 
 final currentAuthUserProvider = FutureProvider<User?>((ref) async {
@@ -114,7 +120,7 @@ class AuthAPI implements IAuthAPI {
   FutureEither<User> getCurrentUser() async {
     try {
       final user = _auth.currentUser;
-     
+
       if (user != null) {
         return right(user);
       } else {

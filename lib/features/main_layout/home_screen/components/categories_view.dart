@@ -30,7 +30,7 @@ class _CategoriesListViewState extends ConsumerState<CategoriesListView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: ref.watch(categoriesProvider).when(
+            children: ref.watch(endlessCategoriesProvider).when(
               data: (data) {
                 return data != null
                     ? data.map((e) {

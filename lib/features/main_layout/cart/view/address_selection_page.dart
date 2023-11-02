@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:eds_beta/api/address_api.dart';
 import 'package:eds_beta/common/common.dart';
+import 'package:eds_beta/common/components/title_app_bar.dart';
 import 'package:eds_beta/features/main_layout/cart/view/address_editing_page.dart';
 import 'package:eds_beta/theme/pallete.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,7 @@ class _AddressSelectionPageState extends ConsumerState<AddressSelectionPage> {
 
     log(addresses.toString());
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Shipping Address"),
-      ),
+      appBar: titleAppBar(title: "Shipping Address"),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),

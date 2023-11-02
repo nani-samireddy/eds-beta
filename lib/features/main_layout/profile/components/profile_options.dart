@@ -1,5 +1,6 @@
 import 'package:eds_beta/common/common.dart';
 import 'package:eds_beta/features/authentication/controller/auth_controller.dart';
+import 'package:eds_beta/features/main_layout/cart/view/edit_profile_view.dart';
 import 'package:eds_beta/features/main_layout/profile/view/address_book_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -16,10 +17,14 @@ class _ProfileOptionsState extends ConsumerState<ProfileOptions> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const OptionListTile(
+        OptionListTile(
           title: "Edit Profile",
           icon: Icons.border_color_outlined,
           subtitle: "Name, E-mail, DOB, Phone",
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const EditProfileView()));
+          },
         ),
         SizedBox(
             width: MediaQuery.of(context).size.width * 0.9,

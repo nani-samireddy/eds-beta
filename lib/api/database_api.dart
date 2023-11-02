@@ -53,6 +53,14 @@ abstract class IDatabaseAPI {
 
   Future<void> updateUserAddresses(
       {required List<AddressModel> addresses, required String uid});
+
+  Future<bool?> isNewUser({required String uid});
+
+  Future<UserModel?> updateUserDetails(
+      {required String uid, required Map<String, dynamic> data});
+
+  Future<List<Offer>?> getFreshKartOffersSlides();
+  Future<List<CategoryModel>?> getFreshKartCategories();
 }
 
 class DatabaseAPI extends IDatabaseAPI {
@@ -100,6 +108,7 @@ class DatabaseAPI extends IDatabaseAPI {
     try {
       var results = await _firestore
           .collection(FirestoreCollectionNames.offersCollection)
+          .where('active', isEqualTo: true)
           .get();
 
       if (results.docs.isNotEmpty) {
@@ -641,6 +650,106 @@ class DatabaseAPI extends IDatabaseAPI {
       log("Added address");
     } catch (e) {
       log("Error while adding address $e");
+    }
+  }
+
+  @override
+  Future<bool?> isNewUser({required String uid}) async {
+    try {
+      return await _firestore
+          .collection(FirestoreCollectionNames.usersCollection)
+          .doc(uid)
+          .get()
+          .then((value) {
+        if (value.exists) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+    } catch (e) {
+      log("Error while checking if user is new $e");
+      return null;
+    }
+  }
+
+  @override
+  Future<UserModel?> updateUserDetails(
+      {required String uid, required Map<String, dynamic> data}) async {
+    try {
+      return await _firestore
+          .collection(FirestoreCollectionNames.usersCollection)
+          .doc(uid)
+          .update(
+            data,
+          )
+          .then((value) {
+        return _firestore
+            .collection(FirestoreCollectionNames.usersCollection)
+            .doc(uid)
+            .get()
+            .then((value) {
+          if (value.exists) {
+            return UserModel.fromMap(value.data()!);
+          } else {
+            return null;
+          }
+        });
+      });
+    } catch (e) {
+      log("Error while updating user details $e");
+      return null;
+    }
+  }
+
+  @override
+  Future<List<Offer>?> getFreshKartOffersSlides() async {
+    try {
+      return await _firestore
+          .collection(FirestoreCollectionNames.freshKartOffersSlidesCollection)
+          .where('active', isEqualTo: true)
+          .get()
+          .then((value) {
+        if (value.docs.isNotEmpty) {
+          List<Offer> offers = [];
+          log(value.docs.length.toString());
+          for (var element in value.docs) {
+            offers.add(Offer.fromMap(element.data()));
+          }
+          return offers;
+        } else {
+          log("Freshkart offers does not exist");
+          return null;
+        }
+      });
+    } catch (e) {
+      log("Error while getting freshkart offers $e");
+      return null;
+    }
+  }
+
+  @override
+  Future<List<CategoryModel>?> getFreshKartCategories() async {
+    try {
+      final docRef = _firestore
+          .collection(FirestoreCollectionNames.appData)
+          .doc(FirestoreDocumentNames.freshKartCategoriesDocument);
+      return await docRef.get().then((value) {
+        if (value.exists) {
+          List<CategoryModel> categories = [];
+          final data = value.data()!["freshKartCategories"];
+          for (var element in data) {
+            categories.add(CategoryModel.fromMap(element));
+          }
+          return categories;
+        } else {
+          log("Freshkart categories does not exist");
+          return [];
+        }
+      });
+    } catch (e, st) {
+      log("Error while getting freshkart categories $e\n $st");
+      return null;
     }
   }
 }

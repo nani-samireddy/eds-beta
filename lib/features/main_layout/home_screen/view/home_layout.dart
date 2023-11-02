@@ -1,7 +1,7 @@
 import 'package:eds_beta/common/components/page_padding.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/categories_view.dart';
 import 'package:eds_beta/features/main_layout/home_screen/components/new_products_section.dart';
-import 'package:eds_beta/features/main_layout/home_screen/components/offers_slider.dart';
+import 'package:eds_beta/features/main_layout/home_screen/components/edless_offers_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,7 +22,7 @@ class _HomeLayoutState extends ConsumerState<HomeLayout> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //CustomSearchBar(),
-            OffersCarosel(),
+            EndlessOffersCarosel(),
 
             // ElevatedButton(
             //   onPressed: () async {
